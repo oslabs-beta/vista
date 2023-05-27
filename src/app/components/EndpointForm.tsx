@@ -1,4 +1,4 @@
-import { getSchema } from '@/app/utils/getSchema';
+import { getSchema } from '@/utils/getSchema';
 
 export function EndpointForm({childToParent}: any) { //TODO: type
   const handleSubmit = async (data: FormData) => {

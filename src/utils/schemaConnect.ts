@@ -55,7 +55,7 @@ export async function schemaConnect(apiEndpoint: string) {
         const arrayOfFields:string[] = [];
 
         const fieldsArrayOnQuery = obj.fields;
-        fieldsArrayOnQuery.forEach((fieldObj => {
+        fieldsArrayOnQuery.forEach(((fieldObj: object) => {
             arrayOfFields.push(fieldObj.name)
         }))
         console.log(obj.name, arrayOfFields)
