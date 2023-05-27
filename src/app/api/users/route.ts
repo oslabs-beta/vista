@@ -11,10 +11,12 @@ export async function POST(request: Request) {
         
         const queryStr = 'INSERT INTO users (username, password) VALUES ($1, $2);';
 
-        const newUser = await db.query(queryStr, ['test', 'test']);
+        const newUser: any = await db.query(queryStr, ['test', 'test']);
 
         console.log('this is the newUser -> ', newUser);
 
+        return new Response(newUser);
+        
     } catch(error) {
         console.log(error)
     }
