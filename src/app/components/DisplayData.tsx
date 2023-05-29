@@ -1,5 +1,5 @@
 export function DisplayData(props: any) { //TODO: type
-  // console.log('data:', props.data);
+  console.log('data:', props.data);
   return (
     <>
       <div className="m-4 p-4 border-2 border-red-600">
