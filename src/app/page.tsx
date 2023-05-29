@@ -11,6 +11,7 @@ export default function Home({session}) { // data fetching: https://youtu.be/gSS
   const childToParent = (childData: any) => { //TODO: type
     setData(childData);
   }
+  // sessionprovider component allows the wrapped component to use the useSession hook: https://next-auth.js.org/getting-started/client
   return (
     <>
       <SessionProvider session={session}>
