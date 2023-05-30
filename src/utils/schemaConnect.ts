@@ -45,7 +45,15 @@ export async function schemaConnect(apiEndpoint: string) {
 
 
     // make the introspection query 
-    const types: TypesData = await graphQLClient.request(queryStringforTypes);
+    let types: TypesData = {'__schema': {types: [{name: '', kind: '', fields: '', __typename: ''}]}};
+    
+    // error handling: if no valid endpoint
+    try {
+        types = await graphQLClient.request(queryStringforTypes);
+    }
+    catch {
+        return {}
+    }
 
     // filter the types
     const filteredTypes = types.__schema.types.filter((element) => !typesToIgnore.includes(element.name) && element.kind === 'OBJECT');

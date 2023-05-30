@@ -1,8 +1,8 @@
 "use client"
 
 import { EndpointForm } from '@/app/components/EndpointForm';
-import { DisplayData } from '@/app/components/DisplayData';
 import { useState } from 'react';
+import { Dashboard } from './components/Dashboard';
 
 export default function Home() { // data fetching: https://youtu.be/gSSsZReIFRk?t=293
   const [data, setData] = useState({});
@@ -12,8 +12,7 @@ export default function Home() { // data fetching: https://youtu.be/gSSsZReIFRk?
   return (
     <>
       <EndpointForm childToParent={childToParent} />
-      <DisplayData data={data} />
-      {/* <QueryGenerator /> */}
+      <Dashboard data={data} />
     </>
   )
 }
