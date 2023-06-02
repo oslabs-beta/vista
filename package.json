@@ -25,5 +25,11 @@
     "react-query": "^3.39.3",
     "tailwindcss": "3.3.2",
     "typescript": "5.0.4"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.10.1",
+    "bcrypt": "^5.1.0",
+    "dotenv": "^16.0.3",
+    "pg": "^8.11.0"
   }
 }
