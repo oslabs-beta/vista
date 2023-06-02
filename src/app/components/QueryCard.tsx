@@ -2,10 +2,8 @@ import React from "react";
 import FieldsBtn from './FieldsBtn';
 import Card from '@mui/material/Card';
 import { DisplayData } from "./DisplayData";
-//import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-//import Button from '@mui/material/Button';
-//import Typography from '@mui/material/Typography';
+
 
 const QueryCard = (props: any) => {
   return (
