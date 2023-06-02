@@ -19,6 +19,7 @@
     "graphql": "^16.6.0",
     "graphql-request": "^6.0.0",
     "next": "13.4.2",
+    "next-auth": "^4.22.1",
     "postcss": "8.4.23",
     "react": "18.2.0",
     "react-dom": "18.2.0",

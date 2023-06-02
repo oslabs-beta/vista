@@ -1,10 +1,18 @@
 import { getSchema } from '@/app/utils/getSchema';
+import { useSession, signIn, signOut} from 'next-auth/react'
 
 export function EndpointForm({childToParent}: any) { //TODO: type
   const handleSubmit = async (data: FormData) => {
     childToParent(await getSchema(data));
   }
+  const {data: session, status} = useSession()
+
+  function checkIfLoggedIn (){
+    return (status === "authenticated") ? <><h1>Welcome {session.user.email}</h1> <button onClick={() => signOut()}>Sign Out</button></> : <button onClick={() => signIn()}>Sign In</button>
+  }
+
   return (
+    <>
     <form
       action={handleSubmit}
       className="flex items-center"
@@ -56,6 +64,9 @@ export function EndpointForm({childToParent}: any) { //TODO: type
         </svg>
       </button>
     </form>
+
+    {checkIfLoggedIn()}
+    </>
   )
 }
 
