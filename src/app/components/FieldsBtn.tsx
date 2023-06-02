@@ -1,21 +1,20 @@
 import React from 'react'
+import QueryCard from './QueryCard';
 
 const FieldsBtn = (props: any) => {
-  console.log('this is from FieldsBtn', props.data['__schema'].types)
-  const typeArray = props.data['__schema'].types;
 
-  typeArray.forEach((type: object) => {
-    console.log('this is each type', type)
-  })
+//props.type or props.data based off the QueryCard props we are passing down
+console.log('FieldsBtn props:', props.result);
+console.log('FieldsBtn type name:', props.result.name);
 return (
-  <div>
-    <button>Hello world</button>
-  </div>
+  <>
+    {console.log('this is the data that should render in the button', props.result.name)}
+    {/* <button>{props.type.__schema.types.name}</button> */}
+    <button>{props.result}</button>
+  </>
 )
 
-  //add some logic to iterate through our data.
-  //Lets figure out what the data is and how to access it.
-  
 }
 
 export default FieldsBtn;
+
