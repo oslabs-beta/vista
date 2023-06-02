@@ -7,6 +7,8 @@ console.log(process.env.GOOGLE_CLIENT_ID)
 console.log(process.env.GOOGLE_CLIENT_SECRET)
 
 
+
+
 // resource: https://www.youtube.com/watch?v=A5ZN--P9vXM&pp=ygUObmV4dGF1dGggb2F1dGg%3D
 const handler = NextAuth({
 
@@ -18,7 +20,7 @@ const handler = NextAuth({
         // }),
         GoogleProvider({
             clientId: "5354437150-3nrov3m1foon5jpb4t4let2uu9anf4ep.apps.googleusercontent.com",
-            clientSecret: "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",
+            clientSecret: "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"
         })
     ],
     // unsure of why we need this currently.

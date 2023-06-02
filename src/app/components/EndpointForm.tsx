@@ -5,7 +5,12 @@ export function EndpointForm({childToParent}: any) { //TODO: type
   const handleSubmit = async (data: FormData) => {
     childToParent(await getSchema(data));
   }
-  const {data: session} = useSession()
+  const {data: session, status} = useSession()
+
+  function checkIfLoggedIn (){
+    return (status === "authenticated") ? <><h1>Welcome {session.user.email}</h1> <button onClick={() => signOut()}>Sign Out</button></> : <button onClick={() => signIn()}>Sign In</button>
+  }
+
   return (
     <>
     <form
@@ -60,7 +65,7 @@ export function EndpointForm({childToParent}: any) { //TODO: type
       </button>
     </form>
 
-    <button onClick={() => signIn()}>Sign In</button>
+    {checkIfLoggedIn()}
     </>
   )
 }
