@@ -8,21 +8,23 @@ const SALT_WORK_FACTOR = 10;
 // cookies
 import { cookies } from 'next/headers';
 
-//types
-import { userData } from '../login/route';
-
 
 // unused imports
 import { redirect } from 'next/dist/server/api-utils';
 import { PERMANENT_REDIRECT_STATUS } from 'next/dist/shared/lib/constants';
 
 
+interface UserData {
+    username: string,
+    password: string,
+}
+
 // add new user to db
 export async function POST(request: Request) {
     
     try {
         // get username and password from POST req
-        const body: userData = await request.json(); // TODO: Sanitize Data
+        const body: UserData = await request.json(); // TODO: Sanitize Data
         const { username, password } = body;
 
         // check if user exists, return error if it does
@@ -43,7 +45,6 @@ export async function POST(request: Request) {
 
         // create new session & add cookie to response
         // TS error seems to be an unresolved issue, but method still works
-        cookies().set('ssid', '1234');
 
         return new Response(newUser.json());
 

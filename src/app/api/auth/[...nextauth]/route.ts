@@ -9,28 +9,17 @@ const bcrypt = require('bcrypt');
 console.log(process.env.GOOGLE_CLIENT_ID)
 console.log(process.env.GOOGLE_CLIENT_SECRET)
 
-
-
-
 // resource: https://www.youtube.com/watch?v=A5ZN--P9vXM&pp=ygUObmV4dGF1dGggb2F1dGg%3D
 const handler = NextAuth({
 
     // providers array allows nextauth to handle oauth; just need ot import the providers
     providers: [
-        // GithubProvider({
-        //     clientId: process.env.GITHUB_CLIENT_ID,
-        //     clientSecret: process.env.GITHUB_CLIENT_SECRET
-        // }),
-        GoogleProvider({
-            clientId: "5354437150-3nrov3m1foon5jpb4t4let2uu9anf4ep.apps.googleusercontent.com",
-            clientSecret: "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"
-        }),
         CredentialsProvider({
             // name to display on the sign-in form (e.g. 'Sign in with... )
             name: "Credentials",
             // 'credentials' is used to generate a form on the sign-in page
             credentials: {
-                username: { label: "Username", type: "text", placeholder: "username" },
+                username: { label: "Username", type: "text" },
                 password: { label: "Password", type: "password" }
             },
             // authorize is used to query db with provided credentials & authenticate user
@@ -47,19 +36,26 @@ const handler = NextAuth({
                     const match = await bcrypt.compare(credentials?.password, user.rows[0].password);
                     if(match) {
                         // any object returned will be saved in user property of JWT 
-                        return user
+                        return user;
                     } else {
                         // returning null results in an error being displayed that advises user to check their details
                         return null;
-                    }
-                    
+                    }    
                 } catch(error) {
                     console.log('error with credential authentication: ', error);
                 }
-
+    
             }
+        }),
+        GithubProvider({
+            clientId: process.env.GITHUB_CLIENT_ID,
+            clientSecret: process.env.GITHUB_CLIENT_SECRET
+        }),
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET
+        }),
 
-        })
     ],
     // unsure of why we need this currently.
     secret: process.env.JWT_SECRET
