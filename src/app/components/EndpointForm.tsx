@@ -1,4 +1,4 @@
-import { getSchema } from '@/app/utils/getSchema';
+import { getSchema } from '@/utils/getSchema';
 import { useSession, signIn, signOut} from 'next-auth/react'
 
 export function EndpointForm({childToParent}: any) { //TODO: type
@@ -72,3 +72,10 @@ export function EndpointForm({childToParent}: any) { //TODO: type
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default { EndpointForm };
+
+//import { getSchema } from '@/app/utils/getSchema';
+// import { useSession, signIn, signOut} from 'next-auth/react'
+
+// export function EndpointForm({childToParent}: any) { //TODO: type
+//   const handleSubmit = async (data: FormData) => {
+//     childToParent(await getSchema(data));
