@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import {GraphQLClient, gql} from 'graphql-request' //fetch from GraphQL API: https://youtu.be/F3BWdFXEJPk
+import QueryGenerator from './QueryGenerator'; 
 
 export default async function Home() { // data fetching: https://youtu.be/gSSsZReIFRk?t=293
 
@@ -105,6 +106,6 @@ export default async function Home() { // data fetching: https://youtu.be/gSSsZR
   console.log('hello');
   console.log('data: ', data); //why does it show twice in the console?
   return (
-    "hello"
+    <QueryGenerator />
   )
 }
