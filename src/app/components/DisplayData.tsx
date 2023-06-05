@@ -2,6 +2,25 @@
 import React from "react";
 import QueryCard from "./QueryCard";
 
+import ReactFlow, { 
+  MiniMap, 
+  Controls, 
+  Background, 
+  useNodesState, // similar to useState in React
+  useEdgesState, 
+  addEdge
+} from 'reactflow';
+
+import 'reactflow/dist/style.css';
+
+//iterate through our type elements and grab the `label` for each tyep
+const initialNodes = [
+  { id: '1', position: { x: 0, y: 0 }, data: { label: 'Root Query' } },
+]
+
+let xindex = 0;
+let yindex = 0;
+
 export function DisplayData(props: any) {
   console.log('data from DisplayData comp', props.data.schema);
   const schema = props.data.schema;
@@ -17,7 +36,11 @@ export function DisplayData(props: any) {
     <>
       <div className="m-4 p-4 border-2 border-red-600">
         <div>
-          {Object.keys(schema).map((type) => {
+          {Object.keys(schema).map((type, index) => {
+            const newNode: any = { id: index, position: { x: xindex, y: yindex }, data: { label: type } }; // TODO: type
+            initialNodes.push(newNode);
+            xindex += 10;
+            yindex += 10;
             logType(type);
             return (
               <div key={type}>
