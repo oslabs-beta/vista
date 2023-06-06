@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import React from "react";
+import React, { useCallback, useState } from "react";
 import QueryCard from "./QueryCard";
 
 import ReactFlow, { 
@@ -13,16 +13,48 @@ import ReactFlow, {
 
 import 'reactflow/dist/style.css';
 
-//iterate through our type elements and grab the `label` for each tyep
-const initialNodes = [
-  { id: '1', position: { x: 0, y: 0 }, data: { label: 'Root Query' } },
+type NodeObj = {
+  id: string, 
+  position: PositionObj,
+  data: LabelObj,
+  style: StyleObj,
+  parentNode?: string, 
+  extent?: string
+}
+
+type PositionObj = {
+  x: number, 
+  y: number
+}
+
+type LabelObj = {
+  label: string
+}
+
+type StyleObj = {
+  width: number,
+  height: number
+}
+
+
+const initialNodes: any[] = [
+  { id: 'x', position: { x: 500, y: 0 }, data: { label: 'Root Query' } }
 ]
 
 let xindex = 0;
 let yindex = 0;
 
+const initialEdges: any[] = [];
+console.log('this is our nodes', initialNodes)
+
+
+
 export function DisplayData(props: any) {
-  console.log('data from DisplayData comp', props.data.schema);
+
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
+  //console.log('data from DisplayData comp', props.data.schema);
   const schema = props.data.schema;
   if (!schema) {
     return null; // or render an error message, loading state, or fallback UI
@@ -31,34 +63,102 @@ export function DisplayData(props: any) {
   const logType = (type: string) => {
     console.log('this is the type', type);
   };
+  console.log('this is our schema', schema)
+
+
+// iterate through our type elements and set each label to the type
+  Object.keys(schema).map((typeName, i) => {
+    const arrayOfFields = schema[typeName];
+    const indexOfType = i.toString();
+    let newNode: NodeObj = { 
+      id: i.toString(), 
+      position: { x: xindex, y: yindex }, 
+      data: { label: typeName }, 
+      style: {
+        width: 170,
+        height: 200,
+      },
+    };
+    // push them to the initial nodes array (is it better to use a hook)
+    initialNodes.push(newNode);
+
+    // increase the x and y positions
+    xindex += 10;
+    yindex += 10;
+
+    // create a new edge to connect each type to the root query
+    const newEdge = { source: 'x', target: i.toString()};
+
+    // push the edges to the initial edges array (is it better to use a hook here?)
+    initialEdges.push(newEdge);
+
+
+    // iterate through the type's field array\
+    for (let i = 0; i < arrayOfFields.length; i++){
+      
+      newNode = {
+        id: i.toString() + indexOfType + 'c',
+        data: {label: arrayOfFields[i] },
+        position: { x:xindex, y:yindex },
+        style: {width: 50, height: 50},
+        parentNode: indexOfType,
+        extent: 'parent'
+      }
+      console.log('this is new node', newNode)
+      initialNodes.push(newNode)
+    }
+    // create a new node, making sure to set an option that points to a parent node, no need to set a type
+    // push to the nodes array 
+  })
 
   return (
     <>
-      <div className="m-4 p-4 border-2 border-red-600">
         <div>
-          {Object.keys(schema).map((type, index) => {
-            const newNode: any = { id: index, position: { x: xindex, y: yindex }, data: { label: type } }; // TODO: type
-            initialNodes.push(newNode);
-            xindex += 10;
-            yindex += 10;
-            logType(type);
-            return (
-              <div key={type}>
-                {/* We can make this something different than an h3 if we want */}
-                <h3>{type}:</h3>
+              {/* <div key={index}>
+                <h3>{type}:</h3> */}
+
                 <ul>
-                  {schema[type].map((field: any, index: any) => (
-                    <div key={index}>
-                      <QueryCard type={field} />
-                    </div>
-                  ))}
+                  {/* {schema[type].map((field: any, index: any) => ( */}
+                    <div style={{ width: '100vw', height: '100vh' }}>
+                    <ReactFlow
+                      nodes={nodes}
+                      edges={edges}
+                      onNodesChange={onNodesChange}
+                      onEdgesChange={onEdgesChange}
+                      //onConnect={onConnect}
+                    >
+                      <Controls />
+                      <MiniMap />
+                      <Background variant="dots" gap={12} size={1} />
+                    </ReactFlow>
+                  </div>
+                    
+                    {/* // <div key={index}>
+                    //   <QueryCard type={field} />
+                    // </div> */}
+                  {/* ))} */}
                 </ul>
               </div>
-            );
-          })}
-        </div>
-      </div>
+      {/* </></div> */}
     </>
   );
 }
 
+
+
+
+/*  return (
+  <ReactFlow
+  nodes={nodes}
+  edges={edges}
+  onNodesChange={onNodesChange}
+  onEdgesChange={onEdgesChange}
+  onConnect={onConnect}
+  fitView
+  style={rfStyle}
+  attributionPosition="top-right"
+>
+  <Background />
+</ReactFlow>
+);
+*/
