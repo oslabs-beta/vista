@@ -1,55 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "tailwindcss/tailwind.css";
+import { jsonToGraphQLQuery } from "json-to-graphql-query";
 
-export default function QueryGenerator() {
+export default function QueryGenerator({ childToParent }: any) {
   const [result, setResult] = useState("");
   const [schemaVal, setSchemaVal] = useState("");
-  const [queryStructure, setQueryStructure] = useState({});
+  const [queryAsObj, setQueryAsObj] = useState({ query: {} });
+  const [queryAsString, setQueryAsString] = useState("query: { \n \n }");
 
-  // Event handler for running the query
-  const handleRunQuery = (buttonName: string) => {
-    try {
-      // Execute the code input by the user
-      const schemaResult = eval(buttonName);
+  // console.log("CHILD TO PARENT", childToParent);
+  useEffect(() => childToParent(queryAsString));
 
-      // Set the result to the schema result
-      setResult(schemaResult.toString());
-    } catch (error: any) {
-      // Handle any errors that occur during code execution
-      setResult(`Error: ${error.message}`);
-    }
+  console.log("this is query as a string:", queryAsString);
+  console.log("this is query as a object:", queryAsObj);
 
-    // Set the schema value to the button name
-    setSchemaVal(schemaVal + buttonName);
-  };
+  //   const queryObject = {
+  //     query: {
+  //         Posts: {
+  //             id: true,
+  //             title: true,
+  //             post_date: true
+  //         }
+  //     }
+  // };
+  // console.log('THIS IS THE JSON TO GRAPHQLQUERY', jsonToGraphQLQuery(queryAsObj, { pretty: true }))
 
   // this function will be the onClick for each button, it should check if the type of the field that was clicked is already on queryStructure, if so, it will add a new element to the array value of the corresponding type, if not, it will add the type as a property with a value of an array with only the clicked field as an element. after that, it will call stringifyQuery and re-render the value of the textarea.
-  const updateQueryStructure = (fieldName: string, typeName: string) => {
+  const updateQueryAsObj = (fieldName: string, typeName: string) => {
+    //make a deep copy of queryAsObj
+    const tempObj = JSON.parse(JSON.stringify(queryAsObj));
+    //@ts-ignore
+    if (!tempObj.query[typeName]) {
+      tempObj.query[typeName] = {};
+    }
+    tempObj.query[typeName][fieldName] = true;
+    //update object in state
+    setQueryAsObj(tempObj);
+    //update string in state
+    setQueryAsString(jsonToGraphQLQuery(tempObj, { pretty: true }));
     
-    // {
-    //   character: ["age"]
-    // }
-  }
-
-  // we are assuming we don't need to handle clicks to the type names, the user would only be able to click on it's fields
-  const stringifyQuery = (query: object) => {
-    const generatedFieldName =
-      typeName + " " + "{" + "\n" + "  " + fieldName + "\n" + "}" + "\n";
-    setSchemaVal(schemaVal + generatedFieldName);
   };
 
-  /*
-    character{
-      name
-    }
-  */
-
-  /*
-  {
-    character :["name", "age", "height"],
-    episode: ["name", "length", "characters"]
-  }
-  */
   return (
     <div className="flex items-center justify-center">
       <div className="bg-white rounded-lg shadow p-4 max-w-md w-full">
@@ -61,10 +52,14 @@ export default function QueryGenerator() {
                 e.preventDefault();
                 const buttonName =
                   (e.target as HTMLButtonElement).textContent || "";
-                  stringifyQuery(buttonName, "hello");
+                updateQueryAsObj(buttonName, "continents");
+                console.log(
+                  "queryAsString just after updateQueryAsObj:",
+                  queryAsString
+                );
               }}
             >
-              Schema 1
+              name
             </button>
             <br />
             <button
@@ -73,19 +68,53 @@ export default function QueryGenerator() {
                 e.preventDefault();
                 const buttonName =
                   (e.target as HTMLButtonElement).textContent || "";
-                  stringifyQuery(buttonName, "sup");
+                updateQueryAsObj(buttonName, "continents");
               }}
             >
-              Schema 2
+              code
+            </button>
+            <br />
+            <button
+              className="bg-blue-500 hover:bg-blue-600 text-white font-bold"
+              onClick={(e) => {
+                e.preventDefault();
+                const buttonName =
+                  (e.target as HTMLButtonElement).textContent || "";
+                updateQueryAsObj(buttonName, "countries");
+              }}
+            >
+              name
+            </button>
+            <br />
+            <button
+              className="bg-blue-500 hover:bg-blue-600 text-white font-bold"
+              onClick={(e) => {
+                e.preventDefault();
+                const buttonName =
+                  (e.target as HTMLButtonElement).textContent || "";
+                updateQueryAsObj(buttonName, "countries");
+              }}
+            >
+              code
             </button>
             <br />
             <textarea
-              value={schemaVal}
+              value={queryAsString}
               className="border border-gray-300 rounded px-2 py-1 w-full h-40 break-normal"
               readOnly
             />
           </label>
-
+          <div>
+            <button
+              className="text-right bg-blue-500 hover:bg-blue-600 text-white font-bold"
+              onClick={(e) => {
+                e.preventDefault();
+                navigator.clipboard.writeText(queryAsString);
+              }}
+            >
+              Copy Query
+            </button>
+          </div>
           <p className="text-black">Result: {result}</p>
         </form>
       </div>
