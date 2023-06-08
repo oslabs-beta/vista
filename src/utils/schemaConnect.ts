@@ -28,27 +28,29 @@ export async function schemaConnect(apiEndpoint: string) {
     // will be populated and returned to the FE
     const schemaData:Schema = {};
 
-    // declare the query strings
+    // declare the query strings returns 
     const queryStringforTypes = gql`
     {
-        __schema {
-            types {
+        __schema{
+              queryType{
               name
-              kind
               fields{
                 name
               }
             }
           }
-    }
-    `
+        }`
 
 
     // make the introspection query 
-    const types: TypesData = await graphQLClient.request(queryStringforTypes);
-
+    const types: any  = await graphQLClient.request(queryStringforTypes);
+    const arrOfFields = []
     // filter the types
-    const filteredTypes = types.__schema.types.filter((element) => !typesToIgnore.includes(element.name) && element.kind === 'OBJECT');
+    // const filteredTypes = types.__schema.types.filter((element) => !typesToIgnore.includes(element.name) && element.kind === 'OBJECT');
+    
+    types.__schema.queryType.fields.forEach((obj) => arrOfFields.push(obj.name))
+
+    console.log(arrOfFields)
     
     //populate the schemaData
     filteredTypes.forEach((obj) => {
