@@ -15,7 +15,7 @@ const QueryCard = (props: any) => {
                 <CardContent>
                   <div>
                     <FieldsBtn result={props.type} />
-                   </div>
+                  </div>
                 </CardContent>
               </Card>
             </>
