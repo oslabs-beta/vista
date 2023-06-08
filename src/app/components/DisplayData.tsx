@@ -8,10 +8,12 @@ import ReactFlow, {
   Background, 
   useNodesState, // similar to useState in React
   useEdgesState, 
-  addEdge
+  addEdge,
+  BackgroundVariant,
 } from 'reactflow';
 
 import 'reactflow/dist/style.css';
+import { type } from "os";
 
 type NodeObj = {
   id: string, 
@@ -37,22 +39,26 @@ type StyleObj = {
 }
 
 
-const initialNodes: any[] = [
+const initialNodes: any[] = [ // TODO: type
   { id: 'x', position: { x: 500, y: 0 }, data: { label: 'Root Query' } }
 ]
 
 let xindex = 0;
 let yindex = 0;
 
-const initialEdges: any[] = [];
+const initialEdges: any[] = []; // TODO: type
 console.log('this is our nodes', initialNodes)
 
+const onNodeClick = (event: any, node: any) => console.log('click node', node);
 
 
-export function DisplayData(props: any) {
+export function DisplayData(props: any) { // TODO: type
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
+  //background variant
+  const [ variant, setVariant ] = useState('dots');
 
   //console.log('data from DisplayData comp', props.data.schema);
   const schema = props.data.schema;
@@ -60,9 +66,9 @@ export function DisplayData(props: any) {
     return null; // or render an error message, loading state, or fallback UI
   }
   
-  const logType = (type: string) => {
-    console.log('this is the type', type);
-  };
+  // const logType = (type: string) => {
+  //   console.log('this is the type', type);
+  // };
   console.log('this is our schema', schema)
 
 
@@ -71,9 +77,11 @@ export function DisplayData(props: any) {
     const arrayOfFields = schema[typeName];
     const indexOfType = i.toString();
     let newNode: NodeObj = { 
-      id: i.toString(), 
+      id: typeName, 
+      // id: i.toString(), 
       position: { x: xindex, y: yindex }, 
       data: { label: typeName }, 
+
       style: {
         width: 170,
         height: 200,
@@ -91,17 +99,18 @@ export function DisplayData(props: any) {
 
     // push the edges to the initial edges array (is it better to use a hook here?)
     initialEdges.push(newEdge);
-
-
     // iterate through the type's field array\
     for (let i = 0; i < arrayOfFields.length; i++){
+      // xindex += 5;
+      // yindex += 5;
       
       newNode = {
         id: i.toString() + indexOfType + 'c',
         data: {label: arrayOfFields[i] },
         position: { x:xindex, y:yindex },
+        // position: { x:xindex, y:yindex },
         style: {width: 50, height: 50},
-        parentNode: indexOfType,
+        parentNode: typeName,
         extent: 'parent'
       }
       console.log('this is new node', newNode)
@@ -126,10 +135,13 @@ export function DisplayData(props: any) {
                       onNodesChange={onNodesChange}
                       onEdgesChange={onEdgesChange}
                       //onConnect={onConnect}
+                      //
+                      onNodeClick={onNodeClick}
                     >
                       <Controls />
                       <MiniMap />
-                      <Background variant="dots" gap={12} size={1} />
+                      {/* removed the TS error here that was caused by the variant */}
+                      <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
                     </ReactFlow>
                   </div>
                     
