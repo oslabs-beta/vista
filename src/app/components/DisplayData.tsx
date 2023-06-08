@@ -3,7 +3,7 @@ import React from "react";
 import QueryCard from "./QueryCard";
 
 export function DisplayData(props: any) {
-  console.log('data from DisplayData comp', props.data.schema);
+  // console.log('data from DisplayData comp', props.data.schema);
   const schema = props.data.schema;
   if (!schema) {
     return null; // or render an error message, loading state, or fallback UI

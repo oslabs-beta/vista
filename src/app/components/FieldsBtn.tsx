@@ -3,12 +3,16 @@ import QueryCard from './QueryCard';
 
 const FieldsBtn = (props: any) => {
 
+  const addToQuery = () => {
+    console.log(props.result);
+  }
+
 //props.type or props.data based off the QueryCard props we are passing down
 //console.log('FieldsBtn props:', props.result);
 return (
   <>
-    {/* {console.log('this is the data that should render in the button', props.result)} */}
-    <button>{props.result}</button>
+     {/* {console.log('this is the data that should render in the button', props.result)} */}
+    <button onClick={addToQuery}>{props.result}</button>
   </>
 )
 
