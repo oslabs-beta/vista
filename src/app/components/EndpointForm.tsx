@@ -19,11 +19,11 @@ export function EndpointForm({ childToParent }: any) {
     return status === "authenticated" ? (
       <div className="flex items-center space-x-1">
         <h1 className="mr-1">Welcome {session.user!.email}</h1>{" "}
-        <button onClick={() => signOut()} >Sign Out</button>
+        {/* <button onClick={() => signOut()} >Sign Out</button> */}
       </div>
     ) : (
       <div className="flex items-center space-x-1">
-        <button onClick={() => signIn()}>Sign In</button>
+        {/* <button onClick={() => signIn()}>Sign In</button> */}
       </div>
     );
   }
@@ -32,7 +32,7 @@ export function EndpointForm({ childToParent }: any) {
   
   return (
     <>
-      <form action={handleSubmit} className="flex items-center">
+      <form action={handleSubmit} className="m-1 flex items-center">
         <div className="relative w-full">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
             <svg
@@ -77,6 +77,16 @@ export function EndpointForm({ childToParent }: any) {
             ></path>
           </svg>
         </button>
+        <div className="flex items-center space-x-1">
+    {/* Sign In button */}
+    <button onClick={() => signIn()} className=" w-32 bg-blue-500 text-white px-3 py-2 rounded-lg">
+      Sign In
+    </button>
+    {/* Sign Out button */}
+    <button onClick={() => signOut()} className=" w-32 bg-red-500 text-white px-3 py-2 rounded-lg">
+      Sign Out
+    </button>
+    </div>
 
       </form>
 
