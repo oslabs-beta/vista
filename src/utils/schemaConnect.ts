@@ -3,7 +3,8 @@ import {GraphQLClient, gql} from 'graphql-request'
 
 // interfaces for the data
 interface Schema {
-    [index:string]: string[]
+    fields: any
+    types: any
 }
 
 interface TypesData{
@@ -26,10 +27,23 @@ export async function schemaConnect(apiEndpoint: string) {
     const graphQLClient = new GraphQLClient(apiEndpoint);
 
     // will be populated and returned to the FE
-    const schemaData:Schema = {};
+    // @ts-ignore
+    const schemaData:Schema = {fields: null, types: {}};
 
-    // declare the query strings
-    const queryStringforTypes = gql`
+    // declare the query strings returns 
+    const queryStringForFields = gql`
+    {
+        __schema{
+              queryType{
+              name
+              fields{
+                name
+              }
+            }
+          }
+        }`
+
+    const queryStringForTypes = gql`
     {
         __schema {
             types {
@@ -40,26 +54,220 @@ export async function schemaConnect(apiEndpoint: string) {
               }
             }
           }
-    }
-    `
+    }`
+    // make the introspection query to grab the fields we can query
+    const queryFields: any  = await graphQLClient.request(queryStringForFields);
+    const arrOfFieldsOfQuery = []
 
 
-    // make the introspection query 
-    const types: TypesData = await graphQLClient.request(queryStringforTypes);
-
-    // filter the types
-    const filteredTypes = types.__schema.types.filter((element) => !typesToIgnore.includes(element.name) && element.kind === 'OBJECT');
     
+    queryFields.__schema.queryType.fields.forEach((obj) => arrOfFieldsOfQuery.push(obj.name))
+
+    schemaData.fields = arrOfFieldsOfQuery;
+    // filter the types
+
+    const types:TypesData = await graphQLClient.request(queryStringForTypes);
+    const filteredTypes = types.__schema.types.filter((element) => !typesToIgnore.includes(element.name) && element.kind === 'OBJECT');
     //populate the schemaData
     filteredTypes.forEach((obj) => {
         const arrayOfFields:string[] = [];
 
-        const fieldsArrayOnQuery = obj.fields;
-        fieldsArrayOnQuery.forEach((fieldObj => {
+        const fieldsArrayFromType = obj.fields;
+
+        fieldsArrayFromType.forEach((fieldObj => {
             arrayOfFields.push(fieldObj.name)
         }))
         console.log(obj.name, arrayOfFields)
-        schemaData[obj.name] = arrayOfFields;
+        schemaData.types[obj.name] = arrayOfFields;
     })
+    console.log(schemaData)
    return schemaData;
 }
+
+/*
+
+query = {
+  __schema{
+    queryType{
+      name
+      fields {
+        name
+        description
+        type{
+          name
+          fields{
+            name
+          }
+        }
+      }
+    }
+  }
+}
+
+returns 
+
+{
+  "data": {
+    "__schema": {
+      "queryType": {
+        "name": "Query",
+        "fields": [
+          {
+            "name": "continent",****
+            "description": null,
+            "type": {
+              "name": "Continent",
+              "fields": [
+                {
+                  "name": "code",****
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "countries",****
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "name",****
+                  "__typename": "__Field"
+                }
+              ],
+              "__typename": "__Type"
+            },
+            "__typename": "__Field"
+          },
+          {
+            "name": "continents",****
+            "description": null,
+            "type": {
+              "name": null,
+              "fields": null,
+              "__typename": "__Type"
+            },
+            "__typename": "__Field"
+          },
+          {
+            "name": "countries",
+            "description": null,
+            "type": {
+              "name": null,
+              "fields": null,
+              "__typename": "__Type"
+            },
+            "__typename": "__Field"
+          },
+          {
+            "name": "country",
+            "description": null,
+            "type": {
+              "name": "Country",
+              "fields": [
+                {
+                  "name": "awsRegion",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "capital",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "code",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "continent",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "currencies",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "currency",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "emoji",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "emojiU",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "languages",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "name",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "native",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "phone",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "phones",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "states",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "subdivisions",
+                  "__typename": "__Field"
+                }
+              ],
+              "__typename": "__Type"
+            },
+            "__typename": "__Field"
+          },
+          {
+            "name": "language",
+            "description": null,
+            "type": {
+              "name": "Language",
+              "fields": [
+                {
+                  "name": "code",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "name",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "native",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "rtl",
+                  "__typename": "__Field"
+                }
+              ],
+              "__typename": "__Type"
+            },
+            "__typename": "__Field"
+          },
+          {
+            "name": "languages",
+            "description": null,
+            "type": {
+              "name": null,
+              "fields": null,
+              "__typename": "__Type"
+            },
+            "__typename": "__Field"
+          }
+        ],
+        "__typename": "__Type"
+      },
+      "__typename": "__Schema"
+    }
+  }
+}
+*/

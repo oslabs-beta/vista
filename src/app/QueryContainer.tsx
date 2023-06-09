@@ -5,14 +5,14 @@ import "tailwindcss/tailwind.css";
 import QueryGenerator from "./QueryGenerator";
 import QueryResult from "./QueryResult";
 
-export default function QueryContainer({ endpoint }: any) { // TODO: type
+export default function QueryContainer({ endpoint, clickField }: any) { // TODO: type
   const [data, setData] = useState("");
   const childToParent = (childData: any) => {
     setData(childData);
   };
   return (
     <>
-      <QueryGenerator childToParent={childToParent} />
+      <QueryGenerator childToParent={childToParent} clickField={clickField}/>
       <QueryResult data={data} endpoint={endpoint} />
     </>
   );
