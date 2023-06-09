@@ -10,6 +10,7 @@ import ReactFlow, {
   useEdgesState, 
   addEdge,
   BackgroundVariant,
+  applyNodeChanges,
 } from 'reactflow';
 
 import 'reactflow/dist/style.css';
@@ -59,11 +60,9 @@ const initialEdges: any[] = [
 console.log('this is our nodes', initialNodes)
 
 
-
-
 export function DisplayData(props: any) { // TODO: type
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   
   const onNodeClick = (event: any, node: any) => {
@@ -71,6 +70,10 @@ export function DisplayData(props: any) { // TODO: type
       
     props.setClickField({type: node.parentNode, field: node.data.label})
   }
+
+  const onNodesChange = useCallback(
+    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)), [setNodes]
+  )
   
   //background variant
   const [ variant, setVariant ] = useState('dots');
@@ -84,8 +87,9 @@ export function DisplayData(props: any) { // TODO: type
 // iterate through our type elements and set each label to the type
 
   const schemaFields = schema.fields
-  let nodeState = [...initialNodes];
-  schemaFields.map((fieldName, i) => {
+  // let nodeState = [...initialNodes];
+  let numOfNodes = 0;
+  initialNodes.length === 3 && schemaFields.map((fieldName, i) => {
     let newNode: NodeObj = { 
       id: fieldName,
       position: { x: xIndexForFields, y: yIndexForFields }, 
@@ -120,10 +124,12 @@ export function DisplayData(props: any) { // TODO: type
     //   }
     //   console.log('this is new node', newNode)
     //   initialNodes.push(newNode)
-    })
+    numOfNodes++;
+  })
 
   const schemaTypes = schema.types
-  for (let key in schemaTypes){
+  if(numOfNodes + 3 === initialNodes.length) {
+    for (let key in schemaTypes){
 
     let newTypeNode: NodeObj = { 
       id: key,
@@ -157,7 +163,7 @@ export function DisplayData(props: any) { // TODO: type
       console.log(initialNodes)
     }
     // setNodes(nodeState)
-  }
+  }}
 
   return (
     <>
