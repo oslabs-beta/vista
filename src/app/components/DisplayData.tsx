@@ -58,14 +58,20 @@ const initialEdges: any[] = [
 ]; // TODO: type
 console.log('this is our nodes', initialNodes)
 
-const onNodeClick = (event: any, node: any) => console.log('click node', node);
+
 
 
 export function DisplayData(props: any) { // TODO: type
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-
+  
+  const onNodeClick = (event: any, node: any) => {
+    console.log('click node', node);
+      
+    props.setClickField({type: node.parentNode, field: node.data.label})
+  }
+  
   //background variant
   const [ variant, setVariant ] = useState('dots');
 

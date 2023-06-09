@@ -11,6 +11,7 @@ import QueryContainer from "./QueryContainer";
 export default function Home({ session }: any) {
   // data fetching: https://youtu.be/gSSsZReIFRk?t=293
   const [data, setData] = useState({});
+  const [clickField, setClickField] = useState({});
   const childToParent = (childData: any) => {
     //TODO: type
     setData(childData);
@@ -21,9 +22,9 @@ export default function Home({ session }: any) {
     <>
       <SessionProvider session={session}>
         <EndpointForm childToParent={childToParent} />
-        <DisplayData data={data} />
+        <DisplayData data={data} setClickField={setClickField} />
       </SessionProvider>
-      <QueryContainer endpoint={data.endpoint} />
+      <QueryContainer endpoint={data.endpoint} clickField={clickField} />
     </>
   );
 }

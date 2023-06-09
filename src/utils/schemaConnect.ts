@@ -83,3 +83,191 @@ export async function schemaConnect(apiEndpoint: string) {
     console.log(schemaData)
    return schemaData;
 }
+
+/*
+
+query = {
+  __schema{
+    queryType{
+      name
+      fields {
+        name
+        description
+        type{
+          name
+          fields{
+            name
+          }
+        }
+      }
+    }
+  }
+}
+
+returns 
+
+{
+  "data": {
+    "__schema": {
+      "queryType": {
+        "name": "Query",
+        "fields": [
+          {
+            "name": "continent",****
+            "description": null,
+            "type": {
+              "name": "Continent",
+              "fields": [
+                {
+                  "name": "code",****
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "countries",****
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "name",****
+                  "__typename": "__Field"
+                }
+              ],
+              "__typename": "__Type"
+            },
+            "__typename": "__Field"
+          },
+          {
+            "name": "continents",****
+            "description": null,
+            "type": {
+              "name": null,
+              "fields": null,
+              "__typename": "__Type"
+            },
+            "__typename": "__Field"
+          },
+          {
+            "name": "countries",
+            "description": null,
+            "type": {
+              "name": null,
+              "fields": null,
+              "__typename": "__Type"
+            },
+            "__typename": "__Field"
+          },
+          {
+            "name": "country",
+            "description": null,
+            "type": {
+              "name": "Country",
+              "fields": [
+                {
+                  "name": "awsRegion",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "capital",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "code",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "continent",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "currencies",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "currency",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "emoji",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "emojiU",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "languages",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "name",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "native",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "phone",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "phones",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "states",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "subdivisions",
+                  "__typename": "__Field"
+                }
+              ],
+              "__typename": "__Type"
+            },
+            "__typename": "__Field"
+          },
+          {
+            "name": "language",
+            "description": null,
+            "type": {
+              "name": "Language",
+              "fields": [
+                {
+                  "name": "code",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "name",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "native",
+                  "__typename": "__Field"
+                },
+                {
+                  "name": "rtl",
+                  "__typename": "__Field"
+                }
+              ],
+              "__typename": "__Type"
+            },
+            "__typename": "__Field"
+          },
+          {
+            "name": "languages",
+            "description": null,
+            "type": {
+              "name": null,
+              "fields": null,
+              "__typename": "__Type"
+            },
+            "__typename": "__Field"
+          }
+        ],
+        "__typename": "__Type"
+      },
+      "__typename": "__Schema"
+    }
+  }
+}
+*/
