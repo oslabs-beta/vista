@@ -22,14 +22,11 @@ export function EndpointForm({ childToParent }: any) {
         {/* <button onClick={() => signOut()} >Sign Out</button> */}
       </div>
     ) : (
-      <div className="flex items-center space-x-1">
-        {/* <button onClick={() => signIn()}>Sign In</button> */}
+      <div>
+        <h1 className="mr-1">Authentication not found</h1>{" "}
       </div>
     );
   }
-
-
-  
   return (
     <>
       <form action={handleSubmit} className="m-1 flex items-center">
