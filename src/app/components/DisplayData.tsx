@@ -19,9 +19,10 @@ type NodeObj = {
   id: string, 
   position: PositionObj,
   data: LabelObj,
-  style: StyleObj,
+  style?: StyleObj,
   parentNode?: string, 
-  extent?: string
+  extent?: string,
+  type?: string
 }
 
 type PositionObj = {
@@ -40,13 +41,21 @@ type StyleObj = {
 
 
 const initialNodes: any[] = [ // TODO: type
-  { id: 'x', position: { x: 500, y: 0 }, data: { label: 'Root Query' } }
+  { id: 'query', position: { x: 500, y: 0 }, data: { label: 'Root Query' } },
+  { id: 'types', position: { x: 750, y: 200 }, data: { label: 'Types'}},
+  { id: 'fields', position: { x: 250, y: 200 }, data: { label: 'Fields'}},
 ]
 
-let xindex = 0;
-let yindex = 0;
+let xIndexForFields = 250;
+let yIndexForFields = 300;
 
-const initialEdges: any[] = []; // TODO: type
+let xIndexForTypes = 750;
+let yIndexForTypes= 300;
+
+const initialEdges: any[] = [
+  {source: 'query', target: 'types'},
+  {source: 'query', target: 'fields'}
+]; // TODO: type
 console.log('this is our nodes', initialNodes)
 
 const onNodeClick = (event: any, node: any) => console.log('click node', node);
@@ -60,65 +69,89 @@ export function DisplayData(props: any) { // TODO: type
   //background variant
   const [ variant, setVariant ] = useState('dots');
 
-  //console.log('data from DisplayData comp', props.data.schema);
+ 
   const schema = props.data.schema;
   if (!schema) {
     return null; // or render an error message, loading state, or fallback UI
   }
-  
-  // const logType = (type: string) => {
-  //   console.log('this is the type', type);
-  // };
-  console.log('this is our schema', schema)
-
 
 // iterate through our type elements and set each label to the type
-  Object.keys(schema).map((typeName, i) => {
-    const arrayOfFields = schema[typeName];
-    const indexOfType = i.toString();
-    let newNode: NodeObj = { 
-      id: typeName, 
-      // id: i.toString(), 
-      position: { x: xindex, y: yindex }, 
-      data: { label: typeName }, 
 
-      style: {
-        width: 170,
-        height: 200,
-      },
+  const schemaFields = schema.fields
+  let nodeState = [...initialNodes];
+  schemaFields.map((fieldName, i) => {
+    let newNode: NodeObj = { 
+      id: fieldName,
+      position: { x: xIndexForFields, y: yIndexForFields }, 
+      data: { label: fieldName }, 
     };
     // push them to the initial nodes array (is it better to use a hook)
     initialNodes.push(newNode);
+    // nodeState.push(newNode);
+
 
     // increase the x and y positions
-    xindex += 10;
-    yindex += 10;
+    xIndexForFields += 50
 
     // create a new edge to connect each type to the root query
-    const newEdge = { source: 'x', target: i.toString()};
+    const newEdgeForFields = { source: 'fields', target: fieldName};
 
     // push the edges to the initial edges array (is it better to use a hook here?)
-    initialEdges.push(newEdge);
-    // iterate through the type's field array\
-    for (let i = 0; i < arrayOfFields.length; i++){
-      // xindex += 5;
-      // yindex += 5;
+    initialEdges.push(newEdgeForFields);
+    // // iterate through the type's field array\
+    // for (let i = 0; i < arrayOfFields.length; i++){
+    //   // xindex += 5;
+    //   // yindex += 5;
       
-      newNode = {
-        id: i.toString() + indexOfType + 'c',
-        data: {label: arrayOfFields[i] },
-        position: { x:xindex, y:yindex },
-        // position: { x:xindex, y:yindex },
-        style: {width: 50, height: 50},
-        parentNode: typeName,
+    //   newNode = {
+    //     id: i.toString() + indexOfType + 'c',
+    //     data: {label: arrayOfFields[i] },
+    //     position: { x:xindex, y:yindex },
+    //     // position: { x:xindex, y:yindex },
+    //     style: {width: 50, height: 50},
+    //     parentNode: typeName,
+    //     extent: 'parent'
+    //   }
+    //   console.log('this is new node', newNode)
+    //   initialNodes.push(newNode)
+    })
+
+  const schemaTypes = schema.types
+  for (let key in schemaTypes){
+
+    let newTypeNode: NodeObj = { 
+      id: key,
+      position: { x: xIndexForTypes, y: yIndexForTypes }, 
+      data: { label: key },
+      style: {
+        width: 200,
+        height: 400
+      } 
+    }
+
+    xIndexForTypes += 50
+    let newTypeEdge = {source: 'types', target: key};
+
+    initialNodes.push(newTypeNode);
+    // nodeState.push(newTypeNode)
+    initialEdges.push(newTypeEdge);
+
+    for (let el of schemaTypes[key]){
+      console.log(el)
+      let newTypeFieldNode: NodeObj = {
+        id: el + '_field' + key + '_parent',
+        position: {x: 0, y: 0},
+        data: { label: el},
+        parentNode: key,
         extent: 'parent'
       }
-      console.log('this is new node', newNode)
-      initialNodes.push(newNode)
+
+      initialNodes.push(newTypeFieldNode)
+      // nodeState.push(newTypeNode)
+      console.log(initialNodes)
     }
-    // create a new node, making sure to set an option that points to a parent node, no need to set a type
-    // push to the nodes array 
-  })
+    // setNodes(nodeState)
+  }
 
   return (
     <>
