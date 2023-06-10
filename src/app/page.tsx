@@ -18,8 +18,14 @@ export default function Home({ session }: any) {
     <>
       <SessionProvider session={session}>
         <EndpointForm childToParent={childToParent} />
-        <DisplayData data={data} setClickField={setClickField} />
-        <QueryContainer endpoint={data.endpoint} clickField={clickField} />
+        <div className="grid grid-cols-3">
+          <div className="col-span-2">
+            <DisplayData data={data} setClickField={setClickField} />
+          </div>
+          <div>
+            <QueryContainer endpoint={data.endpoint} clickField={clickField} />
+          </div>
+        </div>
       </SessionProvider>
     </>
   );

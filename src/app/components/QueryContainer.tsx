@@ -13,6 +13,7 @@ export default function QueryContainer({ endpoint, clickField }: any) { // TODO:
   return (
     <>
       <QueryGenerator childToParent={childToParent} clickField={clickField}/>
+      <br />
       <QueryResult data={data} endpoint={endpoint} />
     </>
   );

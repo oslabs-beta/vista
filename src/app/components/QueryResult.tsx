@@ -31,24 +31,23 @@ export default function QueryResult({ data, endpoint }: any) {
   }
 
   return (
-    <div className="flex items-center justify-center">
-      <div className="bg-white rounded-lg shadow p-4 max-w-md w-full">
+      <div className="bg-white rounded-lg shadow p-4 max-w-md border-dashed border-2 border-sky-500 mx-2">
         <button
-          className="bg-blue-500 text-white px-3 py-1 rounded-xl my-1"
+          className="bg-blue-500 text-white px-3 py-1 rounded-xl my-1 inline-flex"
           onClick={() => {
             queryData();
           }}
         >
-          Make Query
+          Run Query
+          <svg aria-hidden="true" className="w-5 h-5 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
         </button>
         <br />
         <textarea
           value={result}
-          className="resize-none hover:resize border border-gray-300 rounded px-2 py-1 w-72 h-80 break-normal"
+          className="resize-none hover:resize border border-gray-300 rounded px-2 py-1 w-96 h-64 break-normal"
           readOnly
           placeholder="Result..."
         ></textarea>
       </div>
-    </div>
   );
 }

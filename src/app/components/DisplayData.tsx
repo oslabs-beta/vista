@@ -167,6 +167,9 @@ export function DisplayData(props: any) { // TODO: type
     // setNodes(nodeState)
   }}
 
+  // fit view on load
+  // const onLoad= (instance:any) => setTimeout(() => instance.fitView(), 0);
+
   return (
     <>
         <div>
@@ -174,9 +177,9 @@ export function DisplayData(props: any) { // TODO: type
                 <h3>{type}:</h3> */}
 
                 <ul>
-                  {/* {schema[type].map((field: any, index: any) => ( */}
-                    <div style={{ width: '100vw', height: '100vh' }}>
+                    <div className="w-full h-[722px] border-2 border-blue-950 rounded-lg shadow p-2 mb-5">
                     <ReactFlow
+                      // onLoad={onLoad}
                       nodes={nodes}
                       edges={edges}
                       onNodesChange={onNodesChange}
@@ -191,33 +194,9 @@ export function DisplayData(props: any) { // TODO: type
                       <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
                     </ReactFlow>
                   </div>
-                    
-                    {/* // <div key={index}>
-                    //   <QueryCard type={field} />
-                    // </div> */}
-                  {/* ))} */}
                 </ul>
               </div>
       {/* </></div> */}
     </>
   );
 }
-
-
-
-
-/*  return (
-  <ReactFlow
-  nodes={nodes}
-  edges={edges}
-  onNodesChange={onNodesChange}
-  onEdgesChange={onEdgesChange}
-  onConnect={onConnect}
-  fitView
-  style={rfStyle}
-  attributionPosition="top-right"
->
-  <Background />
-</ReactFlow>
-);
-*/

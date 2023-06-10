@@ -32,81 +32,58 @@ export default function QueryGenerator({ childToParent, clickField }: any ) {
 
   // types and fields for hard coded buttons for demo
   const hardCodedValues = {
-    continents : ['code', 'name'],
-    countries : ['code', 'name'],
+    continents : ['name', 'code'],
+    countries : ['name', 'capital'],
   }
 
+  const demoButtons = document.querySelector("div.hidden");
+
   return (
-    <div className="flex items-center justify-center">
-      <div className="bg-white rounded-lg shadow p-4 max-w-md w-full">
+      <div className="bg-white rounded-lg shadow p-4 max-w-md border-dashed border-2 border-sky-500 mx-2">
         <form>
+          <button
+            className="text-blue-500 px-3 py-1 rounded-xl my-1 border border-blue-500 hover:bg-blue-500 hover:text-white hover:transition-all mx-1 inline-flex"
+            onClick={(e) => {
+              e.preventDefault();
+              demoButtons.classList.toggle("hidden")
+            }}
+          >
+            Click for demo
+            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" className="w-5 h-5 ml-2 -mr-1">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
+            </svg>
+          </button>
           {/* iterate object hardCodedValues */}
-          { Object.keys(hardCodedValues).map((type, index) => {
-              return (
-                <div key={index}>
-                  <h2>
-                    {type}:
-                  </h2>
-                  {hardCodedValues[type].map}
-                </div>
-              )
-            })
-          }
-          --------------<br />
-          continents:<br/>
-          <button
-            className="w-16 bg-blue-500 text-white px-3 py-1 rounded-xl my-1"
-            onClick={(e) => {
-              e.preventDefault();
-              const buttonName =
-                (e.target as HTMLButtonElement).textContent || "";
-              updateQueryAsObj(buttonName, "continents");
-            }}
-          >
-            name
-          </button>
-          <br />
-          <button
-            className="w-16 bg-blue-500 text-white px-3 py-1 rounded-xl my-1"
-            onClick={(e) => {
-              e.preventDefault();
-              const buttonName =
-                (e.target as HTMLButtonElement).textContent || "";
-              updateQueryAsObj(buttonName, "continents");
-            }}
-          >
-            code
-          </button>
-          <br />
-          countries:<br/>
-          <button
-            className="w-16 bg-blue-500 text-white px-3 py-1 rounded-xl my-1"
-            onClick={(e) => {
-              e.preventDefault();
-              const buttonName =
-                (e.target as HTMLButtonElement).textContent || "";
-              updateQueryAsObj(buttonName, "countries");
-            }}
-          >
-            name
-          </button>
-          <br />
-          <button
-            className="w-16 bg-blue-500 text-white px-3 py-1 rounded-xl my-1"
-            onClick={(e) => {
-              e.preventDefault();
-              const buttonName =
-                (e.target as HTMLButtonElement).textContent || "";
-              updateQueryAsObj(buttonName, "countries");
-            }}
-          >
-            code
-          </button>
-          <br />
-          <br />
+          <div className="hidden border border-dashed border-red-500 mb-5">
+            { Object.keys(hardCodedValues).map((type, index) => {
+                return (
+                  <div key={index}>
+                    <p>
+                      {type}:
+                      {hardCodedValues[type].map((value:string, indexValue:number) => {
+                        return (
+                          <button
+                            key={indexValue}
+                            className="text-blue-500 px-3 py-1 rounded-xl my-1 border border-blue-500 hover:bg-blue-500 hover:text-white hover:transition-all mx-1"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              updateQueryAsObj(value, type);
+                            }}
+                          >
+                            {value}
+                          </button>
+                        )
+                      })}
+                    </p>
+                  </div>
+                )
+              })
+            }
+          </div>
           <textarea
             value={queryAsString}
-            className="resize-none hover:resize border border-gray-300 rounded px-2 py-1 w-72 h-60 break-normal"
+            className="resize-none hover:resize border border-gray-300 rounded px-2 py-1 w-96 h-60 break-normal"
+            // className="resize-none hover:resize border border-gray-300 rounded px-2 py-1 w-96 h-60 break-normal bg-[url('https://graphql.org/img/logo-gray.svg')] bg-no-repeat bg-opacity-0"
             readOnly
           />
           <div>
@@ -127,6 +104,5 @@ export default function QueryGenerator({ childToParent, clickField }: any ) {
           {/* <p className="text-black">Result: {result}</p> */}
         </form>
       </div>
-    </div>
   );
 }
