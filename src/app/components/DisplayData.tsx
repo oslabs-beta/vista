@@ -60,9 +60,9 @@ console.log('this is our nodes', initialNodes)
 
 export function DisplayData(props: any) { // TODO: type
   // {props.data.err && alert('Please enter a valid endpoint')}
-  //         {!props.data.schema && "No data, please enter an endpoint above."}
-  //         {props.data.schema && Object.keys(props.data.schema).map((key, index) => {
-  //           return (
+  // {!props.data.schema && "No data, please enter an endpoint above."}
+  // {props.data.schema && Object.keys(props.data.schema).map((key, index) => {
+  // return (
 
   const [nodes, setNodes] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
