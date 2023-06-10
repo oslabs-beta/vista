@@ -31,20 +31,24 @@ export default function QueryResult({ data, endpoint }: any) {
   }
 
   return (
-    <>
-      <button
-        className="text-right bg-blue-500 hover:bg-blue-600 text-white font-bold"
-        onClick={() => {
-          queryData();
-        }}
-      >
-        Make Query
-      </button>
-      <textarea
-        value={result}
-        className="border border-gray-300 rounded px-2 py-1 w-full h-40 break-normal"
-        readOnly
-      ></textarea>
-    </>
+    <div className="flex items-center justify-center">
+      <div className="bg-white rounded-lg shadow p-4 max-w-md w-full">
+        <button
+          className="bg-blue-500 text-white px-3 py-1 rounded-xl my-1"
+          onClick={() => {
+            queryData();
+          }}
+        >
+          Make Query
+        </button>
+        <br />
+        <textarea
+          value={result}
+          className="resize-none hover:resize border border-gray-300 rounded px-2 py-1 w-72 h-80 break-normal"
+          readOnly
+          placeholder="Result..."
+        ></textarea>
+      </div>
+    </div>
   );
 }
