@@ -17,19 +17,19 @@ export function EndpointForm({ childToParent }: any) {
 
   function checkIfLoggedIn() {
     return status === "authenticated" ? (
-      <div className="flex items-center space-x-1">
+      <div className="p-5 flex items-center space-x-1 dark:bg-slate-800 dark:text-white">
         <h1 className="mr-1">Welcome {session.user!.email}</h1>{" "}
         {/* <button onClick={() => signOut()} >Sign Out</button> */}
       </div>
     ) : (
       <div>
-        <h1 className="mr-1">Authentication not found</h1>{" "}
+        <h1 className="p-5 mr-1 dark:bg-slate-800 dark:text-white">Authentication not found</h1>{" "}
       </div>
     );
   }
   return (
     <>
-      <form action={handleSubmit} className="m-1 flex items-center">
+      <form action={handleSubmit} className="m-0 p-6 flex items-center dark:bg-slate-800">
         <div className="relative w-full">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
             <svg
@@ -50,14 +50,14 @@ export function EndpointForm({ childToParent }: any) {
             type="text"
             name="endpoint-url"
             id="simple-search"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 dark:bg-slate-500 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Enter GraphQL API endpoint..."
             required
           />
         </div>
         <button
           type="submit"
-          className="p-2.5 ml-1 mr-1 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          className="p-2.5 ml-1 mr-1 text-sm font-medium text-white bg-blue-700 dark:bg-slate-500 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-slate-500 dark:hover:bg-slate-300 dark:hover:text-slate-900"
         >
           <svg
             className="w-5 h-5"

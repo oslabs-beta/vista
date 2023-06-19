@@ -31,9 +31,9 @@ export default function QueryResult({ data, endpoint }: any) {
   }
 
   return (
-      <div className="bg-white rounded-lg shadow p-4 max-w-md border-dashed border-2 border-sky-500 mx-2">
+      <div className="bg-white dark:bg-slate-600 rounded-lg shadow p-4 max-w-md border-dashed border-2 border-sky-500 dark:border-white mx-2">
         <button
-          className="bg-blue-500 text-white px-3 py-1 rounded-xl my-1 inline-flex"
+          className="bg-blue-500 dark:bg-slate-500 text-white px-3 py-1 rounded-xl my-1 inline-flex dark:border dark:border-white dark:hover:bg-slate-300 dark:hover:text-slate-900"
           onClick={() => {
             queryData();
           }}
@@ -44,7 +44,7 @@ export default function QueryResult({ data, endpoint }: any) {
         <br />
         <textarea
           value={result}
-          className="resize-none hover:resize border border-gray-300 rounded px-2 py-1 w-96 h-64 break-normal"
+          className="dark:bg-slate-800 dark:text-white resize-none hover:resize border border-gray-300 rounded px-2 py-1 w-96 h-64 break-normal"
           readOnly
           placeholder="Result..."
         ></textarea>

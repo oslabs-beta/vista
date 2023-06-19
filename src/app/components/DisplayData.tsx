@@ -188,8 +188,8 @@ export function DisplayData(props: any) { // TODO: type
                       //
                       onNodeClick={onNodeClick}
                     >
-                      <Controls />
-                      <MiniMap />
+                      <Controls className="dark:bg-slate-300"/>
+                      <MiniMap className="dark:bg-slate-300"/>
                       {/* removed the TS error here that was caused by the variant */}
                       <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
                     </ReactFlow>

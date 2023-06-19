@@ -19,7 +19,7 @@ export default function Home({ session }: any) {
       <SessionProvider session={session}>
         <EndpointForm childToParent={childToParent} />
         <div className="grid grid-cols-3">
-          <div className="col-span-2">
+          <div className="col-span-2 dark:bg-slate-800">
             <DisplayData data={data} setClickField={setClickField} />
           </div>
           <div>
