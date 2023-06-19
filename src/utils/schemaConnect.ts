@@ -67,6 +67,8 @@ export async function schemaConnect(apiEndpoint: string) {
     // filter the types
 
     const types:TypesData = await graphQLClient.request(queryStringForTypes);
+
+    
     const filteredTypes = types.__schema.types.filter((element) => !typesToIgnore.includes(element.name) && element.kind === 'OBJECT');
     //populate the schemaData
     filteredTypes.forEach((obj) => {
