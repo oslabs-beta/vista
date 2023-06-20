@@ -11,9 +11,8 @@ export default function QueryContainer({ endpoint, clickField }: any) { // TODO:
     setData(childData);
   };
   return (
-    <div className="dark:bg-slate-800">
+    <div className="ml-6 dark:bg-slate-800">
       <QueryGenerator childToParent={childToParent} clickField={clickField}/>
-      <br />
       <QueryResult data={data} endpoint={endpoint} />
     </div>
   );

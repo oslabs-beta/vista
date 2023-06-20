@@ -39,10 +39,10 @@ export default function QueryGenerator({ childToParent, clickField }: any ) {
   const demoButtons = document.querySelector("div.hidden");
 
   return (
-      <div className="bg-white dark:bg-slate-600 rounded-lg shadow p-4 max-w-md border-dashed border-2 border-sky-500 dark:border-white mx-2">
+      <div className="bg-white rounded-lg shadow p-4 max-w-md border-dashed border-2 border-sky-500 dark:bg-slate-600 dark:border-white mx-2">
         <form>
           <button
-            className="dark:bg-slate-500 text-blue-500 dark:text-white px-3 py-1 rounded-xl my-1 border border-blue-500 dark:border-white hover:bg-blue-500 hover:text-white dark:hover:bg-slate-300 dark:hover:text-slate-900 hover:transition-all mx-1 inline-flex"
+            className="ml-1 text-blue-500 dark:text-white px-3 py-1 rounded-xl my-1 border border-blue-500 hover:bg-blue-500 hover:text-white hover:transition-all mx-1 inline-flex dark:bg-slate-500 dark:border-white dark:hover:bg-slate-300 dark:hover:text-slate-900"
             onClick={(e) => {
               e.preventDefault();
               demoButtons.classList.toggle("hidden")
@@ -54,7 +54,7 @@ export default function QueryGenerator({ childToParent, clickField }: any ) {
             </svg>
           </button>
           {/* iterate object hardCodedValues */}
-          <div className="hidden border border-dashed border-red-500 dark:border-white mb-5 dark:text-white">
+          <div className="hidden border border-dashed border-red-500 mb-5 dark:border-white dark:text-white">
             { Object.keys(hardCodedValues).map((type, index) => {
                 return (
                   <div key={index}>
@@ -64,7 +64,7 @@ export default function QueryGenerator({ childToParent, clickField }: any ) {
                         return (
                           <button
                             key={indexValue}
-                            className="dark:bg-slate-500 text-blue-500 dark:text-white px-3 py-1 rounded-xl my-1 border border-blue-500 dark:border-white dark:hover:bg-slate-300 dark:hover:text-slate-900 hover:bg-blue-500 hover:text-white hover:transition-all mx-1"
+                            className="text-blue-500 px-3 py-1 rounded-xl my-1 border border-blue-500 hover:bg-blue-500 hover:text-white hover:transition-all mx-1dark:bg-slate-500 dark:text-white dark:border-white dark:hover:bg-slate-300 dark:hover:text-slate-900"
                             onClick={(e) => {
                               e.preventDefault();
                               updateQueryAsObj(value, type);
@@ -82,13 +82,13 @@ export default function QueryGenerator({ childToParent, clickField }: any ) {
           </div>
           <textarea
             value={queryAsString}
-            className="dark:bg-slate-800 dark:text-white resize-none hover:resize border border-gray-300 rounded px-2 py-1 w-96 h-60 break-normal"
+            className="mt-1 ml-1 mb-1 resize-none hover:resize border border-gray-300 rounded px-2 py-1 w-96 h-60 break-normal dark:bg-slate-800 dark:text-white"
             // className="resize-none hover:resize border border-gray-300 rounded px-2 py-1 w-96 h-60 break-normal bg-[url('https://graphql.org/img/logo-gray.svg')] bg-no-repeat bg-opacity-0"
             readOnly
           />
           <div>
             <button
-              className="bg-gray-500 text-white px-3 py-1 rounded-xl dark:bg-slate-500 dark:hover:bg-slate-300 dark:hover:text-slate-900"
+              className="ml-1 bg-gray-500 text-white px-3 py-1 rounded-xl dark:bg-slate-500 dark:hover:bg-slate-300 dark:hover:text-slate-900"
               onClick={async (e) => {
                 e.preventDefault();
                 await navigator.clipboard.writeText(queryAsString);

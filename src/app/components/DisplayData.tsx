@@ -172,12 +172,12 @@ export function DisplayData(props: any) { // TODO: type
 
   return (
     <>
-        <div>
+        <div className="ml-4">
               {/* <div key={index}>
                 <h3>{type}:</h3> */}
 
                 <ul>
-                    <div className="w-full h-[722px] border-2 border-blue-950 rounded-lg shadow p-2 mb-5">
+                    <div className="w-full h-[722px] border-2 border-blue-950 rounded-lg shadow p-2 mb-5 dark:border-white">
                     <ReactFlow
                       // onLoad={onLoad}
                       nodes={nodes}
