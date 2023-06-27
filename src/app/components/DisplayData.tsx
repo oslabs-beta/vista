@@ -172,12 +172,12 @@ export function DisplayData(props: any) { // TODO: type
 
   return (
     <>
-        <div>
+        <div className="ml-4">
               {/* <div key={index}>
                 <h3>{type}:</h3> */}
 
                 <ul>
-                    <div className="w-full h-[722px] border-2 border-blue-950 rounded-lg shadow p-2 mb-5">
+                    <div className="w-full h-[722px] border-2 border-blue-950 rounded-lg shadow p-2 mb-5 dark:border-white">
                     <ReactFlow
                       // onLoad={onLoad}
                       nodes={nodes}
@@ -188,8 +188,8 @@ export function DisplayData(props: any) { // TODO: type
                       //
                       onNodeClick={onNodeClick}
                     >
-                      <Controls />
-                      <MiniMap />
+                      <Controls className="dark:bg-slate-300"/>
+                      <MiniMap className="dark:bg-slate-300"/>
                       {/* removed the TS error here that was caused by the variant */}
                       <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
                     </ReactFlow>
