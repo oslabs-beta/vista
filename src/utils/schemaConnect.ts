@@ -20,7 +20,9 @@ type NamesOfTypes = {
     __typename: string
 }
 
+// types to ignore
 const typesToIgnore: string[] = ["Query", "String", "Boolean", "__Schema", "__Type", "__TypeKind", "__Field", "__InputValue", "__EnumValue", "__Directive", "ID", "Int", "__DirectiveLocation", "CacheControlScope", "Upload"]
+
 
 export async function schemaConnect(apiEndpoint: string) {
     
@@ -30,7 +32,7 @@ export async function schemaConnect(apiEndpoint: string) {
     // @ts-ignore
     const schemaData:Schema = {fields: null, types: {}};
 
-    // declare the query strings returns 
+    // declare the query strings for the fields and the types
     const queryStringForFields = gql`
     {
         __schema{
@@ -38,6 +40,9 @@ export async function schemaConnect(apiEndpoint: string) {
               name
               fields{
                 name
+                type{
+                  name
+                }
               }
             }
           }
@@ -55,26 +60,20 @@ export async function schemaConnect(apiEndpoint: string) {
             }
           }
     }`
-    // make the introspection query to grab the fields we can query
-    const queryFields: any  = await graphQLClient.request(queryStringForFields);
-    const arrOfFieldsOfQuery = []
 
 
     
-    queryFields.__schema.queryType.fields.forEach((obj) => arrOfFieldsOfQuery.push(obj.name))
-
-    schemaData.fields = arrOfFieldsOfQuery;
-    // filter the types
-
+    // get the types and filter them
     const types:TypesData = await graphQLClient.request(queryStringForTypes);
-
-    
     const filteredTypes = types.__schema.types.filter((element) => !typesToIgnore.includes(element.name) && element.kind === 'OBJECT');
+
     //populate the schemaData
     filteredTypes.forEach((obj) => {
         const arrayOfFields:string[] = [];
 
         const fieldsArrayFromType = obj.fields;
+
+        console.log(fieldsArrayFromType)
 
         fieldsArrayFromType.forEach((fieldObj => {
             arrayOfFields.push(fieldObj.name)
@@ -82,6 +81,17 @@ export async function schemaConnect(apiEndpoint: string) {
         console.log(obj.name, arrayOfFields)
         schemaData.types[obj.name] = arrayOfFields;
     })
+
+    // make the introspection query to grab the fields we can query
+    const queryFields: any  = await graphQLClient.request(queryStringForFields);
+    const arrOfFieldsOfQuery = []
+
+    // build the array of fields of the query; allow the frontend to check if arguments are required and what type each field is.
+    queryFields.__schema.queryType.fields.forEach((obj) => {
+      arrOfFieldsOfQuery.push({name: obj.name, argsRequired: false, type: obj.type.name})
+    })
+    schemaData.fields = arrOfFieldsOfQuery;
+
     console.log(schemaData)
    return schemaData;
 }
