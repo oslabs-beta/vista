@@ -1,5 +1,5 @@
 // import DB connection
-import { db } from '../../utils/database';
+import { db } from '../../../utils/database';
 
 // bcrypt
 const bcrypt = require('bcrypt');
