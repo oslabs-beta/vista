@@ -43,7 +43,7 @@ export async function POST(request: Request) {
     } catch(error: any) { // TODO: type
 
         // TODO: configure global error handler
-        console.log('error with user sign up in api/users POST handler');
+        console.log('error with user sign up in api/signup POST handler');
 
         return new Response(error.message);
     
