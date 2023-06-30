@@ -87,12 +87,94 @@ export async function schemaConnect(apiEndpoint: string) {
     const arrOfFieldsOfQuery = []
 
     // build the array of fields of the query; allow the frontend to check if arguments are required and what type each field is.
-    queryFields.__schema.queryType.fields.forEach((obj) => {
-      arrOfFieldsOfQuery.push({name: obj.name, argsRequired: false, type: obj.type.name})
-    })
-    schemaData.fields = arrOfFieldsOfQuery;
+    // possible problem with the forEach method
 
-    console.log(schemaData)
+    // queryFields.__schema.queryType.fields.forEach (async (obj) => {})
+      // arrOfFieldsOfQuery.push({name: obj.name, argsRequired: false, type: obj.type.name})
+    let promiseArray = [];
+    const buildPromiseArray = async () => {
+
+      queryFields.__schema.queryType.fields.forEach(async (obj) => {
+
+        if (schemaData.types[obj.type.name]){
+          let testField = schemaData.types[obj.type.name][0]
+        // build the dummy query and call it
+          let dummyQueryString = gql`
+          {
+            ${obj.name}{
+              ${testField}
+            }
+          }`
+
+          promiseArray.push({query: graphQLClient.request(dummyQueryString), fieldName: obj.name, type: obj.type.name})
+      } 
+      else {
+        arrOfFieldsOfQuery.push({name: obj.name, argsRequired: false, type: obj.type.name})
+      }
+      
+    
+    })
+    }
+        
+
+    buildPromiseArray();
+
+    const resolvePromises = async (arr) => {
+      for (const obj of arr){
+        try {
+          await obj.query
+        } catch (error) {
+          console.log(error.response.errors[0].message, 'inside the error')
+          arrOfFieldsOfQuery.push({name: obj.fieldName, argsRequired: true, type: obj.type, errorMessage: error.response.errors[0].message})
+        }
+      }
+
+      // await Promise.all(arr).then((values) => {
+      //   if (values.errors){
+      //     console.log('an error')
+      //   } else {
+      //     console.log('no error')
+      //   }
+      // })
+    }
+
+    const resultsOfPromise = await resolvePromises(promiseArray);
+    console.log(resultsOfPromise)
+    // await Promise.all(promiseArray).then((values) => {
+    //   console.log(values, 'inside the promise all')
+    // })
+
+      // if (schemaData.types[obj.type.name]){
+      //   let testField = schemaData.types[obj.type.name][0]
+      //   console.log(obj.name, testField, 'test field')
+
+      //   // build the dummy query and call it
+      //   let dummyQueryString = gql`
+      //   {
+      //     ${obj.name}{
+      //       ${testField}
+      //     }
+      //   }`
+
+      //   // somehow utilize promises to advantage...wrap all of this in an asynch helper function promise (promiseAll?) *possibility that the helper funciton may not be necessary
+      //   // possibile solutino is to create promise
+      //   // iterate through the fields
+      //   // push the promise to the promise array
+      //   // give array to promiseAll and await the resolution before returning the schema data
+
+      //   try {
+      //     const dummyQuery = await graphQLClient.request(dummyQueryString)
+      //     console.log({dummyQuery});
+      //   } catch (error) {
+      //     arrOfFieldsOfQuery.push({name: obj.name, argsRequired: true, type: obj.type.name})
+      //     console.log(error, 'inside here')
+      //   }
+      // } else {
+      //   arrOfFieldsOfQuery.push({name: obj.name, argsRequired: false, type: obj.type.name})
+      // }
+
+    schemaData.fields = arrOfFieldsOfQuery;
+    console.log('line 118', schemaData)
    return schemaData;
 }
 
