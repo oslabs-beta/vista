@@ -3,6 +3,7 @@ import { sign } from "crypto";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment, useEffect, useState } from "react";
+import Image from "next/image";
 
 
 
@@ -51,16 +52,20 @@ const onSignOut = () => {
   const { data: session, status } = useSession();
 
   function checkIfLoggedIn() {
-    return status === "authenticated" ? (
-      <div className="p-5 flex items-center space-x-1 dark:bg-slate-800 dark:text-white">
-        {/* <h1 className="mr-1">Welcome {session.user!.email}</h1>{" "} */}
-        {/* <button onClick={() => signOut()} >Sign Out</button> */}
-      </div>
-    ) : (
-      <div>
-      </div>
-    );
+    return status === "authenticated";
   }
+
+  // function checkIfLoggedIn() {
+  //   return status === "authenticated" ? (
+  //     <div className="p-5 flex items-center space-x-1 dark:bg-slate-800 dark:text-white">
+  //       {/* <h1 className="mr-1">Welcome {session.user!.email}</h1>{" "} */}
+  //       {/* <button onClick={() => signOut()} >Sign Out</button> */}
+  //     </div>
+  //   ) : (
+  //     <div>
+  //     </div>
+  //   );
+  // }
   return (
     <>
       {/* <form action={handleSubmit} className="pt-5 pr-4 pl-4 flex items-center dark:bg-slate-800"> */}
@@ -111,14 +116,14 @@ const onSignOut = () => {
           </svg>
         </button>
         {/* User Account Dropdown */}
-        <div className="flex items-center space-x-1">
+        <div className="flex items-center space-x-1.5">
           <Menu as='div' className='relative inline-block text-left'>
             <div>
               {/* Account Button */} 
               {/* <Menu.Button className='inline-flex w-full justify-center gap-x-1.5 border border-blue-500 rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset hover:bg-gray-200 dark:bg-slate-500 dark:border-white dark:hover:bg-slate-300'></Menu.Button>      */}
               <Menu.Button className='inline-flex w-full justify-center gap-x-1.5 border border-blue-500 rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset hover:bg-gray-200 dark:bg-slate-500 dark:border-white dark:hover:bg-slate-300'>
               {isLoggedIn ? (
-                    <img src={image} alt="" className="border-blue-500 rounded-sm w-6 h-6"
+                    <img src={image} alt="" className="inline-flex w-full justify-center gap-x-1.5 border-blue-500 rounded-sm w-6 h-6"
                     />
                   ) : (
                     <svg
@@ -161,7 +166,8 @@ const onSignOut = () => {
               leaveFrom='transform opacity-100 scale-100'
               leaveTo='transform opacity-0 scale-95'
             >
-             <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              {/* //mt-2 */}
+             <Menu.Items className="absolute right-0 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
               <div className="px-1 py-1">
                 <Menu.Item>
                   {isLoggedIn ? (
