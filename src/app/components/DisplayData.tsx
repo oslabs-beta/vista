@@ -10,10 +10,13 @@ import ReactFlow, {
   addEdge,
   BackgroundVariant,
   applyNodeChanges,
+  MarkerType,
+  ConnectionMode
 } from 'reactflow';
 
 import 'reactflow/dist/style.css';
 import { type } from "os";
+import SimpleFloatingEdge from './SimpleFloatingEdge';
 
 type NodeObj = {
   id: string, 
@@ -52,9 +55,23 @@ let yIndexForFields = 300;
 let xIndexForTypes = 750;
 let yIndexForTypes= 300;
 
+const edgeTypes = {
+  floating: SimpleFloatingEdge
+};
+
 const initialEdges: any[] = [
-  {source: 'query', target: 'types'},
-  {source: 'query', target: 'fields'}
+  {
+  source: 'query', 
+  target: 'types',
+  type: 'floating',
+  markerEnd: { type: MarkerType.ArrowClosed },
+},
+  {
+  source: 'query', 
+  target: 'fields',
+  type: 'floating',
+  markerEnd: { type: MarkerType.ArrowClosed },
+}
 ]; // TODO: type
 console.log('this is our nodes', initialNodes)
 
@@ -66,6 +83,7 @@ export function DisplayData(props: any) { // TODO: type
 
   const [nodes, setNodes] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
   
   const onNodeClick = (event: any, node: any) => {
     console.log('click node', node);
@@ -74,7 +92,7 @@ export function DisplayData(props: any) { // TODO: type
   }
 
   const onNodesChange = useCallback(
-    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)), [setNodes]
+    (changes:any) => setNodes((nds) => applyNodeChanges(changes, nds)), [setNodes]
   )
   
   //background variant
@@ -91,7 +109,8 @@ export function DisplayData(props: any) { // TODO: type
   const schemaFields = schema.fields
   // let nodeState = [...initialNodes];
   let numOfNodes = 0;
-  initialNodes.length === 3 && schemaFields.map((fieldName, i) => {
+  let counter = 0;
+  initialNodes.length === 3 && schemaFields.map((fieldName: string, i: number) => {
     let newNode: NodeObj = { 
       id: fieldName,
       position: { x: xIndexForFields, y: yIndexForFields }, 
@@ -100,34 +119,22 @@ export function DisplayData(props: any) { // TODO: type
     // push them to the initial nodes array (is it better to use a hook)
     initialNodes.push(newNode);
     // nodeState.push(newNode);
+    numOfNodes++;
 
-
-    // increase the x and y positions
-    xIndexForFields += 50
-
+    // set the x and y positions:
+    if (numOfNodes % 6 === 0 && numOfNodes !== 0) {
+      counter ++;
+      xIndexForFields -= 160; // Decrement x value for a new column
+      yIndexForFields = 300; // Reset y value for a new column
+    } else {
+      yIndexForFields += 50; // Increment y value for the next row in the same column
+    }
     // create a new edge to connect each type to the root query
-    const newEdgeForFields = { source: 'fields', target: fieldName};
+    const newEdgeForFields = { source: 'fields', target: fieldName, type: 'floating', markerEnd: { type: MarkerType.ArrowClosed }};
 
     // push the edges to the initial edges array (is it better to use a hook here?)
     initialEdges.push(newEdgeForFields);
-    // // iterate through the type's field array\
-    // for (let i = 0; i < arrayOfFields.length; i++){
-    //   // xindex += 5;
-    //   // yindex += 5;
-      
-    //   newNode = {
-    //     id: i.toString() + indexOfType + 'c',
-    //     data: {label: arrayOfFields[i] },
-    //     position: { x:xindex, y:yindex },
-    //     // position: { x:xindex, y:yindex },
-    //     style: {width: 50, height: 50},
-    //     parentNode: typeName,
-    //     extent: 'parent'
-    //   }
-    //   console.log('this is new node', newNode)
-    //   initialNodes.push(newNode)
-    numOfNodes++;
-  })
+  });
 
   const schemaTypes = schema.types
   if(numOfNodes + 3 === initialNodes.length) {
@@ -139,26 +146,33 @@ export function DisplayData(props: any) { // TODO: type
       data: { label: key },
       style: {
         width: 200,
-        height: 400
+        height: 400 
       } 
+    
     }
 
-    xIndexForTypes += 50
-    let newTypeEdge = {source: 'types', target: key};
+    xIndexForTypes += 215
+    let newTypeEdge = {source: 'types', target: key, type: 'floating',markerEnd: { type: MarkerType.ArrowClosed }};
 
     initialNodes.push(newTypeNode);
     // nodeState.push(newTypeNode)
     initialEdges.push(newTypeEdge);
 
+    
+    let fieldInTypeYValue: number = 40;
+    let fieldInTypeXValue: number = 25
+
     for (let el of schemaTypes[key]){
       console.log(el)
       let newTypeFieldNode: NodeObj = {
         id: el + '_field' + key + '_parent',
-        position: {x: 0, y: 0},
+        position: {x: fieldInTypeXValue, y: fieldInTypeYValue},
         data: { label: el},
         parentNode: key,
         extent: 'parent'
       }
+      fieldInTypeYValue += 50
+      
 
       initialNodes.push(newTypeFieldNode)
       // nodeState.push(newTypeNode)
@@ -187,6 +201,7 @@ export function DisplayData(props: any) { // TODO: type
                       //onConnect={onConnect}
                       //
                       onNodeClick={onNodeClick}
+                      fitView
                     >
                       <Controls className="dark:bg-slate-300"/>
                       <MiniMap className="dark:bg-slate-300"/>
