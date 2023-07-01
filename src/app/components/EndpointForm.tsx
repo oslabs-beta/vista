@@ -173,11 +173,13 @@ const onSignOut = () => {
               {/* //mt-2 */}
              <Menu.Items className="absolute right-0 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
               <div className="px-1 py-1">
-                  <Menu.Item>
-                    <button type='submit' onClick={() => router.push('/signup')} className="inline-flex r-2 w-56 hover:bg-slate-300"> {/* TODO: look into this error */}
-                      Sign Up
-                    </button>
-                  </Menu.Item>
+                  {!isLoggedIn && (
+                    <Menu.Item>
+                      <button type='submit' onClick={() => router.push('/signup')} className="inline-flex r-2 w-56 hover:bg-slate-300"> {/* TODO: look into this error */}
+                        Sign Up
+                      </button>
+                    </Menu.Item>
+                  )}
                 <Menu.Item>
                   {isLoggedIn ? (
                     <button onClick={onSignOut} className="inline-flex w-56 hover:bg-slate-300">
