@@ -2,10 +2,31 @@ import { getSchema } from "@/utils/getSchema";
 import { sign } from "crypto";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Menu, Transition } from '@headlessui/react';
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
+import Image from "next/image";
+
+
 
 export function EndpointForm({ childToParent }: any) {
+  const [ isLoggedIn, setIsLoggedIn ] = useState(false);
+  const { data: instance } = useSession();
+  const image: any = instance?.user?.image;
+
+  useEffect(() => {
+    console.log('this is the instance, aka session object ---->', instance)
+ 
+    setIsLoggedIn(!!instance);
+  }, [instance])
   //TODO: type
+  const onSignIn = () => {
+    signIn();
+    }
+
+const onSignOut = () => {
+  signOut();
+  setIsLoggedIn(false);
+  
+}
 
   const toggleTheme = () => {
     // query for HTML element
@@ -31,19 +52,23 @@ export function EndpointForm({ childToParent }: any) {
   const { data: session, status } = useSession();
 
   function checkIfLoggedIn() {
-    return status === "authenticated" ? (
-      <div className="p-5 flex items-center space-x-1 dark:bg-slate-800 dark:text-white">
-        <h1 className="mr-1">Welcome {session.user!.email}</h1>{" "}
-        {/* <button onClick={() => signOut()} >Sign Out</button> */}
-      </div>
-    ) : (
-      <div>
-        <h1 className="p-5 mr-1 dark:bg-slate-800 dark:text-white">Authentication not found</h1>{" "}
-      </div>
-    );
+    return status === "authenticated";
   }
+
+  // function checkIfLoggedIn() {
+  //   return status === "authenticated" ? (
+  //     <div className="p-5 flex items-center space-x-1 dark:bg-slate-800 dark:text-white">
+  //       {/* <h1 className="mr-1">Welcome {session.user!.email}</h1>{" "} */}
+  //       {/* <button onClick={() => signOut()} >Sign Out</button> */}
+  //     </div>
+  //   ) : (
+  //     <div>
+  //     </div>
+  //   );
+  // }
   return (
     <>
+      {/* <form action={handleSubmit} className="pt-5 pr-4 pl-4 flex items-center dark:bg-slate-800"> */}
       <form action={handleSubmit} className="pt-5 pr-4 pl-4 flex items-center dark:bg-slate-800">
         <div className="relative w-full">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -91,12 +116,17 @@ export function EndpointForm({ childToParent }: any) {
           </svg>
         </button>
         {/* User Account Dropdown */}
-        <div className="flex items-center space-x-1">
+        <div className="flex items-center space-x-1.5">
           <Menu as='div' className='relative inline-block text-left'>
             <div>
-              {/* Account Button */}      
+              {/* Account Button */} 
+              {/* <Menu.Button className='inline-flex w-full justify-center gap-x-1.5 border border-blue-500 rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset hover:bg-gray-200 dark:bg-slate-500 dark:border-white dark:hover:bg-slate-300'></Menu.Button>      */}
               <Menu.Button className='inline-flex w-full justify-center gap-x-1.5 border border-blue-500 rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset hover:bg-gray-200 dark:bg-slate-500 dark:border-white dark:hover:bg-slate-300'>
-                <svg
+              {isLoggedIn ? (
+                    <img src={image} alt="" className="inline-flex w-full justify-center gap-x-1.5 border-blue-500 rounded-sm w-6 h-6"
+                    />
+                  ) : (
+                    <svg
                   className="w-6 h-6 flex items-center text-blue-500 dark:text-white"
                   fill="none"
                   stroke="currentColor"
@@ -110,6 +140,21 @@ export function EndpointForm({ childToParent }: any) {
                     d="M12.075,10.812c1.358-0.853,2.242-2.507,2.242-4.037c0-2.181-1.795-4.618-4.198-4.618S5.921,4.594,5.921,6.775c0,1.53,0.884,3.185,2.242,4.037c-3.222,0.865-5.6,3.807-5.6,7.298c0,0.23,0.189,0.42,0.42,0.42h14.273c0.23,0,0.42-0.189,0.42-0.42C17.676,14.619,15.297,11.677,12.075,10.812 M6.761,6.775c0-2.162,1.773-3.778,3.358-3.778s3.359,1.616,3.359,3.778c0,2.162-1.774,3.778-3.359,3.778S6.761,8.937,6.761,6.775 M3.415,17.69c0.218-3.51,3.142-6.297,6.704-6.297c3.562,0,6.486,2.787,6.705,6.297H3.415z"
                   ></path>          
                 </svg>
+                  )}
+                {/* <svg
+                  className="w-6 h-6 flex items-center text-blue-500 dark:text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                  >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1"
+                    d="M12.075,10.812c1.358-0.853,2.242-2.507,2.242-4.037c0-2.181-1.795-4.618-4.198-4.618S5.921,4.594,5.921,6.775c0,1.53,0.884,3.185,2.242,4.037c-3.222,0.865-5.6,3.807-5.6,7.298c0,0.23,0.189,0.42,0.42,0.42h14.273c0.23,0,0.42-0.189,0.42-0.42C17.676,14.619,15.297,11.677,12.075,10.812 M6.761,6.775c0-2.162,1.773-3.778,3.358-3.778s3.359,1.616,3.359,3.778c0,2.162-1.774,3.778-3.359,3.778S6.761,8.937,6.761,6.775 M3.415,17.69c0.218-3.51,3.142-6.297,6.704-6.297c3.562,0,6.486,2.787,6.705,6.297H3.415z"
+                  ></path>          
+                </svg> */}
               </Menu.Button>
             </div>
             <Transition
@@ -121,20 +166,20 @@ export function EndpointForm({ childToParent }: any) {
               leaveFrom='transform opacity-100 scale-100'
               leaveTo='transform opacity-0 scale-95'
             >
-              <Menu.Items className='absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
-                <div className="px-1 py-1">
-                  <Menu.Item>
-                    <button type='submit' onClick={signIn} className="inline-flex r-2 w-56 hover:bg-slate-300"> {/* TODO: look into this error */}
-                      Sign In
-                    </button>
-                  </Menu.Item>
-                  <br></br>
-                  <Menu.Item>
-                    <button onClick={signOut} className="inline-flex w-56 hover:bg-slate-300">
+              {/* //mt-2 */}
+             <Menu.Items className="absolute right-0 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <div className="px-1 py-1">
+                <Menu.Item>
+                  {isLoggedIn ? (
+                    <button onClick={onSignOut} className="inline-flex w-56 hover:bg-slate-300">
                       Sign Out
                     </button>
-                  </Menu.Item>
-                  <br></br>
+                  ) : (
+                    <button onClick={onSignIn} className="inline-flex w-56 hover:bg-slate-300">
+                      Sign In
+                    </button>
+                  )}
+                </Menu.Item>
                   <Menu.Item>
                     <button onClick={toggleTheme} className="inline-flex w-56 hover:bg-slate-300">
                       Toggle Theme
