@@ -5,10 +5,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { db } from '../../../utils/database';
 const bcrypt = require('bcrypt');
 
-// added these console logs to make sure that we're processing the enf
-console.log(process.env.GOOGLE_CLIENT_ID)
-console.log(process.env.GOOGLE_CLIENT_SECRET)
-
 // resource: https://www.youtube.com/watch?v=A5ZN--P9vXM&pp=ygUObmV4dGF1dGggb2F1dGg%3D
 const handler = NextAuth({
 
