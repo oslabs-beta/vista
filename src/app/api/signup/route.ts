@@ -24,7 +24,7 @@ export async function POST(request: Request) {
         const user: any = await db.query(checkUser, [username]); // TODO: type
 
         if(user.rows[0]) {
-            throw new Error('that username is already taken');
+            return new Response(JSON.stringify({userTaken: true}));
         }
 
         // hash password

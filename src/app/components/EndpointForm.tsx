@@ -3,9 +3,12 @@ import { sign } from "crypto";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from "react";
+import { useRouter } from "next/navigation";
 
 export function EndpointForm({ childToParent }: any) {
   //TODO: type
+
+  const router = useRouter();
 
   const toggleTheme = () => {
     // query for HTML element
@@ -123,6 +126,11 @@ export function EndpointForm({ childToParent }: any) {
             >
               <Menu.Items className='absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
                 <div className="px-1 py-1">
+                  <Menu.Item>
+                    <button type='submit' onClick={() => router.push('/signup')} className="inline-flex r-2 w-56 hover:bg-slate-300"> {/* TODO: look into this error */}
+                      Sign Up
+                    </button>
+                  </Menu.Item>
                   <Menu.Item>
                     <button type='submit' onClick={signIn} className="inline-flex r-2 w-56 hover:bg-slate-300"> {/* TODO: look into this error */}
                       Sign In
