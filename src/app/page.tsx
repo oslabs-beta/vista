@@ -22,7 +22,7 @@ export default function Home({ session }: any) {
           <div className="col-span-2 dark:bg-slate-800">
             <DisplayData data={data} setClickField={setClickField} />
           </div>
-          <div className="dark:bg-slate-800">
+          <div className="h-screen dark:bg-slate-800">
             <QueryContainer endpoint={data.endpoint} clickField={clickField} />
           </div>
         </div>
