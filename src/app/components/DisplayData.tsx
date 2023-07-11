@@ -91,11 +91,11 @@ export function DisplayData(props: any) { // TODO: type
   const schemaFields = schema.fields
   // let nodeState = [...initialNodes];
   let numOfNodes = 0;
-  initialNodes.length === 3 && schemaFields.map((fieldName, i) => {
+  initialNodes.length === 3 && schemaFields.map((field, i) => {
     let newNode: NodeObj = { 
-      id: fieldName,
+      id: field.name,
       position: { x: xIndexForFields, y: yIndexForFields }, 
-      data: { label: fieldName }, 
+      data: { label: field.name }, 
     };
     // push them to the initial nodes array (is it better to use a hook)
     initialNodes.push(newNode);
@@ -106,7 +106,7 @@ export function DisplayData(props: any) { // TODO: type
     xIndexForFields += 50
 
     // create a new edge to connect each type to the root query
-    const newEdgeForFields = { source: 'fields', target: fieldName};
+    const newEdgeForFields = { source: 'fields', target: field.name};
 
     // push the edges to the initial edges array (is it better to use a hook here?)
     initialEdges.push(newEdgeForFields);
