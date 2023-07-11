@@ -1,24 +1,16 @@
 // import DB connection
-import { db } from '../../utils/database';
+import { db } from '../../../utils/database';
 
 // bcrypt
 const bcrypt = require('bcrypt');
 const SALT_WORK_FACTOR = 10;
-
-// cookies
-import { cookies } from 'next/headers';
-
-
-// unused imports
-import { redirect } from 'next/dist/server/api-utils';
-import { PERMANENT_REDIRECT_STATUS } from 'next/dist/shared/lib/constants';
 
 
 interface UserData {
     username: string,
     password: string,
 }
-
+//how do i test this in postman?
 // add new user to db
 export async function POST(request: Request) {
     
@@ -32,26 +24,26 @@ export async function POST(request: Request) {
         const user: any = await db.query(checkUser, [username]); // TODO: type
 
         if(user.rows[0]) {
-            throw new Error('that username is already taken');
+            return new Response(JSON.stringify({userTaken: true}));
         }
 
         // hash password
         const hashedPass: string = await bcrypt.hash(password, SALT_WORK_FACTOR);
 
         // create query string & add new user to db
-        const queryStr: string = 'INSERT INTO users (username, password) VALUES ($1, $2);';
+        const queryStr: string = 'INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *;';
         const newUser: any = await db.query(queryStr, [username, hashedPass]); // TODO: type
-        console.log('this is the newUser -> ', newUser);
+        console.log('this is the newUser -> ', newUser.rows[0]);
 
         // create new session & add cookie to response
         // TS error seems to be an unresolved issue, but method still works
 
-        return new Response(newUser.json());
+        return new Response(JSON.stringify(newUser.rows[0]));
 
     } catch(error: any) { // TODO: type
 
         // TODO: configure global error handler
-        console.log('error with user sign up in api/users POST handler');
+        console.log('error with user sign up in api/signup POST handler');
 
         return new Response(error.message);
     
