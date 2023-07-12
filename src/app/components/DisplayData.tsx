@@ -127,35 +127,23 @@ export function DisplayData(props: any) {
   const schemaFields = schema.fields;
   // let nodeState = [...initialNodes];
   let numOfNodes = 0;
-  let counter = 0;
-  initialNodes.length === 3 &&
-    schemaFields.map((fieldName: string, i: number) => {
-      let newNode: NodeObj = {
-        id: fieldName,
-        position: { x: xIndexForFields, y: yIndexForFields },
-        data: { label: fieldName },
-        type: "output",
-      };
-      // push them to the initial nodes array (is it better to use a hook)
-      initialNodes.push(newNode);
-      // nodeState.push(newNode);
-      numOfNodes++;
+  initialNodes.length === 3 && schemaFields.map((field: any, i: any) => {
+    let newNode: NodeObj = { 
+      id: field.name,
+      position: { x: xIndexForFields, y: yIndexForFields }, 
+      data: { label: field.name },
+      type: "output", 
+    };
+    // push them to the initial nodes array (is it better to use a hook)
+    initialNodes.push(newNode);
+    // nodeState.push(newNode);
 
-      // set the x and y positions:
-      if (numOfNodes % 6 === 0 && numOfNodes !== 0) {
-        counter++;
-        xIndexForFields -= 300; // Decrement x value for a new column
-        yIndexForFields = 300; // Reset y value for a new column
-      } else {
-        yIndexForFields += 50; // Increment y value for the next row in the same column
-      }
-      // create a new edge to connect each type to the root query
-      const newEdgeForFields = {
-        source: "fields",
-        target: fieldName,
-        type: "floating",
-        markerEnd: { type: MarkerType.ArrowClosed },
-      };
+
+    // increase the x and y positions
+    xIndexForFields += 50
+
+    // create a new edge to connect each type to the root query
+    const newEdgeForFields = { source: 'fields', target: field.name};
 
       // push the edges to the initial edges array (is it better to use a hook here?)
       initialEdges.push(newEdgeForFields);

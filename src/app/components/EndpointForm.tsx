@@ -51,6 +51,7 @@ const onSignOut = () => {
     if (typeof endpoint === "string") {
       schemaAndEndpoint.endpoint = endpoint!;
     }
+    console.log("schema endpoint:", schemaAndEndpoint);
     childToParent(schemaAndEndpoint);
   };
   const { data: session, status } = useSession();
