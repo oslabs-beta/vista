@@ -23,6 +23,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"], // removed '"src/app/api/schema/routes.js"' 
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/components/SimpleFloatingEdge.js"], // removed '"src/app/api/schema/routes.js"' 
   "exclude": ["node_modules"]
 }
