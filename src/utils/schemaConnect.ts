@@ -43,6 +43,12 @@ export async function schemaConnect(apiEndpoint: string) {
                 type{
                   name
                 }
+                args {
+                  name
+                  type {
+                    kind
+                  }
+                }
               }
             }
           }
@@ -65,7 +71,9 @@ export async function schemaConnect(apiEndpoint: string) {
     
     // get the types and filter them
     const types:TypesData = await graphQLClient.request(queryStringForTypes);
-    const filteredTypes = types.__schema.types.filter((element) => !typesToIgnore.includes(element.name) && element.kind === 'OBJECT');
+    const filteredTypes = types.__schema.types.filter(
+      (element) => !typesToIgnore.includes(element.name) && element.kind === 'OBJECT'
+    );
 
     //populate the schemaData
     filteredTypes.forEach((obj) => {
@@ -88,6 +96,13 @@ export async function schemaConnect(apiEndpoint: string) {
     const buildPromiseArray = async () => {
 
       queryFields.__schema.queryType.fields.forEach(async (obj) => {
+        // for each field, store all it's non-null (required) arguments in an array
+        const reqArgs: string[] = [];
+        obj.args.forEach((arg) => {
+          if (arg.type.kind === 'NON_NULL') {
+            reqArgs.push(arg.name);
+          }
+        })
 
         // check to see if the type is on the queryfield
         if (schemaData.types[obj.type.name]){
@@ -101,13 +116,27 @@ export async function schemaConnect(apiEndpoint: string) {
             }
           }`
           // push the information to the promise array
-          promiseArray.push({query: graphQLClient.request(dummyQueryString), fieldName: obj.name, type: obj.type.name})
-      } 
-      // if there is no type, that means args aren't required.
-      else {
-        arrOfFieldsOfQuery.push({name: obj.name, argsRequired: false, type: obj.type.name})
-      }
-    })
+          promiseArray.push(
+            {
+              query: graphQLClient.request(dummyQueryString),
+              fieldName: obj.name,
+              type: obj.type.name,
+              reqArgs: reqArgs
+            }
+          );
+        } 
+        // if there is no type, that means args aren't required.
+        else {
+          arrOfFieldsOfQuery.push(
+            {
+              name: obj.name,
+              argsRequired: false,
+              type: obj.type.name,
+              reqArgs: reqArgs
+            }
+          );
+        }
+      })
     }
     buildPromiseArray();
 
@@ -115,10 +144,25 @@ export async function schemaConnect(apiEndpoint: string) {
     const resolvePromises = async (arr) => {
       for (const obj of arr){
         try {
-          await obj.query
-          arrOfFieldsOfQuery.push({name: obj.fieldName, argsRequired:false, type: obj.type})
+          await obj.query;
+          arrOfFieldsOfQuery.push(
+            {
+              name: obj.fieldName,
+              argsRequired: false,
+              type: obj.type,
+              reqArgs: obj.reqArgs
+            }
+          );
         } catch (error) {
-          arrOfFieldsOfQuery.push({name: obj.fieldName, argsRequired: true, type: obj.type, errorMessage: error.response.errors[0].message})
+          arrOfFieldsOfQuery.push(
+            {
+              name: obj.fieldName,
+              argsRequired: true,
+              type: obj.type,
+              errorMessage: error.response.errors[0].message,
+              reqArgs: obj.reqArgs
+            }
+          );
         }
       }
     }
