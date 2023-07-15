@@ -14,7 +14,7 @@
     "@headlessui/react": "^1.7.15",
     "@mui/material": "^5.13.3",
     "@types/node": "20.2.1",
-    "@types/react": "18.2.6",
+    "@types/react": "^18.2.6",
     "@types/react-dom": "18.2.4",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",

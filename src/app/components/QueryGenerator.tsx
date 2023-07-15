@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import "tailwindcss/tailwind.css";
 import { jsonToGraphQLQuery } from "json-to-graphql-query";
+import { QueryGenerator } from "../../../types"
 
-export default function QueryGenerator({ childToParent, clickField }: any ) {
+export default function QueryGenerator({ childToParent, clickField }: QueryGenerator) {
   const [queryAsObj, setQueryAsObj] = useState({ query: {} });
   const [queryAsString, setQueryAsString] = useState("query: { \n \n }");
   
@@ -20,66 +21,20 @@ export default function QueryGenerator({ childToParent, clickField }: any ) {
     setQueryAsString(jsonToGraphQLQuery(tempObj, { pretty: true }));
     
   };
-  // console.log("CHILD TO PARENT", childToParent);
-  useEffect(() => {
-    childToParent(queryAsString);   
-  });
+  
+  // useEffect(() => {
+  //   childToParent(queryAsString);   
+  // });
 
   // useEffect(() => {
   useEffect(() => {
     if(clickField.field && clickField.type) updateQueryAsObj(clickField.field.toLowerCase(), clickField.type.toLowerCase())
-  }, [clickField])
+  })
 
-  // types and fields for hard coded buttons for demo
-  const hardCodedValues = {
-    continents : ['name', 'code'],
-    countries : ['name', 'capital'],
-  }
-
-  const demoButtons = document.querySelector("div.hidden");
 
   return (
       <div className="bg-white rounded-lg shadow p-4 max-w-md border-dashed border-2 border-sky-500 dark:bg-slate-600 dark:border-white mx-2">
         <form>
-          <button
-            className="ml-1 text-blue-500 dark:text-white px-3 py-1 rounded-xl my-1 border border-blue-500 hover:bg-blue-500 hover:text-white hover:transition-all mx-1 inline-flex dark:bg-slate-500 dark:border-white dark:hover:bg-slate-300 dark:hover:text-slate-900"
-            onClick={(e) => {
-              e.preventDefault();
-              demoButtons.classList.toggle("hidden")
-            }}
-          >
-            Click for demo
-            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" className="w-5 h-5 ml-2 -mr-1">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
-            </svg>
-          </button>
-          {/* iterate object hardCodedValues */}
-          <div className="hidden border border-dashed border-red-500 mb-5 dark:border-white dark:text-white">
-            { Object.keys(hardCodedValues).map((type, index) => {
-                return (
-                  <div key={index}>
-                    <p>
-                      {type}:
-                      {hardCodedValues[type].map((value:string, indexValue:number) => {
-                        return (
-                          <button
-                            key={indexValue}
-                            className="px-3 py-1 my-1 mx-1 text-blue-500 rounded-xl border border-blue-500 hover:bg-blue-500 hover:text-white hover:transition-all dark:bg-slate-500 dark:text-white dark:border-white dark:hover:bg-slate-300 dark:hover:text-slate-900"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              updateQueryAsObj(value, type);
-                            }}
-                          >
-                            {value}
-                          </button>
-                        )
-                      })}
-                    </p>
-                  </div>
-                )
-              })
-            }
-          </div>
           <textarea
             value={queryAsString}
             className="mt-1 ml-1 mb-1 resize-none hover:resize border border-gray-300 rounded px-2 py-1 w-96 h-60 break-normal dark:bg-slate-800 dark:text-white"

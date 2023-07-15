@@ -9,6 +9,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export function EndpointForm({ childToParent }: any) {
+  console.log({childToParent})
   const [ isLoggedIn, setIsLoggedIn ] = useState(false);
   const { data: instance } = useSession();
   const image: any = instance?.user?.image;
