@@ -74,7 +74,7 @@ const onSignOut = () => {
   return (
     <>
       {/* <form action={handleSubmit} className="pt-5 pr-4 pl-4 flex items-center dark:bg-slate-800"> */}
-      <form action={handleSubmit} className="pt-5 pr-4 pl-4 flex items-center dark:bg-slate-800">
+      <form data-testid="endpoint-form" action={handleSubmit} className="pt-5 pr-4 pl-4 flex items-center dark:bg-slate-800">
         <div className="relative w-full">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
             <svg

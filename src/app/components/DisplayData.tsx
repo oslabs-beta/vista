@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 import React, { useCallback, useState } from "react";
-
+import { v4 as uuid } from "uuid";
 import ReactFlow, { 
   MiniMap, 
   Controls, 
@@ -24,7 +24,8 @@ type NodeObj = {
   style?: StyleObj,
   parentNode?: string, 
   extent?: string,
-  type?: string
+  type?: string,
+
 }
 
 type PositionObj = {
@@ -34,13 +35,13 @@ type PositionObj = {
 
 type LabelObj = {
   label: string
+  "data-testid"?: string;
 }
 
 type StyleObj = {
   width: number,
   height: number
 }
-
 
 const initialNodes: any[] = [ // TODO: type
   { id: 'query', position: { x: 500, y: 0 }, data: { label: 'Root Query' } },
@@ -111,9 +112,17 @@ export function DisplayData(props: any) { // TODO: type
     let newNode: NodeObj = { 
       id: field.name,
       position: { x: xIndexForFields, y: yIndexForFields }, 
-      data: { label: field.name },
-      type: "output", 
+      data: { label: field.name, "data-testid": "field" },
+      type: "output",
     };
+    // // Generate a unique ID for the data-test attribute
+    // const dataTestId = uuid();
+    // // Add a data-test attribute to the node
+    // newNode.data["data-testid"] = dataTestId;
+    // console.log('THIS IS THE DATA TEST ID:', dataTestId)
+    newNode.data["data-testid"] = "field"
+
+
       // push them to the initial nodes array (is it better to use a hook)
       initialNodes.push(newNode);
       // nodeState.push(newNode);
@@ -145,9 +154,11 @@ export function DisplayData(props: any) { // TODO: type
       style: {
         width: 200,
         height: 400 
-      } 
-    
+      } ,
     }
+    console.log('HELLOHELLOHELLO', newTypeNode)
+    
+    newTypeNode.data["data-testid"] = "type";
 
     xIndexForTypes += 215
     let newTypeEdge = {source: 'types', target: key, type: 'floating',markerEnd: { type: MarkerType.ArrowClosed }};
@@ -165,10 +176,14 @@ export function DisplayData(props: any) { // TODO: type
       let newTypeFieldNode: NodeObj = {
         id: el + '_field' + key + '_parent',
         position: {x: fieldInTypeXValue, y: fieldInTypeYValue},
-        data: { label: el},
+        data: { label: el },
         parentNode: key,
-        extent: 'parent'
+        extent: 'parent',
       }
+      // // Generate a unique ID for the data-test attribute
+      // const dataTestId = uuid();
+      // // Add a data-test attribute to the node
+      
       fieldInTypeYValue += 50
       
 
