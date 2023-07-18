@@ -5,13 +5,13 @@ import { DisplayData } from "@/app/components/DisplayData";
 import { useState } from "react";
 import { SessionProvider } from "next-auth/react";
 import QueryContainer from "./components/QueryContainer";
-import { ChildData, } from "../../types"
+import { ChildData, ClickField, Data } from "../../types"
 import { CircularProgress } from "@mui/material";
 
 export default function Home({ session }: any) {
   // data fetching: https://youtu.be/gSSsZReIFRk?t=293
-  const [data, setData] = useState({schema:{fields: [], types: {}}, endpoint:""});
-  const [clickField, setClickField] = useState({ field: "" });
+  const [data, setData] = useState<Data>({schema:{fields: [], types: {}}, endpoint:""});
+  const [clickField, setClickField] = useState<ClickField>({ type: "", field: "" });
   const childToParent = (childData: ChildData): void => {
     setData(childData);
   };

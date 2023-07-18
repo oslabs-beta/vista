@@ -61,7 +61,7 @@ export function DisplayData(props: Props) { // TODO: type
   const [edges, setEdges] = useState(initialEdges);
   
   const onNodeClick = (event:any, node:Node) => {
-    props.setClickField({type: node.parentNode, field: node.data.label})
+    props.setClickField({type: node.parentNode || "", field: node.data.label})
   }
 
   // const onNodesChange = useCallback(
