@@ -59,4 +59,28 @@ export type BuildingTheSchemaObject = {
   query:Promise<string>,
   fieldName: string,
   type:string
+  reqArgs: string[]
 }
+
+export type ArrayOfFields = {
+  name: string, 
+  argsRequired:boolean, 
+  type: string, 
+  errorMessage?: string, 
+  reqArgs: any
+}[]
+
+export type QueryFieldsSchema = {
+  name: string, 
+  type: {
+    name: string, 
+    __typename: string}, 
+   args: {
+    name:string, 
+    type: {
+      kind: string, 
+      __typename: string
+      },
+      __typename:string}[],
+   __typename: string
+      }
