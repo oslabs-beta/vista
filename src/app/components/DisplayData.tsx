@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 
 import ReactFlow, { 
   MiniMap, 
@@ -17,6 +17,8 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import { type } from "os";
 
+import TextUpdaterNode from '@/app/components/nodes/TextUpdaterNode';
+
 type NodeObj = {
   id: string, 
   position: PositionObj,
@@ -33,7 +35,8 @@ type PositionObj = {
 }
 
 type LabelObj = {
-  label: string
+  label: string,
+  arguments: string[]
 }
 
 type StyleObj = {
@@ -80,11 +83,23 @@ export function DisplayData(props: any) { // TODO: type
 
   const [nodes, setNodes] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const nodeTypes = useMemo(() => ({ textUpdater: TextUpdaterNode }), []);
+
 
   
   const onNodeClick = (event: any, node: any) => {
     console.log('click node', node);
-      
+    // setNodes(
+    //   [
+    //     ...nodes,
+    //     {
+    //       id: 'id' + Math.random(),
+    //       position: { x: 500, y: 0 },
+    //       data: { label: "yo" },
+    //       type: 'textUpdater',
+    //     }
+    //   ]
+    // );
     props.setClickField({type: node.parentNode, field: node.data.label})
   }
 
@@ -111,7 +126,7 @@ export function DisplayData(props: any) { // TODO: type
     let newNode: NodeObj = { 
       id: field.name,
       position: { x: xIndexForFields, y: yIndexForFields }, 
-      data: { label: field.name },
+      data: { label: field.name, arguments: [...field.reqArgs] },
       type: "output", 
     };
       // push them to the initial nodes array (is it better to use a hook)
@@ -141,7 +156,7 @@ export function DisplayData(props: any) { // TODO: type
     let newTypeNode: NodeObj = { 
       id: key,
       position: { x: xIndexForTypes, y: yIndexForTypes }, 
-      data: { label: key },
+      data: { label: key, arguments: [] },
       style: {
         width: 200,
         height: 400 
@@ -165,7 +180,7 @@ export function DisplayData(props: any) { // TODO: type
       let newTypeFieldNode: NodeObj = {
         id: el + '_field' + key + '_parent',
         position: {x: fieldInTypeXValue, y: fieldInTypeYValue},
-        data: { label: el},
+        data: { label: el, arguments: [] }, // add required arguments here
         parentNode: key,
         extent: 'parent'
       }
@@ -181,7 +196,6 @@ export function DisplayData(props: any) { // TODO: type
 
   // fit view on load
   // const onLoad= (instance:any) => setTimeout(() => instance.fitView(), 0);
-
   return (
     <>
         <div className="ml-4">
@@ -200,6 +214,8 @@ export function DisplayData(props: any) { // TODO: type
                       //
                       onNodeClick={onNodeClick}
                       fitView
+
+                      nodeTypes={nodeTypes}
                     >
                       <Controls className="dark:bg-slate-300"/>
                       <MiniMap className="dark:bg-slate-300"/>
