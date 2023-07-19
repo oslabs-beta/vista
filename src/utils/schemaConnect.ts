@@ -1,28 +1,8 @@
 import {GraphQLClient, gql} from 'graphql-request'
-
-
-// interfaces for the data
-interface Schema {
-    fields: any
-    types: any
-}
-
-interface TypesData{
-    __schema: {
-        types: [NamesOfTypes]
-    }
-}
-
-type NamesOfTypes = {
-    name: string,
-    kind: string,
-    fields: any,
-    __typename: string
-}
+import { SchemaData, Field, TypesData, BuildingTheSchemaObject, ArrayOfFields, QueryFieldsSchema } from '../../types'
 
 // types to ignore
 const typesToIgnore: string[] = ["Query", "String", "Boolean", "__Schema", "__Type", "__TypeKind", "__Field", "__InputValue", "__EnumValue", "__Directive", "ID", "Int", "__DirectiveLocation", "CacheControlScope", "Upload"]
-
 
 export async function schemaConnect(apiEndpoint: string) {
     
@@ -30,7 +10,7 @@ export async function schemaConnect(apiEndpoint: string) {
 
     // will be populated and returned to the FE
 
-    const schemaData:Schema = {fields: null, types: {}};
+    const schemaData:SchemaData = {fields: [], types: {}};
 
     // declare the query strings for the fields and the types
     const queryStringForFields = gql`
@@ -80,31 +60,34 @@ export async function schemaConnect(apiEndpoint: string) {
         const arrayOfFields:string[] = [];
         const fieldsArrayFromType = obj.fields;
 
-        fieldsArrayFromType.forEach((fieldObj => {
+        fieldsArrayFromType.forEach((fieldObj: Field) => {
             arrayOfFields.push(fieldObj.name)
-        }))
+        })
         
         schemaData.types[obj.name] = arrayOfFields;
     })
 
     // make the introspection query to grab the fields we can query
-    const queryFields  = await graphQLClient.request(queryStringForFields);
-    const arrOfFieldsOfQuery = []
+    const queryFields = await graphQLClient.request(queryStringForFields);
+    
+    const arrOfFieldsOfQuery:ArrayOfFields = [];
 
     // declare the helper function to build the array of promises
-    let promiseArray = [];
+    let promiseArray: BuildingTheSchemaObject[] = [];
     const buildPromiseArray = async () => {
 
-      queryFields.__schema.queryType.fields.forEach(async (obj) => {
+      queryFields.__schema.queryType.fields.forEach(async (obj: QueryFieldsSchema) => {
+
         // for each field, store all it's non-null (required) arguments in an array
         const reqArgs: string[] = [];
         obj.args.forEach((arg) => {
+          console.log(arg)
           if (arg.type.kind === 'NON_NULL') {
             reqArgs.push(arg.name);
           }
         })
 
-        // check to see if the type is on the queryfield
+        // check to see if the type is on the queryfield290
         if (schemaData.types[obj.type.name]){
           // grab a test field to make the dummy auery
           let testField = schemaData.types[obj.type.name][0]
@@ -123,7 +106,7 @@ export async function schemaConnect(apiEndpoint: string) {
               type: obj.type.name,
               reqArgs: reqArgs
             }
-          );
+           );
         } 
         // if there is no type, that means args aren't required.
         else {
@@ -141,7 +124,7 @@ export async function schemaConnect(apiEndpoint: string) {
     buildPromiseArray();
 
     // helper function to resolve the promises, this allows us to check if we get an error
-    const resolvePromises = async (arr) => {
+    const resolvePromises = async (arr:BuildingTheSchemaObject[]) => {
       for (const obj of arr){
         try {
           await obj.query;
