@@ -1,5 +1,5 @@
 import {GraphQLClient, gql} from 'graphql-request'
-import { SchemaData, Field, TypesData, BuildingTheSchemaObject} from '../../types'
+import { SchemaData, Field, TypesData, BuildingTheSchemaObject } from '../../types'
 
 // types to ignore
 const typesToIgnore: string[] = ["Query", "String", "Boolean", "__Schema", "__Type", "__TypeKind", "__Field", "__InputValue", "__EnumValue", "__Directive", "ID", "Int", "__DirectiveLocation", "CacheControlScope", "Upload"]
@@ -61,7 +61,9 @@ export async function schemaConnect(apiEndpoint: string) {
 
     // make the introspection query to grab the fields we can query
     const queryFields = await graphQLClient.request(queryStringForFields);
-    console.log({queryFields})
+    
+    console.log(queryFields)
+
     const arrOfFieldsOfQuery: {name: string, argsRequired:boolean, type: string, errorMessage?: string}[] = []
 
     // declare the helper function to build the array of promises

@@ -2,7 +2,7 @@
 
 import { EndpointForm } from "@/app/components/EndpointForm";
 import { DisplayData } from "@/app/components/DisplayData";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { SessionProvider } from "next-auth/react";
 import QueryContainer from "./components/QueryContainer";
 import { ChildData, ClickField, Data } from "../../types"

@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, Suspense } from "react";
 import { Props } from '../../../types'
 
 import ReactFlow, { 
@@ -19,6 +19,7 @@ import ReactFlow, {
 } from 'reactflow';
 
 import 'reactflow/dist/style.css';
+import { CircularProgress } from "@mui/material";
 
 const initialNodes: Node[] = [ 
   { id: 'query', position: { x: 500, y: 0 }, data: { label: 'Root Query' } },
@@ -155,13 +156,13 @@ export function DisplayData(props: Props) { // TODO: type
   // const onLoad= (instance:any) => setTimeout(() => instance.fitView(), 0);
 
   return (
-    <>youtu
        <div className="ml-4">
               {/* <div key={index}>
                 <h3>{type}:</h3> */}
-
+              <Suspense fallback={<CircularProgress />}>
                 <ul>
-                    <div className="w-full h-[722px] border-2 border-blue-950 rounded-lg shadow p-2 mb-5 dark:border-white">
+
+                  <div className="w-full h-[722px] border-2 border-blue-950 rounded-lg shadow p-2 mb-5 dark:border-white">
                    <ReactFlow
                       // onLoad={onLoad}
                       nodes={nodes}
@@ -180,8 +181,7 @@ export function DisplayData(props: Props) { // TODO: type
                     </ReactFlow>
                   </div>
                 </ul>
+              </Suspense>
               </div> 
-      {/* </></div> */}
-    </>
   );
               }
