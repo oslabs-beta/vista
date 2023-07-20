@@ -1,13 +1,14 @@
 import React, { ChangeEvent, MouseEvent, FormEvent, useState } from "react";
 import { Dialog } from '@headlessui/react';
-interface SaveModalProps {
+
+type SaveModalProps = {
+    query: string,
+    endpoint: string,
     isSaveModalOpen: boolean,
     setIsSaveModalOpen: (status: boolean) => void,
     setIsSaveResponseModalOpen: (status: boolean) => void,
-    setSaveResponseMessage: (response: string) => void,
-    query: string,
-    endpoint: string,
-}
+    setSaveResponseMessage: (message: string) => void,
+};
 
 export default function SaveModal(props: SaveModalProps) {
     const { isSaveModalOpen, 
