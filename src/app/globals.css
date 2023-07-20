@@ -39,3 +39,14 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.flow-container {
+  position: relative;
+}
+
+.view-more-button {
+  position: absolute;
+  bottom: 10px; /* Adjust the bottom value as needed */
+  left: 50%; /* Adjust the left value to center the button horizontally */
+  transform: translateX(-50%);
+}
