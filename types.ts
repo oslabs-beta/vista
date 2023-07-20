@@ -98,3 +98,18 @@ export type QueryFieldsSchema = {
       __typename:string}[],
    __typename: string
       }
+
+export type SaveModalProps = {
+  query: string,
+  endpoint: string,
+  isSaveModalOpen: boolean,
+  setIsSaveModalOpen: (status: boolean) => void,
+  setIsSaveResponseModalOpen: (status: boolean) => void,
+  setSaveResponseMessage: (message: string) => void,
+};
+
+export type SaveResponseModalProps = {
+  isSaveResponseModalOpen: boolean,
+  setIsSaveResponseModalOpen: (status: boolean) => void,
+  saveResponseMessage: string,
+};

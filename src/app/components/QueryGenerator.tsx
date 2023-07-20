@@ -14,7 +14,6 @@ export default function QueryGenerator(QueryGeneratorProps: QueryGenerator) {
   } = QueryGeneratorProps;
 
   const [queryAsObj, setQueryAsObj] = useState({ query: {} });
-  // const [queryAsString, setQueryAsString] = useState("query: { \n \n }");
   
   const updateQueryAsObj = (fieldName: string, typeName: string) => {
     //make a deep copy of queryAsObj

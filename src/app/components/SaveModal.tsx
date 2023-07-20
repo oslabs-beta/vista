@@ -1,14 +1,6 @@
 import React, { ChangeEvent, MouseEvent, FormEvent, useState } from "react";
 import { Dialog } from '@headlessui/react';
-
-type SaveModalProps = {
-    query: string,
-    endpoint: string,
-    isSaveModalOpen: boolean,
-    setIsSaveModalOpen: (status: boolean) => void,
-    setIsSaveResponseModalOpen: (status: boolean) => void,
-    setSaveResponseMessage: (message: string) => void,
-};
+import { SaveModalProps } from "../../../types";
 
 export default function SaveModal(props: SaveModalProps) {
     const { isSaveModalOpen, 
@@ -20,14 +12,16 @@ export default function SaveModal(props: SaveModalProps) {
         } = props;
 
     const [queryName, setQueryName] = useState('');
+
     async function handleSaveQuery(e: FormEvent) {
         e.preventDefault();
+
         const queryData = {
             queryName,
             queryText: query,
             endpoint,
         }
-        const res = await fetch('http://localhost:3000/api/queries', {
+        const res = await fetch('http://localhost:3000/app/api/queries', {
             method: "POST",
             mode: "cors",
             credentials: "same-origin",
