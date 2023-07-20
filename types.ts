@@ -36,7 +36,21 @@ export type ChildToParent = (schema: Data, endpoint: string) => void
 
 export type ChildData = { schema: {fields: never[]; types: {}; }, endpoint: string }
 
-export type QueryGenerator = {childToParent: ChildToParent, clickField: ClickField}
+export type QueryContainerProps = {
+  endpoint: string,
+  clickField: ClickField,
+  setIsSaveModalOpen: (status: boolean) => void,
+  queryAsString: string,
+  setQueryAsString: (query: string) => void,
+};
+
+export type QueryGenerator = {
+    childToParent: ChildToParent, 
+    clickField: ClickField,
+    queryAsString: string,
+    setQueryAsString: (query: string) => void,
+    setIsSaveModalOpen: (status: boolean) => void,
+  }
 
 export type QueryResult = {data: any, endpoint: string}
 

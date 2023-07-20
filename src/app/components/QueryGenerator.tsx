@@ -3,9 +3,18 @@ import "tailwindcss/tailwind.css";
 import { jsonToGraphQLQuery } from "json-to-graphql-query";
 import { QueryGenerator } from "../../../types"
 
-export default function QueryGenerator({ childToParent, clickField }: QueryGenerator) {
+export default function QueryGenerator(QueryGeneratorProps: QueryGenerator) {
+
+  const {
+    childToParent,
+    clickField,
+    queryAsString,
+    setQueryAsString,
+    setIsSaveModalOpen,
+  } = QueryGeneratorProps;
+
   const [queryAsObj, setQueryAsObj] = useState({ query: {} });
-  const [queryAsString, setQueryAsString] = useState("query: { \n \n }");
+  // const [queryAsString, setQueryAsString] = useState("query: { \n \n }");
   
   const updateQueryAsObj = (fieldName: string, typeName: string) => {
     //make a deep copy of queryAsObj
@@ -57,6 +66,7 @@ export default function QueryGenerator({ childToParent, clickField }: QueryGener
             </button>
           </div>
           {/* <p className="text-black">Result: {result}</p> */}
+          
         </form>
       </div>
   );
