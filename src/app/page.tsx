@@ -18,7 +18,7 @@ export default function Home({ session }: any) {
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [isSaveResponseModalOpen, setIsSaveResponseModalOpen] = useState(false);
   const [queryAsString, setQueryAsString] = useState("query: { \n \n }");
-  const [saveResponseMessage, setSaveResponseMessage] = useState('');
+  const [saveResponseStatus, setSaveResponseStatus] = useState(false);
 
   const childToParent = (childData: ChildData): void => {
     setData(childData);
@@ -40,8 +40,8 @@ export default function Home({ session }: any) {
             <QueryContainer endpoint={data.endpoint} clickField={clickField} setIsSaveModalOpen={setIsSaveModalOpen} queryAsString={queryAsString} setQueryAsString={setQueryAsString} />
           </div>
         </div>
-        <SaveModal isSaveModalOpen={isSaveModalOpen} setIsSaveModalOpen={setIsSaveModalOpen} setIsSaveResponseModalOpen={setIsSaveResponseModalOpen} setSaveResponseMessage={setSaveResponseMessage} query={queryAsString} endpoint={data.endpoint} />
-        <SaveResponseModal isSaveResponseModalOpen={isSaveResponseModalOpen} setIsSaveResponseModalOpen={setIsSaveResponseModalOpen} saveResponseMessage={saveResponseMessage}/>
+        <SaveModal isSaveModalOpen={isSaveModalOpen} setIsSaveModalOpen={setIsSaveModalOpen} setIsSaveResponseModalOpen={setIsSaveResponseModalOpen} setSaveResponseStatus={setSaveResponseStatus} query={queryAsString} endpoint={data.endpoint} />
+        <SaveResponseModal isSaveResponseModalOpen={isSaveResponseModalOpen} setIsSaveResponseModalOpen={setIsSaveResponseModalOpen} saveResponseStatus={saveResponseStatus}/>
       </SessionProvider>
     </>
   );

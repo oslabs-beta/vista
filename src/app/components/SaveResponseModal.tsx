@@ -2,7 +2,7 @@ import { Dialog } from "@headlessui/react";
 import { SaveResponseModalProps } from "../../../types";
 
 export default function SaveResponseModal(props: SaveResponseModalProps) {
-    const { isSaveResponseModalOpen, setIsSaveResponseModalOpen, saveResponseMessage } = props;
+    const { isSaveResponseModalOpen, setIsSaveResponseModalOpen, saveResponseStatus } = props;
     return(
         <Dialog as='div' open={isSaveResponseModalOpen} onClose={() => {setIsSaveResponseModalOpen(false)}}>
             {/* backdrop */}
@@ -10,11 +10,15 @@ export default function SaveResponseModal(props: SaveResponseModalProps) {
             {/* fullscreen container - used for positioning */}
             <div className='flex flex-col items-center justify-center z-10 overflow-y-auto'>
                 <Dialog.Panel
-                    className='flex align-center justify-center border dark:border-white fixed inset-x-90 inset-y-60 flex items-center justify-center w-full max-w-md py-6 px-10 transform overflow-hidden rounded-2xl bg-white bg-opacity-10 shadow-xl border dark:bg-opacity-90 dark:bg-slate-700 dark:border-white'
+                    className='flex flex-col items-center justify-center border dark:border-white fixed inset-x-90 inset-y-60 flex items-center justify-center w-full max-w-md py-6 px-10 transform overflow-hidden rounded-2xl bg-white bg-opacity-10 shadow-xl border dark:bg-opacity-90 dark:bg-slate-700 dark:border-white'
                     >
                     <Dialog.Title className='flex align-center text-xl font-bold dark:text-white'>
-                        <span>{saveResponseMessage}</span>
+                            <span>{(saveResponseStatus) ? "Success!" : "Whoops!"}</span>
                     </Dialog.Title>
+                    <br></br>
+                    <Dialog.Description className='flex align-center text-md font-bold dark:text-white'>
+                        <span><p>{(saveResponseStatus) ? "Query Saved To The Database" : "Something Went Wrong. Please Try Again."}</p></span>
+                    </Dialog.Description>
                 </Dialog.Panel>
             </div>
         </Dialog>

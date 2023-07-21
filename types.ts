@@ -105,11 +105,11 @@ export type SaveModalProps = {
   isSaveModalOpen: boolean,
   setIsSaveModalOpen: (status: boolean) => void,
   setIsSaveResponseModalOpen: (status: boolean) => void,
-  setSaveResponseMessage: (message: string) => void,
+  setSaveResponseStatus: (status: boolean) => void,
 };
 
 export type SaveResponseModalProps = {
   isSaveResponseModalOpen: boolean,
   setIsSaveResponseModalOpen: (status: boolean) => void,
-  saveResponseMessage: string,
+  saveResponseStatus: boolean,
 };

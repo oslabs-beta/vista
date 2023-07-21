@@ -6,7 +6,7 @@ export default function SaveModal(props: SaveModalProps) {
     const { isSaveModalOpen, 
             setIsSaveModalOpen, 
             setIsSaveResponseModalOpen, 
-            setSaveResponseMessage, 
+            setSaveResponseStatus, 
             query, 
             endpoint, 
         } = props;
@@ -21,7 +21,7 @@ export default function SaveModal(props: SaveModalProps) {
             queryText: query,
             endpoint,
         }
-        const res = await fetch('http://localhost:3000/app/api/queries', {
+        const res = await fetch('http://localhost:3000/api/queries', {
             method: "POST",
             mode: "cors",
             credentials: "same-origin",
@@ -31,9 +31,9 @@ export default function SaveModal(props: SaveModalProps) {
             body: JSON.stringify(queryData)
         })
         console.log('this is the response from posting query to DB => ', res);
-        // alert('Query saved to DB!');
-        const responseMessage = (res.ok) ? 'Query Saved Succesfully!' : 'Failed to save query. Please try again.'
-        setSaveResponseMessage(responseMessage);
+
+        // const responseMessage = (res.ok) ? 'Query Saved Succesfully!' : 'Something Went Wrong'
+        setSaveResponseStatus(res.ok);
         setIsSaveModalOpen(false);
         setIsSaveResponseModalOpen(true);
     };
