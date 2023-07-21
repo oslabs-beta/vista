@@ -62,13 +62,15 @@ export type BuildingTheSchemaObject = {
   reqArgs: string[]
 }
 
-export type ArrayOfFields = {
-  name: string, 
-  argsRequired:boolean, 
-  type: string, 
-  errorMessage?: string, 
-  reqArgs: any
-}[]
+export type ArrayOfFields = FieldObject[]
+
+export type FieldObject = {
+  name: string,
+  argsRequired: boolean,
+  type: string,
+  errorMessage?: string,
+  reqArgs?: any
+}
 
 export type QueryFieldsSchema = {
   name: string, 
