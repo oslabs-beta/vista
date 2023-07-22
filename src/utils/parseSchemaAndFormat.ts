@@ -14,9 +14,11 @@ export async function parseSchemaAndFormat(apiEndpoint: string) {
     const schemaData:SchemaData = {fields: [], types: {}};
 
     const introspectionQueryData:unknown = await request (apiEndpoint, getIntrospectionQuery());
+    console.log('introspectionQueryData', JSON.stringify(introspectionQueryData));
 
     const arrayOfFieldObjects:ArrayOfFields = [];
 
+    // @ts-ignore
     const fieldsFromIntrospectionQuery = introspectionQueryData.__schema.types;
 
 
@@ -60,7 +62,32 @@ export async function parseSchemaAndFormat(apiEndpoint: string) {
         const fieldsOfTheType = [];
 
         for (const field of type.fields){
-          fieldsOfTheType.push(field.name)
+          // fieldsOfTheType.push(field.name)
+
+          let name = field.name;
+
+          //check if the field is of kind object meaning it adds a new level of nesting we currently don't support
+          // console.log(`type of field ${field.name}`, JSON.stringify(field.type));
+          let kindOfTypeOfField = field.type.kind;
+          let ofType = field.type.ofType;
+          let isObject = false;
+          while(ofType) {
+            if (kindOfTypeOfField === "OBJECT") {
+              isObject = true;
+              break;
+            }
+            else {
+              ofType = ofType.ofType;
+              kindOfTypeOfField = ofType.kind;
+            }
+          }
+          fieldsOfTheType.push(
+            {
+              name,
+              isObject,
+            }
+          )
+
         }
 
         schemaData.types[type.name] = fieldsOfTheType;
