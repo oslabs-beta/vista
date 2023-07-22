@@ -21,11 +21,11 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import { CircularProgress } from "@mui/material";
 
-import TextUpdaterNode from '@/app/components/nodes/TextUpdaterNode';
+// import TextUpdaterNode from '@/app/components/nodes/TextUpdaterNode';
 
 const initialNodes: Node[] = [ 
   { id: 'query', position: { x: 500, y: 0 }, data: { label: 'Root Query' } },
-  { id: 'types', position: { x: 750, y: 200 }, data: { label: 'Types'}},
+  // { id: 'types', position: { x: 750, y: 200 }, data: { label: 'Types'}},
   { id: 'fields', position: { x: 250, y: 200 }, data: { label: 'Fields'}},
 ]
 
@@ -38,12 +38,12 @@ let yIndexForTypes= 300;
 
 
 const initialEdges: Edge[] = [
-  {
-  id: '1',
-  source: 'query', 
-  target: 'types',
-  markerEnd: { type: MarkerType.ArrowClosed },
-},
+//   {
+//   id: '1',
+//   source: 'query', 
+//   target: 'types',
+//   markerEnd: { type: MarkerType.ArrowClosed },
+// },
   {
   id: '2',
   source: 'query', 
@@ -65,7 +65,7 @@ export function DisplayData(props: Props) { // TODO: type
 
   const [hiddenNodes, setHiddenNodes] = useState(new Set());
   
-  const nodeTypes = useMemo(() => ({ textUpdater: TextUpdaterNode }), []);
+  // const nodeTypes = useMemo(() => ({ textUpdater: TextUpdaterNode }), []);
 
   
   const onNodeClick = (event:any, node:Node) => {
@@ -111,7 +111,7 @@ export function DisplayData(props: Props) { // TODO: type
 // render a node for each field in the query type
   const schemaFields = schema.fields
   let numOfNodes = 0;
-  initialNodes.length === 3 && schemaFields.map((field: any, i: any) => {
+  initialNodes.length === 2 && schemaFields.map((field: any, i: any) => {
     let newNode: Node = {
       id: field.name,
       position: { x: xIndexForFields, y: yIndexForFields }, 
@@ -169,6 +169,7 @@ export function DisplayData(props: Props) { // TODO: type
     }
 
     const newTypeOfFieldEdge = {
+      id: field.name + 'to' + field.name + '-' + field.type,
       source: field.name,
       target: field.name + '-' + field.type,
       type: 'floating',
@@ -176,12 +177,30 @@ export function DisplayData(props: Props) { // TODO: type
         type: MarkerType.ArrowClosed
       }
     };
-    console.log('new edge:', newTypeOfFieldEdge);
+    // console.log('new edge:', newTypeOfFieldEdge);
 
     initialNodes.push(newTypeOfFieldNode);
     initialEdges.push(newTypeOfFieldEdge);
 
     xIndexForTypes +=215
+
+    let fieldInTypeYValue: number = 40;
+    let fieldInTypeXValue: number = 25
+
+    for (let el of schema.types[field.type]){
+      let newTypeFieldNode: Node = {
+        id: el + '_field' + field.type + '_parent',
+        position: {x: fieldInTypeXValue, y: fieldInTypeYValue},
+        data: { label: el },
+        parentNode: field.name + '-' + field.type,
+        extent: 'parent'
+      }
+      fieldInTypeYValue += 50
+      
+
+      initialNodes.push(newTypeFieldNode)
+    }
+
   });
 
   // render types and their fields
@@ -218,8 +237,8 @@ export function DisplayData(props: Props) { // TODO: type
   //   initialEdges.push(newTypeEdge);
 
     
-  //   let fieldInTypeYValue: number = 40;
-  //   let fieldInTypeXValue: number = 25
+    // let fieldInTypeYValue: number = 40;
+    // let fieldInTypeXValue: number = 25
 
     // for (let el of schemaTypes[key]){
     //   let newTypeFieldNode: Node = {
@@ -232,9 +251,9 @@ export function DisplayData(props: Props) { // TODO: type
     //   fieldInTypeYValue += 50
       
 
-  //     initialNodes.push(newTypeFieldNode)
-  //   }
-  //   // setNodes(nodeState)
+    //   initialNodes.push(newTypeFieldNode)
+    // }
+    // setNodes(nodeState)
   // }}
 
 
@@ -259,7 +278,7 @@ export function DisplayData(props: Props) { // TODO: type
                       onNodeClick={onNodeClick}
                       fitView
 
-                      nodeTypes={nodeTypes}
+                      // nodeTypes={nodeTypes}
                     >
                       <Controls className="dark:bg-slate-300"/>
                       <MiniMap className="dark:bg-slate-300"/>

@@ -24,31 +24,16 @@
 "use server";
 import { GraphQLClient } from 'graphql-request' //fetch from GraphQL API: https://youtu.be/F3BWdFXEJPk
 import { getIntrospectionQuery } from 'graphql';
-import { parseSchemaAndFormat } from './parseSchemaAndFormat';
+import { parseSchemaAndFormat } from '././parseSchemaAndFormat';
 import { request } from "graphql-request"
 
-<<<<<<< HEAD
-import { GraphQLClient } from 'graphql-request' //fetch from GraphQL API: https://youtu.be/F3BWdFXEJPk
-import { getIntrospectionQuery } from 'graphql';
-import { parseSchemaAndFormat } from './parseSchemaAndFormat';
-import { request } from "graphql-request"
 
 export async function getSchema(data: FormData) {
   'use client'
-
-=======
-
-export async function getSchema(data: FormData) {
-  'use client'
->>>>>>> dev
   const endpoint = data.get('endpoint-url')?.valueOf();
   if(typeof endpoint !== 'string' || endpoint.length === 0) {
     throw new Error('Invalid endpoint');
   }
-<<<<<<< HEAD
-=======
-
->>>>>>> dev
   const schema = await parseSchemaAndFormat(endpoint);
   console.log('this is the schema', JSON.stringify(schema));
   let err = false;
