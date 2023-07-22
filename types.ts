@@ -3,6 +3,7 @@ import {Dispatch, SetStateAction} from "react"
 export type Props = {
     data: Data,
     setClickField: Dispatch<SetStateAction<{type: string, field: string}>>
+    setData: Dispatch<SetStateAction<Data>>
   }
 
 export type SchemaData = {
