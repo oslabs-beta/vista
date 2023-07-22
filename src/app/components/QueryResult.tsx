@@ -3,11 +3,10 @@ import "tailwindcss/tailwind.css";
 import QueryGenerator from "./QueryGenerator";
 import QueryContainer from "./QueryContainer";
 import { GraphQLClient, gql } from "graphql-request";
+import { QueryResult } from "../../../types"
 
-export default function QueryResult({ data, endpoint }: any) {
+export default function QueryResult({ data, endpoint }: QueryResult) {
   const [result, setResult] = useState("");
-  console.log("this is data on QueryResult:", data);
-  console.log("this is the endpoint on QueryResult:", endpoint);
 
   async function queryData() {
     const graphQLClient = new GraphQLClient(endpoint);

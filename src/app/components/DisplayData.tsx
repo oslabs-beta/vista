@@ -1,54 +1,29 @@
 /* eslint-disable react/jsx-key */
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState, Suspense } from "react";
+import { Props } from '../../../types'
 
 import ReactFlow, { 
   MiniMap, 
   Controls, 
   Background, 
-  useNodesState, // similar to useState in React
+  useNodesState,
   useEdgesState, 
-  addEdge,
+  Node,
+  Edge,
   BackgroundVariant,
   applyNodeChanges,
+  applyEdgeChanges,
   MarkerType,
-  ConnectionMode
+  NodeChange,
+  EdgeChange
 } from 'reactflow';
 
 import 'reactflow/dist/style.css';
-import { type } from "os";
+import { CircularProgress } from "@mui/material";
 
 import TextUpdaterNode from '@/app/components/nodes/TextUpdaterNode';
 
-type NodeObj = {
-  id: string, 
-  position: PositionObj,
-  data: LabelObj,
-  style?: StyleObj,
-  parentNode?: string, 
-  extent?: string,
-  type?: string,
-  hidden?: boolean,
-}
-
-type PositionObj = {
-  x: number, 
-  y: number
-}
-
-type LabelObj = {
-  label: string,
-  arguments?: string[],
-  type?: string,
-  queryField?: boolean,
-}
-
-type StyleObj = {
-  width: number,
-  height: number
-}
-
-
-const initialNodes: any[] = [ // TODO: type
+const initialNodes: Node[] = [ 
   { id: 'query', position: { x: 500, y: 0 }, data: { label: 'Root Query' } },
   { id: 'types', position: { x: 750, y: 200 }, data: { label: 'Types'}},
   { id: 'fields', position: { x: 250, y: 200 }, data: { label: 'Fields'}},
@@ -62,39 +37,38 @@ let yIndexForTypes= 300;
 
 
 
-const initialEdges: any[] = [
+const initialEdges: Edge[] = [
   {
+  id: '1',
   source: 'query', 
   target: 'types',
-  type: 'floating',
   markerEnd: { type: MarkerType.ArrowClosed },
 },
   {
+  id: '2',
   source: 'query', 
   target: 'fields',
-  type: 'floating',
   markerEnd: { type: MarkerType.ArrowClosed },
 }
-]; // TODO: type
-console.log('this is our nodes', initialNodes)
+];
 
-export function DisplayData(props: any) { // TODO: type
+
+
+export function DisplayData(props: Props) { // TODO: type
   // {props.data.err && alert('Please enter a valid endpoint')}
   // {!props.data.schema && "No data, please enter an endpoint above."}
   // {props.data.schema && Object.keys(props.data.schema).map((key, index) => {
   // return (
 
-  const [nodes, setNodes] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  
-  // handle hiding and unhiding nodes on click
+  const [nodes, setNodes] = useState(initialNodes);
+  const [edges, setEdges] = useState(initialEdges);
+
   const [hiddenNodes, setHiddenNodes] = useState(new Set());
   
   const nodeTypes = useMemo(() => ({ textUpdater: TextUpdaterNode }), []);
 
-
   
-  const onNodeClick = (event: any, node: any) => {
+  const onNodeClick = (event:any, node:Node) => {
     // if the node that was clicked is a field on Query type
     if (node.data.queryField) {
       // set id of node that should be hidden/unhidden
@@ -116,17 +90,17 @@ export function DisplayData(props: any) { // TODO: type
     // alert(`should display node for type ${node.data.type}`)
 
     // send clicked node data to query generator
-    props.setClickField({type: node.parentNode, field: node.data.label})
+    props.setClickField({type: node.parentNode || "", field: node.data.label})
   }
 
-  const onNodesChange = useCallback(
-    (changes:any) => setNodes((nds) => applyNodeChanges(changes, nds)), [setNodes]
-  )
-  
-  //background variant
-  const [ variant, setVariant ] = useState('dots');
+  // const onNodesChange = useCallback(
+  //   (changes:any) => setNodes((nds) => applyNodeChanges(changes, nds)), [setNodes]
+  // )
 
- 
+  const onNodesChange = useCallback((changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)), []);
+
+  const onEdgesChange = useCallback((changes: EdgeChange[]) => setEdges((eds) => applyEdgeChanges(changes, eds)),[] );
+
   const schema = props.data.schema;
   if (!schema) {
     return null; // or render an error message, loading state, or fallback UI
@@ -136,11 +110,9 @@ export function DisplayData(props: any) { // TODO: type
 
 // render a node for each field in the query type
   const schemaFields = schema.fields
-  // let nodeState = [...initialNodes];
-  let counter = 0;
   let numOfNodes = 0;
   initialNodes.length === 3 && schemaFields.map((field: any, i: any) => {
-    let newNode: NodeObj = {
+    let newNode: Node = {
       id: field.name,
       position: { x: xIndexForFields, y: yIndexForFields }, 
       data: {
@@ -159,7 +131,6 @@ export function DisplayData(props: any) { // TODO: type
 
     // set the x and y positions:
     if (numOfNodes % 6 === 0 && numOfNodes !== 0) {
-      counter ++;
       xIndexForFields -= 300; // Decrement x value for a new column
       yIndexForFields = 300; // Reset y value for a new column
     } else {
@@ -167,6 +138,7 @@ export function DisplayData(props: any) { // TODO: type
     }
     // create a new edge to connect each type to the root query
     const newEdgeForFields = {
+      id: `${field.name} edge`,
       source: 'fields',
       target: field.name,
       type: 'floating',
@@ -181,7 +153,7 @@ export function DisplayData(props: any) { // TODO: type
 
 
     //render types and their fields
-    const newTypeOfFieldNode: NodeObj = {
+    const newTypeOfFieldNode: Node = {
       id: field.name + '-' + field.type,
       position: {
         x: xIndexForTypes,
@@ -230,15 +202,16 @@ export function DisplayData(props: any) { // TODO: type
   //     // hidden: true, // hidden at first, unhidden when a field from the query type with the matching type is clicked
   //   }
 
-  //   xIndexForTypes += 215
-  //   let newTypeEdge = {
-  //     source: 'types',
-  //     target: key,
-  //     type: 'floating',
-  //     markerEnd: {
-  //       type: MarkerType.ArrowClosed
-  //     }
-  //   };
+    // xIndexForTypes += 215
+
+    // let newTypeEdge: Edge = {
+    //   id: `${key} edge`,
+    //   source: 'types',
+    //   target: key,
+    //   markerEnd: {
+    //     type: MarkerType.ArrowClosed
+    //   }
+    // };
 
   //   initialNodes.push(newTypeNode);
   //   // nodeState.push(newTypeNode)
@@ -248,37 +221,34 @@ export function DisplayData(props: any) { // TODO: type
   //   let fieldInTypeYValue: number = 40;
   //   let fieldInTypeXValue: number = 25
 
-  //   for (let el of schemaTypes[key]){
-  //     console.log(el)
-  //     let newTypeFieldNode: NodeObj = {
-  //       id: el + '_field' + key + '_parent',
-  //       position: {x: fieldInTypeXValue, y: fieldInTypeYValue},
-  //       data: { label: el, arguments: [] }, // add required arguments here
-  //       parentNode: key,
-  //       extent: 'parent',
-  //       // hidden: true, // hidden at first, unhidden when a field from the query type with the matching type is clicked
-  //     }
-  //     fieldInTypeYValue += 50
+    // for (let el of schemaTypes[key]){
+    //   let newTypeFieldNode: Node = {
+    //     id: el + '_field' + key + '_parent',
+    //     position: {x: fieldInTypeXValue, y: fieldInTypeYValue},
+    //     data: { label: el},
+    //     parentNode: key,
+    //     extent: 'parent'
+    //   }
+    //   fieldInTypeYValue += 50
       
 
   //     initialNodes.push(newTypeFieldNode)
-  //     // nodeState.push(newTypeNode)
-  //     console.log(initialNodes)
   //   }
   //   // setNodes(nodeState)
   // }}
 
+
   // fit view on load
   // const onLoad= (instance:any) => setTimeout(() => instance.fitView(), 0);
   return (
-    <>
-        <div className="ml-4">
+       <div className="ml-4">
               {/* <div key={index}>
                 <h3>{type}:</h3> */}
-
+              <Suspense fallback={<CircularProgress />}>
                 <ul>
-                    <div className="w-full h-[722px] border-2 border-blue-950 rounded-lg shadow p-2 mb-5 dark:border-white">
-                    <ReactFlow
+
+                  <div className="w-full h-[722px] border-2 border-blue-950 rounded-lg shadow p-2 mb-5 dark:border-white">
+                   <ReactFlow
                       // onLoad={onLoad}
                       nodes={nodes}
                       edges={edges}
@@ -298,8 +268,7 @@ export function DisplayData(props: any) { // TODO: type
                     </ReactFlow>
                   </div>
                 </ul>
-              </div>
-      {/* </></div> */}
-    </>
+              </Suspense>
+              </div> 
   );
-}
+              }

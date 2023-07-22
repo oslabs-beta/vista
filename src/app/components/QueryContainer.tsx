@@ -4,8 +4,10 @@ import React, { useState } from "react";
 import "tailwindcss/tailwind.css";
 import QueryGenerator from "./QueryGenerator";
 import QueryResult from "./QueryResult";
+import { ClickField } from "../../../types"
 
-export default function QueryContainer({ endpoint, clickField }: any) { // TODO: type
+export default function QueryContainer({ endpoint, clickField }: {endpoint: string, clickField: ClickField}) {
+
   const [data, setData] = useState("");
   const childToParent = (childData: any) => {
     setData(childData);
