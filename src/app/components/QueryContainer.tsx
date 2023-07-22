@@ -9,7 +9,7 @@ import { ClickField } from "../../../types"
 export default function QueryContainer({ endpoint, clickField }: {endpoint: string, clickField: ClickField}) {
 
   const [data, setData] = useState("");
-  const childToParent = (childData: any) => {
+  const childToParent = (childData: string) => {
     setData(childData);
   };
   return (

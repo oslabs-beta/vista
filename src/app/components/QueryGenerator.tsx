@@ -7,6 +7,18 @@ export default function QueryGenerator({ childToParent, clickField }: QueryGener
   const [queryAsObj, setQueryAsObj] = useState({ query: {} });
   const [queryAsString, setQueryAsString] = useState("query: { \n \n }");
   
+  useEffect(() => {
+    childToParent(queryAsString);   
+  });
+
+  // useEffect(() => {
+  useEffect(() => {
+    if(clickField.field && clickField.type) {
+      updateQueryAsObj(clickField.field.toLowerCase(), clickField.type.toLowerCase());
+      console.log('updated query as object')
+    }
+  }, [clickField])
+
   const updateQueryAsObj = (fieldName: string, typeName: string) => {
     //make a deep copy of queryAsObj
     const tempObj = JSON.parse(JSON.stringify(queryAsObj));
@@ -22,19 +34,6 @@ export default function QueryGenerator({ childToParent, clickField }: QueryGener
     
   };
   
-  // useEffect(() => {
-  //   childToParent(queryAsString);   
-  // });
-
-  // useEffect(() => {
-  useEffect(() => {
-    if(clickField.field && clickField.type) {
-      updateQueryAsObj(clickField.field.toLowerCase(), clickField.type.toLowerCase());
-      console.log('updated query as object')
-    }
-  })
-
-
   return (
       <div className="bg-white rounded-lg shadow p-4 max-w-md border-dashed border-2 border-sky-500 dark:bg-slate-600 dark:border-white mx-2">
         <form>

@@ -32,7 +32,7 @@ type SchemaTypes = {
     [index: string]: string[]
 }
 
-export type ChildToParent = (schema: Data, endpoint: string) => void
+export type ChildToParent = (query: string) => void
 
 export type ChildData = { schema: {fields: never[]; types: {}; }, endpoint: string }
 
