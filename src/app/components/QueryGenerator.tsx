@@ -1,10 +1,19 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import "tailwindcss/tailwind.css";
 import { jsonToGraphQLQuery } from "json-to-graphql-query";
+import { QueryGenerator } from "../../../types"
 
-export default function QueryGenerator({ childToParent, clickField }: any ) {
+export default function QueryGenerator(QueryGeneratorProps: QueryGenerator) {
+
+  const {
+    childToParent,
+    clickField,
+    queryAsString,
+    setQueryAsString,
+    setIsSaveModalOpen,
+  } = QueryGeneratorProps;
+
   const [queryAsObj, setQueryAsObj] = useState({ query: {} });
-  const [queryAsString, setQueryAsString] = useState("query: { \n \n }");
   
   const updateQueryAsObj = (fieldName: string, typeName: string) => {
     //make a deep copy of queryAsObj
@@ -20,66 +29,20 @@ export default function QueryGenerator({ childToParent, clickField }: any ) {
     setQueryAsString(jsonToGraphQLQuery(tempObj, { pretty: true }));
     
   };
-  // console.log("CHILD TO PARENT", childToParent);
-  useEffect(() => {
-    childToParent(queryAsString);   
-  });
+  
+  // useEffect(() => {
+  //   childToParent(queryAsString);   
+  // });
 
   // useEffect(() => {
   useEffect(() => {
     if(clickField.field && clickField.type) updateQueryAsObj(clickField.field.toLowerCase(), clickField.type.toLowerCase())
-  }, [clickField])
+  })
 
-  // types and fields for hard coded buttons for demo
-  const hardCodedValues = {
-    continents : ['name', 'code'],
-    countries : ['name', 'capital'],
-  }
-
-  const demoButtons = document.querySelector("div.hidden");
 
   return (
       <div className="bg-white rounded-lg shadow p-4 max-w-md border-dashed border-2 border-sky-500 dark:bg-slate-600 dark:border-white mx-2">
         <form>
-          <button
-            className="ml-1 text-blue-500 dark:text-white px-3 py-1 rounded-xl my-1 border border-blue-500 hover:bg-blue-500 hover:text-white hover:transition-all mx-1 inline-flex dark:bg-slate-500 dark:border-white dark:hover:bg-slate-300 dark:hover:text-slate-900"
-            onClick={(e) => {
-              e.preventDefault();
-              demoButtons.classList.toggle("hidden")
-            }}
-          >
-            Click for demo
-            <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" className="w-5 h-5 ml-2 -mr-1">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
-            </svg>
-          </button>
-          {/* iterate object hardCodedValues */}
-          <div className="hidden border border-dashed border-red-500 mb-5 dark:border-white dark:text-white">
-            { Object.keys(hardCodedValues).map((type, index) => {
-                return (
-                  <div key={index}>
-                    <p>
-                      {type}:
-                      {hardCodedValues[type].map((value:string, indexValue:number) => {
-                        return (
-                          <button
-                            key={indexValue}
-                            className="px-3 py-1 my-1 mx-1 text-blue-500 rounded-xl border border-blue-500 hover:bg-blue-500 hover:text-white hover:transition-all dark:bg-slate-500 dark:text-white dark:border-white dark:hover:bg-slate-300 dark:hover:text-slate-900"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              updateQueryAsObj(value, type);
-                            }}
-                          >
-                            {value}
-                          </button>
-                        )
-                      })}
-                    </p>
-                  </div>
-                )
-              })
-            }
-          </div>
           <textarea
             data-testid="query-generator"
             value={queryAsString}
@@ -99,6 +62,18 @@ export default function QueryGenerator({ childToParent, clickField }: any ) {
               {/* Copy Query button: copies the query from the textarea to the clipboard*/}
               <svg className="w-6 h-6 bg-white text-blue-400 dark:bg-slate-500 dark:text-white dark:hover:text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184"></path>
+              </svg>
+            </button>
+            <button
+              type="button"
+              onClick={() => {setIsSaveModalOpen(true)}}
+              className="ml-1 bg-white text-white px-3 py-1 rounded-xl border border-blue-400 dark:bg-slate-500 dark:border-white dark:hover:bg-slate-300 dark:hover:text-slate-900"
+              >
+              {/* save query button */}
+              <svg className="w-6 h-6 bg-white text-blue-400 dark:bg-slate-500 dark:text-white dark:hover:text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
+                  />
               </svg>
             </button>
           </div>
