@@ -24,9 +24,19 @@ import { CircularProgress } from "@mui/material";
 // import TextUpdaterNode from '@/app/components/nodes/TextUpdaterNode';
 
 const initialNodes: Node[] = [ 
-  { id: 'query', position: { x: 500, y: 0 }, data: { label: 'Root Query' } },
+  {
+    id: 'query',
+    position: { x: 500, y: 0 },
+    data: { label: 'Root Query' },
+    // zIndex: 100
+  },
   // { id: 'types', position: { x: 750, y: 200 }, data: { label: 'Types'}},
-  { id: 'fields', position: { x: 250, y: 200 }, data: { label: 'Fields'}},
+  {
+    id: 'fields',
+    position: { x: 250, y: 200 },
+    data: { label: 'Fields'},
+    // zIndex: 99
+  },
 ]
 
 let xIndexForFields = 400;
@@ -121,6 +131,7 @@ export function DisplayData(props: Props) { // TODO: type
         arguments: [...field.reqArgs],
         type: field.type // added this in order to link with it's type and fields on click
       },
+      // zIndex: 98,
       // type: "output",
     };
     
@@ -166,6 +177,7 @@ export function DisplayData(props: Props) { // TODO: type
         width: 200,
         height: 400,
       },
+      // zIndex: 96,
     }
 
     const newTypeOfFieldEdge = {
@@ -188,12 +200,14 @@ export function DisplayData(props: Props) { // TODO: type
     let fieldInTypeXValue: number = 25
 
     for (let el of schema.types[field.type]){
+      console.log('el', el);
       let newTypeFieldNode: Node = {
-        id: el + '_field' + field.type + '_parent',
+        id: el + '_field' + field.name + '_parent',
         position: {x: fieldInTypeXValue, y: fieldInTypeYValue},
         data: { label: el },
         parentNode: field.name + '-' + field.type,
-        extent: 'parent'
+        extent: 'parent',
+        // zIndex: 97,
       }
       fieldInTypeYValue += 50
       

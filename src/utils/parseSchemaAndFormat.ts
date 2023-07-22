@@ -31,6 +31,13 @@ export async function parseSchemaAndFormat(apiEndpoint: string) {
           fieldObjectTemplate.name = field.name;
           fieldObjectTemplate.type = field.type.name;
 
+          //accounting for type modifiers such as Lists and Non-Null types by traversing the type object until name is not null
+          let currentOfType = field.type;
+          while (!fieldObjectTemplate.type) {
+            fieldObjectTemplate.type = currentOfType.ofType.name;
+            currentOfType = currentOfType.ofType;
+          }
+
           if (field.args){
             for (const arg of field.args){
               if(arg.type.kind === "NON_NULL"){
