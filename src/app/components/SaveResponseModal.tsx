@@ -10,7 +10,7 @@ export default function SaveResponseModal(props: SaveResponseModalProps) {
             {/* fullscreen container - used for positioning */}
             <div className='flex flex-col items-center justify-center z-10 overflow-y-auto'>
                 <Dialog.Panel
-                    className='flex flex-col items-center justify-center border dark:border-white fixed inset-x-90 inset-y-60 flex items-center justify-center w-full max-w-md py-6 px-10 transform overflow-hidden rounded-2xl bg-white bg-opacity-10 shadow-xl border dark:bg-opacity-90 dark:bg-slate-700 dark:border-white'
+                    className='flex flex-col items-center justify-center border dark:border-white fixed inset-x-90 inset-y-60 w-full max-w-md py-6 px-10 transform overflow-hidden rounded-2xl bg-white bg-opacity-10 shadow-xl dark:bg-opacity-90 dark:bg-slate-700'
                     >
                     <Dialog.Title className='flex align-center text-xl font-bold dark:text-white'>
                             <span>{(saveResponseStatus) ? "Success!" : "Whoops!"}</span>

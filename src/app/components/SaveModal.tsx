@@ -37,7 +37,7 @@ export default function SaveModal(props: SaveModalProps) {
         setIsSaveModalOpen(false);
         setIsSaveResponseModalOpen(true);
     };
-    function handleQueryNameChange(e: ChangeEvent) {
+    function handleQueryNameChange(e: ChangeEvent<HTMLInputElement>) {
         setQueryName(e.target.value); // TODO: don't understand why we're getting this error.
         console.log('this is e.target.value => ', e.target.value);
         console.log('queryName has been updated to: ', queryName);
@@ -61,6 +61,7 @@ export default function SaveModal(props: SaveModalProps) {
                     <Dialog.Description>
                         <div className="dark:text-white">
                             <span>store this query so you can reference it later</span>
+                            {/* this is causing a warning because it renders a div inside a p, probably need to take a deeper look into headlessUI to solve it */}
                         </div>
                     </Dialog.Description>
                         <form
