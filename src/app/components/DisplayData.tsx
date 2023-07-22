@@ -22,6 +22,9 @@ import 'reactflow/dist/style.css';
 import { CircularProgress } from "@mui/material";
 
 // import TextUpdaterNode from '@/app/components/nodes/TextUpdaterNode';
+import NoHandleNode from './NoHandleNode';
+import InputNode from './InputNode';
+
 
 const initialNodes: Node[] = [ 
   {
@@ -73,10 +76,15 @@ export function DisplayData(props: Props) { // TODO: type
   const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
 
-  const [hiddenNodes, setHiddenNodes] = useState(new Set());
+  const [hiddenNodes, setHiddenNodes] = useState( new Set());
   
   // const nodeTypes = useMemo(() => ({ textUpdater: TextUpdaterNode }), []);
-
+  const nodeTypes = useMemo(() => (
+    {
+      noHandleNode: NoHandleNode,
+      inputNode: InputNode,
+    }
+  ), []);
   
   const onNodeClick = (event:any, node:Node) => {
     // if the node that was clicked is a field on Query type
@@ -152,7 +160,7 @@ export function DisplayData(props: Props) { // TODO: type
       id: `${field.name} edge`,
       source: 'fields',
       target: field.name,
-      type: 'floating',
+      // type: 'floating',
       markerEnd: {
         type: MarkerType.ArrowClosed
       }
@@ -184,7 +192,7 @@ export function DisplayData(props: Props) { // TODO: type
       id: field.name + 'to' + field.name + '-' + field.type,
       source: field.name,
       target: field.name + '-' + field.type,
-      type: 'floating',
+      // type: 'floating',
       markerEnd: {
         type: MarkerType.ArrowClosed
       }
@@ -199,15 +207,38 @@ export function DisplayData(props: Props) { // TODO: type
     let fieldInTypeYValue: number = 40;
     let fieldInTypeXValue: number = 25
 
+    //for each required argument, render the custom node with input field and a second custom node without an input field
+    for (let i = 0; i < field.reqArgs.length; i++) {
+      const stringForId = ['_argument_', '_field_'];
+      const stringForLabel = [field.reqArgs[i] + '*', field.reqArgs[i]];
+      const stringForType = ['inputNode', 'noHandleNode']; //change when j=0 for custom node with input field
+      for (let j = 0; j < 2; j++) {
+        let newTypeFieldNode: Node = {
+          id: field.reqArgs[i] + stringForId[j] + field.name + '_parent',
+          position: {x: fieldInTypeXValue, y: fieldInTypeYValue},
+          data: { label: stringForLabel[j] },
+          parentNode: field.name + '-' + field.type,
+          extent: 'parent',
+          // zIndex: 97,
+          type: stringForType[j],
+        }
+        fieldInTypeYValue += 50
+        initialNodes.push(newTypeFieldNode)
+      }
+    }
+
+    //render the remaining fields of the type that are not arguments
     for (let el of schema.types[field.type]){
-      console.log('el', el);
+      // console.log('el', el);
+      if (field.reqArgs.includes(el)) continue;
       let newTypeFieldNode: Node = {
-        id: el + '_field' + field.name + '_parent',
+        id: el + '_field_' + field.name + '_parent',
         position: {x: fieldInTypeXValue, y: fieldInTypeYValue},
         data: { label: el },
         parentNode: field.name + '-' + field.type,
         extent: 'parent',
         // zIndex: 97,
+        type: 'noHandleNode',
       }
       fieldInTypeYValue += 50
       
@@ -217,62 +248,6 @@ export function DisplayData(props: Props) { // TODO: type
 
   });
 
-  // render types and their fields
-  // xIndexForTypes = 750;
-  // yIndexForTypes= 300;
-  // const schemaTypes = schema.types
-  // if(numOfNodes + 3 === initialNodes.length) {
-  //   for (let key in schemaTypes){
-
-  //   let newTypeNode: NodeObj = { 
-  //     id: key,
-  //     position: { x: xIndexForTypes, y: yIndexForTypes }, 
-  //     data: { label: key, arguments: [] },
-  //     style: {
-  //       width: 200,
-  //       height: 400 
-  //     }, 
-  //     // hidden: true, // hidden at first, unhidden when a field from the query type with the matching type is clicked
-  //   }
-
-    // xIndexForTypes += 215
-
-    // let newTypeEdge: Edge = {
-    //   id: `${key} edge`,
-    //   source: 'types',
-    //   target: key,
-    //   markerEnd: {
-    //     type: MarkerType.ArrowClosed
-    //   }
-    // };
-
-  //   initialNodes.push(newTypeNode);
-  //   // nodeState.push(newTypeNode)
-  //   initialEdges.push(newTypeEdge);
-
-    
-    // let fieldInTypeYValue: number = 40;
-    // let fieldInTypeXValue: number = 25
-
-    // for (let el of schemaTypes[key]){
-    //   let newTypeFieldNode: Node = {
-    //     id: el + '_field' + key + '_parent',
-    //     position: {x: fieldInTypeXValue, y: fieldInTypeYValue},
-    //     data: { label: el},
-    //     parentNode: key,
-    //     extent: 'parent'
-    //   }
-    //   fieldInTypeYValue += 50
-      
-
-    //   initialNodes.push(newTypeFieldNode)
-    // }
-    // setNodes(nodeState)
-  // }}
-
-
-  // fit view on load
-  // const onLoad= (instance:any) => setTimeout(() => instance.fitView(), 0);
   return (
        <div className="ml-4">
               {/* <div key={index}>
@@ -292,7 +267,7 @@ export function DisplayData(props: Props) { // TODO: type
                       onNodeClick={onNodeClick}
                       fitView
 
-                      // nodeTypes={nodeTypes}
+                      nodeTypes={nodeTypes}
                     >
                       <Controls className="dark:bg-slate-300"/>
                       <MiniMap className="dark:bg-slate-300"/>
