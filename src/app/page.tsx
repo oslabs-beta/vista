@@ -34,7 +34,7 @@ export default function Home({ session }: any) {
         <EndpointForm childToParent={childToParent} />
         <div className="grid grid-cols-3">
           <div className="col-span-2 dark:bg-slate-800">
-            {data.schema.fields.length && <DisplayData data={data} setClickField={setClickField} />}
+            {data.schema.fields.length && <DisplayData data={data} setClickField={setClickField} setData={setData} />}
           </div>
           <div className="h-screen dark:bg-slate-800">
             <QueryContainer endpoint={data.endpoint} clickField={clickField} setIsSaveModalOpen={setIsSaveModalOpen} queryAsString={queryAsString} setQueryAsString={setQueryAsString} />

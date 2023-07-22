@@ -121,6 +121,7 @@ const onSignOut = () => {
             ></path>
           </svg>
         </button>
+
         {/* User Account Dropdown */}
         <div className="flex items-center space-x-1.5">
           <Menu as='div' className='relative inline-block text-left'>
