@@ -75,7 +75,7 @@ const onSignOut = () => {
   return (
     <>
       {/* <form action={handleSubmit} className="pt-5 pr-4 pl-4 flex items-center dark:bg-slate-800"> */}
-      <form action={handleSubmit} className="pt-5 pr-4 pl-4 flex items-center dark:bg-slate-800">
+      <form data-testid="endpoint-form" action={handleSubmit} className="pt-5 pr-4 pl-4 flex items-center dark:bg-slate-800">
         <div className="relative w-full">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
             <svg
@@ -128,7 +128,7 @@ const onSignOut = () => {
             <div>
               {/* Account Button */} 
               {/* <Menu.Button className='inline-flex w-full justify-center gap-x-1.5 border border-blue-500 rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset hover:bg-gray-200 dark:bg-slate-500 dark:border-white dark:hover:bg-slate-300'></Menu.Button>      */}
-              <Menu.Button className='inline-flex w-full justify-center gap-x-1.5 border border-blue-500 rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset hover:bg-gray-200 dark:bg-slate-500 dark:border-white dark:hover:bg-slate-300'>
+              <Menu.Button data-testid="account-button" className='inline-flex w-full justify-center gap-x-1.5 border border-blue-500 rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset hover:bg-gray-200 dark:bg-slate-500 dark:border-white dark:hover:bg-slate-300'>
               {isLoggedIn ? (
                     <img src={image} alt="" className="inline-flex w-full justify-center gap-x-1.5 border-blue-500 rounded-sm w-6 h-6"
                     />
@@ -185,11 +185,11 @@ const onSignOut = () => {
                   )}
                 <Menu.Item>
                   {isLoggedIn ? (
-                    <button onClick={onSignOut} className="inline-flex w-56 hover:bg-slate-300">
+                    <button data-testid="sign-out-button" onClick={onSignOut} className="inline-flex w-56 hover:bg-slate-300">
                       Sign Out
                     </button>
                   ) : (
-                    <button onClick={onSignIn} className="inline-flex w-56 hover:bg-slate-300">
+                    <button data-testid="sign-in-button" onClick={onSignIn} className="inline-flex w-56 hover:bg-slate-300">
                       Sign In
                     </button>
                   )}

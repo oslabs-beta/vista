@@ -44,6 +44,7 @@ export default function QueryGenerator(QueryGeneratorProps: QueryGenerator) {
       <div className="bg-white rounded-lg shadow p-4 max-w-md border-dashed border-2 border-sky-500 dark:bg-slate-600 dark:border-white mx-2">
         <form>
           <textarea
+            data-testid="query-generator"
             value={queryAsString}
             className="mt-1 ml-1 mb-1 resize-none hover:resize border border-gray-300 rounded px-2 py-1 w-96 h-60 break-normal dark:bg-slate-800 dark:text-white"
             // className="resize-none hover:resize border border-gray-300 rounded px-2 py-1 w-96 h-60 break-normal bg-[url('https://graphql.org/img/logo-gray.svg')] bg-no-repeat bg-opacity-0"

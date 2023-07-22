@@ -89,8 +89,16 @@ export function DisplayData(props: Props) { // TODO: type
       id: field.name,
       position: { x: xIndexForFields, y: yIndexForFields }, 
       data: { label: field.name },
-      type: "output", 
+      type: "output",
     };
+    // // Generate a unique ID for the data-test attribute
+    // const dataTestId = uuid();
+    // // Add a data-test attribute to the node
+    // newNode.data["data-testid"] = dataTestId;
+    // console.log('THIS IS THE DATA TEST ID:', dataTestId)
+    
+
+
       // push them to the initial nodes array (is it better to use a hook)
       initialNodes.push(newNode);
       // nodeState.push(newNode);
@@ -121,9 +129,11 @@ export function DisplayData(props: Props) { // TODO: type
       style: {
         width: 200,
         height: 400 
-      } 
-    
+      } ,
     }
+    console.log('HELLOHELLOHELLO', newTypeNode)
+    
+    
 
     xIndexForTypes += 215
 
@@ -140,10 +150,14 @@ export function DisplayData(props: Props) { // TODO: type
       let newTypeFieldNode: Node = {
         id: el + '_field' + key + '_parent',
         position: {x: fieldInTypeXValue, y: fieldInTypeYValue},
-        data: { label: el},
+        data: { label: el },
         parentNode: key,
-        extent: 'parent'
+        extent: 'parent',
       }
+      // // Generate a unique ID for the data-test attribute
+      // const dataTestId = uuid();
+      // // Add a data-test attribute to the node
+      
       fieldInTypeYValue += 50
       
 
