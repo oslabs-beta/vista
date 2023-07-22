@@ -26,7 +26,8 @@ type NodeObj = {
   style?: StyleObj,
   parentNode?: string, 
   extent?: string,
-  type?: string
+  type?: string,
+  hidden?: boolean,
 }
 
 type PositionObj = {
@@ -36,7 +37,9 @@ type PositionObj = {
 
 type LabelObj = {
   label: string,
-  arguments: string[]
+  arguments?: string[],
+  type?: string,
+  queryField?: boolean,
 }
 
 type StyleObj = {
@@ -83,23 +86,36 @@ export function DisplayData(props: any) { // TODO: type
 
   const [nodes, setNodes] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  
+  // handle hiding and unhiding nodes on click
+  const [hiddenNodes, setHiddenNodes] = useState(new Set());
+  
   const nodeTypes = useMemo(() => ({ textUpdater: TextUpdaterNode }), []);
 
 
   
   const onNodeClick = (event: any, node: any) => {
-    console.log('click node', node);
-    // setNodes(
-    //   [
-    //     ...nodes,
-    //     {
-    //       id: 'id' + Math.random(),
-    //       position: { x: 500, y: 0 },
-    //       data: { label: "yo" },
-    //       type: 'textUpdater',
-    //     }
-    //   ]
-    // );
+    // if the node that was clicked is a field on Query type
+    if (node.data.queryField) {
+      // set id of node that should be hidden/unhidden
+      const unHide = node.data.label + '-' + node.data.type;
+   
+      //hide/unhide node with type of the field that was clicked
+      const newHiddenNodes = new Set(
+        JSON.parse(
+          JSON.stringify(
+            Array.from(hiddenNodes)
+          )
+        )
+      );
+      hiddenNodes.has(unHide) ? newHiddenNodes.delete(unHide) : newHiddenNodes.add(unHide);
+      setHiddenNodes(newHiddenNodes);
+    }
+
+    // console.log('click node', node);
+    // alert(`should display node for type ${node.data.type}`)
+
+    // send clicked node data to query generator
     props.setClickField({type: node.parentNode, field: node.data.label})
   }
 
@@ -118,21 +134,28 @@ export function DisplayData(props: any) { // TODO: type
 
 // iterate through our type elements and set each label to the type
 
+// render a node for each field in the query type
   const schemaFields = schema.fields
   // let nodeState = [...initialNodes];
   let counter = 0;
   let numOfNodes = 0;
   initialNodes.length === 3 && schemaFields.map((field: any, i: any) => {
-    let newNode: NodeObj = { 
+    let newNode: NodeObj = {
       id: field.name,
       position: { x: xIndexForFields, y: yIndexForFields }, 
-      data: { label: field.name, arguments: [...field.reqArgs] },
-      type: "output", 
+      data: {
+        queryField: true, // to read from onclick function
+        label: field.name,
+        arguments: [...field.reqArgs],
+        type: field.type // added this in order to link with it's type and fields on click
+      },
+      // type: "output",
     };
-      // push them to the initial nodes array (is it better to use a hook)
-      initialNodes.push(newNode);
-      // nodeState.push(newNode);
-      numOfNodes++;
+    
+    // push them to the initial nodes array (is it better to use a hook)
+    initialNodes.push(newNode);
+    // nodeState.push(newNode);
+    numOfNodes++;
 
     // set the x and y positions:
     if (numOfNodes % 6 === 0 && numOfNodes !== 0) {
@@ -143,56 +166,107 @@ export function DisplayData(props: any) { // TODO: type
       yIndexForFields += 50; // Increment y value for the next row in the same column
     }
     // create a new edge to connect each type to the root query
-    const newEdgeForFields = { source: 'fields', target: field.name, type: 'floating', markerEnd: { type: MarkerType.ArrowClosed }};
+    const newEdgeForFields = {
+      source: 'fields',
+      target: field.name,
+      type: 'floating',
+      markerEnd: {
+        type: MarkerType.ArrowClosed
+      }
+    };
 
     // push the edges to the initial edges array (is it better to use a hook here?)
     initialEdges.push(newEdgeForFields);
-  });
 
-  const schemaTypes = schema.types
-  if(numOfNodes + 3 === initialNodes.length) {
-    for (let key in schemaTypes){
 
-    let newTypeNode: NodeObj = { 
-      id: key,
-      position: { x: xIndexForTypes, y: yIndexForTypes }, 
-      data: { label: key, arguments: [] },
+
+    //render types and their fields
+    const newTypeOfFieldNode: NodeObj = {
+      id: field.name + '-' + field.type,
+      position: {
+        x: xIndexForTypes,
+        y: yIndexForTypes,
+      },
+      data: {
+        label: field.type
+      },
       style: {
         width: 200,
-        height: 400 
-      } 
-    
+        height: 400,
+      },
     }
 
-    xIndexForTypes += 215
-    let newTypeEdge = {source: 'types', target: key, type: 'floating',markerEnd: { type: MarkerType.ArrowClosed }};
+    const newTypeOfFieldEdge = {
+      source: field.name,
+      target: field.name + '-' + field.type,
+      type: 'floating',
+      markerEnd: {
+        type: MarkerType.ArrowClosed
+      }
+    };
+    console.log('new edge:', newTypeOfFieldEdge);
 
-    initialNodes.push(newTypeNode);
-    // nodeState.push(newTypeNode)
-    initialEdges.push(newTypeEdge);
+    initialNodes.push(newTypeOfFieldNode);
+    initialEdges.push(newTypeOfFieldEdge);
+
+    xIndexForTypes +=215
+  });
+
+  // render types and their fields
+  // xIndexForTypes = 750;
+  // yIndexForTypes= 300;
+  // const schemaTypes = schema.types
+  // if(numOfNodes + 3 === initialNodes.length) {
+  //   for (let key in schemaTypes){
+
+  //   let newTypeNode: NodeObj = { 
+  //     id: key,
+  //     position: { x: xIndexForTypes, y: yIndexForTypes }, 
+  //     data: { label: key, arguments: [] },
+  //     style: {
+  //       width: 200,
+  //       height: 400 
+  //     }, 
+  //     // hidden: true, // hidden at first, unhidden when a field from the query type with the matching type is clicked
+  //   }
+
+  //   xIndexForTypes += 215
+  //   let newTypeEdge = {
+  //     source: 'types',
+  //     target: key,
+  //     type: 'floating',
+  //     markerEnd: {
+  //       type: MarkerType.ArrowClosed
+  //     }
+  //   };
+
+  //   initialNodes.push(newTypeNode);
+  //   // nodeState.push(newTypeNode)
+  //   initialEdges.push(newTypeEdge);
 
     
-    let fieldInTypeYValue: number = 40;
-    let fieldInTypeXValue: number = 25
+  //   let fieldInTypeYValue: number = 40;
+  //   let fieldInTypeXValue: number = 25
 
-    for (let el of schemaTypes[key]){
-      console.log(el)
-      let newTypeFieldNode: NodeObj = {
-        id: el + '_field' + key + '_parent',
-        position: {x: fieldInTypeXValue, y: fieldInTypeYValue},
-        data: { label: el, arguments: [] }, // add required arguments here
-        parentNode: key,
-        extent: 'parent'
-      }
-      fieldInTypeYValue += 50
+  //   for (let el of schemaTypes[key]){
+  //     console.log(el)
+  //     let newTypeFieldNode: NodeObj = {
+  //       id: el + '_field' + key + '_parent',
+  //       position: {x: fieldInTypeXValue, y: fieldInTypeYValue},
+  //       data: { label: el, arguments: [] }, // add required arguments here
+  //       parentNode: key,
+  //       extent: 'parent',
+  //       // hidden: true, // hidden at first, unhidden when a field from the query type with the matching type is clicked
+  //     }
+  //     fieldInTypeYValue += 50
       
 
-      initialNodes.push(newTypeFieldNode)
-      // nodeState.push(newTypeNode)
-      console.log(initialNodes)
-    }
-    // setNodes(nodeState)
-  }}
+  //     initialNodes.push(newTypeFieldNode)
+  //     // nodeState.push(newTypeNode)
+  //     console.log(initialNodes)
+  //   }
+  //   // setNodes(nodeState)
+  // }}
 
   // fit view on load
   // const onLoad= (instance:any) => setTimeout(() => instance.fitView(), 0);
