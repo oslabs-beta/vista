@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 import React, { useCallback, useState } from "react";
-import { v4 as uuid } from "uuid";
+
 import ReactFlow, { 
   MiniMap, 
   Controls, 
@@ -35,7 +35,6 @@ type PositionObj = {
 
 type LabelObj = {
   label: string
-  "data-testid"?: string;
 }
 
 type StyleObj = {
@@ -112,7 +111,7 @@ export function DisplayData(props: any) { // TODO: type
     let newNode: NodeObj = { 
       id: field.name,
       position: { x: xIndexForFields, y: yIndexForFields }, 
-      data: { label: field.name, "data-testid": "field" },
+      data: { label: field.name },
       type: "output",
     };
     // // Generate a unique ID for the data-test attribute
@@ -120,7 +119,7 @@ export function DisplayData(props: any) { // TODO: type
     // // Add a data-test attribute to the node
     // newNode.data["data-testid"] = dataTestId;
     // console.log('THIS IS THE DATA TEST ID:', dataTestId)
-    newNode.data["data-testid"] = "field"
+    
 
 
       // push them to the initial nodes array (is it better to use a hook)
@@ -158,7 +157,7 @@ export function DisplayData(props: any) { // TODO: type
     }
     console.log('HELLOHELLOHELLO', newTypeNode)
     
-    newTypeNode.data["data-testid"] = "type";
+    
 
     xIndexForTypes += 215
     let newTypeEdge = {source: 'types', target: key, type: 'floating',markerEnd: { type: MarkerType.ArrowClosed }};

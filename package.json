@@ -4,10 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "prestart": "next build",
+    "start": "next start -p 8080",
     "lint": "next lint",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "cy:run": "cypress run --e2e --browser chrome --config baseUrl=http://localhost:8080",
+    "e2e": "start-test start 8080 cy:run"
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",
