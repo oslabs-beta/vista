@@ -63,7 +63,8 @@ export async function parseSchemaAndFormat(apiEndpoint: string) {
 
         for (const field of type.fields){
           // fieldsOfTheType.push(field.name)
-
+          console.log('current type:', type.name);
+          console.log('current field:', field.name);
           let name = field.name;
 
           //check if the field is of kind object meaning it adds a new level of nesting we currently don't support
@@ -72,13 +73,11 @@ export async function parseSchemaAndFormat(apiEndpoint: string) {
           let ofType = field.type.ofType;
           let isObject = false;
           while(ofType) {
+            kindOfTypeOfField = ofType.kind;
+            ofType = ofType.ofType;
             if (kindOfTypeOfField === "OBJECT") {
               isObject = true;
               break;
-            }
-            else {
-              ofType = ofType.ofType;
-              kindOfTypeOfField = ofType.kind;
             }
           }
           fieldsOfTheType.push(

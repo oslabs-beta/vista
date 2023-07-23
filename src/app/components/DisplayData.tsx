@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import React, { useCallback, useMemo, useState, Suspense } from "react";
+import React, { useCallback, useMemo, useState, Suspense, useEffect } from "react";
 import { Props } from '../../../types'
 
 import ReactFlow, { 
@@ -66,6 +66,20 @@ const initialEdges: Edge[] = [
 }
 ];
 
+//toggle display onclick of fields of query type
+const hideNode = (toggled: string) => (node: Node) => {
+  if(toggled === node.id || toggled === node.parentNode) {
+    node.hidden = !node.hidden;
+  }
+  return node;
+}
+const hideEdge = (toggled: string) => (edge: Edge) => {
+  if(toggled === edge.id) {
+    edge.hidden = !edge.hidden;
+  }
+  return edge;
+}
+
 
 
 export function DisplayData(props: Props) { // TODO: type
@@ -77,7 +91,11 @@ export function DisplayData(props: Props) { // TODO: type
   const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
 
-  const [hiddenNodes, setHiddenNodes] = useState( new Set());
+  // const [unhiddenNodes, setUnHiddenNodes] = useState( new Set());
+
+  // useEffect(() => {
+  //   setNodes((nds) => nds.map(hide(unhiddenNodes)))
+  // }, [unhiddenNodes])
   
   // const nodeTypes = useMemo(() => ({ textUpdater: TextUpdaterNode }), []);
   const nodeTypes = useMemo(() => (
@@ -87,22 +105,18 @@ export function DisplayData(props: Props) { // TODO: type
     }
   ), []);
   
+  const maxDepthWarning = 'Maximum depth supported by current version of vista has been reached.'
+
   const onNodeClick = (event:any, node:Node) => {
     // if the node that was clicked is a field on Query type
     if (node.data.queryField) {
       // set id of node that should be hidden/unhidden
-      const unHide = node.data.label + '-' + node.data.type;
-   
-      //hide/unhide node with type of the field that was clicked
-      const newHiddenNodes = new Set(
-        JSON.parse(
-          JSON.stringify(
-            Array.from(hiddenNodes)
-          )
-        )
-      );
-      hiddenNodes.has(unHide) ? newHiddenNodes.delete(unHide) : newHiddenNodes.add(unHide);
-      setHiddenNodes(newHiddenNodes);
+      const nodeToToggle = node.data.label + '-' + node.data.type;
+      const edgeToToggle = node.data.label + '_to_' + node.data.label + '-' + node.data.type;
+
+      // toggle visibility of node
+      setNodes((nds) => nds.map(hideNode(nodeToToggle)));
+      setEdges((eds) => eds.map(hideEdge(edgeToToggle)));
     }
 
     // console.log('click node', node);
@@ -186,17 +200,19 @@ export function DisplayData(props: Props) { // TODO: type
         width: 200,
         height: 400,
       },
+      hidden: true,
       // zIndex: 96,
     }
 
     const newTypeOfFieldEdge = {
-      id: field.name + 'to' + field.name + '-' + field.type,
+      id: field.name + '_to_' + field.name + '-' + field.type,
       source: field.name,
       target: field.name + '-' + field.type,
       // type: 'floating',
       markerEnd: {
         type: MarkerType.ArrowClosed
-      }
+      },
+      hidden: true,
     };
     // console.log('new edge:', newTypeOfFieldEdge);
 
@@ -222,6 +238,8 @@ export function DisplayData(props: Props) { // TODO: type
           extent: 'parent',
           // zIndex: 97,
           type: stringForType[j],
+          draggable: false,
+          hidden: true,
         }
         fieldInTypeYValue += 50
         initialNodes.push(newTypeFieldNode)
@@ -231,15 +249,18 @@ export function DisplayData(props: Props) { // TODO: type
     //render the remaining fields of the type that are not arguments
     for (let el of schema.types[field.type]){
       // console.log('el', el);
-      if (field.reqArgs.includes(el)) continue;
+      if (field.reqArgs.includes(el.name)) continue;
+      console.log(`field ${el.name}, isObject ${el.isObject}`);
       let newTypeFieldNode: Node = {
-        id: el + '_field_' + field.name + '_parent',
+        id: el.name + '_field_' + field.name + '_parent',
         position: {x: fieldInTypeXValue, y: fieldInTypeYValue},
-        data: { label: el },
+        data: { label: el.isObject ? el.name + '...' : el.name, isObject: el.isObject},
         parentNode: field.name + '-' + field.type,
         extent: 'parent',
         // zIndex: 97,
         type: 'noHandleNode',
+        draggable: false,
+        hidden: true,
       }
       fieldInTypeYValue += 50
       

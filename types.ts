@@ -29,8 +29,16 @@ export type Field = {
     errorMessage?: string
 }
 
+// type SchemaTypes = {
+//     [index: string]: string[]
+// }
 type SchemaTypes = {
-    [index: string]: string[]
+    [index: string]: SchemaTypesField[],
+}
+
+type SchemaTypesField = {
+  isObject: boolean,
+  name: string,
 }
 
 export type ChildToParent = (query: string) => void
