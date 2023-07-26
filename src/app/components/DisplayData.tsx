@@ -18,8 +18,6 @@ import ReactFlow, {
 } from 'reactflow';
 
 import 'reactflow/dist/style.css';
-import { type } from "os";
-import { data } from "autoprefixer";
 
 type NodeObj = {
   id: string, 
@@ -39,6 +37,7 @@ type PositionObj = {
 
 type LabelObj = {
   label: string
+  viewMore?: any,
 }
 
 type StyleObj = {
@@ -85,20 +84,13 @@ const initialEdges: any[] = [
 
 export function DisplayData(props: any) { // TODO: type
   const nodeTypes = useMemo(() => ({ textUpdater: TextUpdaterNode }), []);
+  const {data, setClickField } = props;
 
-  // {props.data.err && alert('Please enter a valid endpoint')}
-  // {!props.data.schema && "No data, please enter an endpoint above."}
-  // {props.data.schema && Object.keys(props.data.schema).map((key, index) => {
-  // return (
 
-const handleBtnClick = useCallback((key: any) =>  {
-  console.log("button was clicked");
-}, [])
+
+
+
  
-
-
-  //matt note's
-  //look into using useState. Down fall, we don't have the html element in our return 
 
   const [nodes, setNodes] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -169,12 +161,16 @@ const handleBtnClick = useCallback((key: any) =>  {
     //console.log('this is represents each node', schemaTypes)
 
     for (let key in schemaTypes){
+      
+      //console.log('schemaTypes[key]--->>>>', schemaTypes[key])
       const newTypeNode = {
         id: key,
         type: 'textUpdater',
         position: { x: xIndexForTypes, y: yIndexForTypes }, 
         data: { 
           label: key,
+          //NEW DATA GOES HERE
+          schema: schemaTypes[key],
           type: "textUpdater",
         },
         style: {
@@ -184,41 +180,33 @@ const handleBtnClick = useCallback((key: any) =>  {
       };
   
       setNodes([...nodes, newTypeNode])
-      //console.log('click btn')
-      //setNodes()
-      
-    // let newTypeNode: NodeObj = { 
-    //   id: key,
-    //   position: { x: xIndexForTypes, y: yIndexForTypes }, 
-    //   data:  { label: key},
-    //   style: {
-    //     width: 200,
-    //     height: 400,
-    //   },
-    //   // render: <TextUpdaterNode onClick={handleBtnClick} data={undefined} isConnectable={false} />,
-    //   //render: <button onClick={handleBtnClick}>View More!</button>
-    // }
 
     xIndexForTypes += 215
     let newTypeEdge = {source: 'types', target: key, type: 'floating',markerEnd: { type: MarkerType.ArrowClosed }};
 
 
     initialNodes.push(newTypeNode);
-
-    //initialNodes.push(newTypeNode);
-    // nodeState.push(newTypeNode)
     initialEdges.push(newTypeEdge);
 
     let fieldInTypeYValue: number = 40;
     let fieldInTypeXValue: number = 25
     
 
-    const fields = schemaTypes[key].slice(0, 5);
+    let fields = schemaTypes[key].slice(0, 5);
+
   
     //changing the array to only contain the first 5 elements
-    //let fields = schemaTypes[key].slice(0, 5);
+    console.log('schemaTypes / fields --->', schemaTypes[key].slice(5));
+    const leftOverFields = schemaTypes[key].slice(5);
+    //write a conditional to check if the button was clicked
+    //if so execute said function?
+    //if so function is below
+    //matter of passing that function to TextUpdaterNode
+    
+
     for (let field of fields){
-      console.log('representing each schema --> ', schemaTypes[key])
+      //console.log('fields', fields)
+      //console.log('each schema', schemaTypes[key])
       //creates the individual node obj
         let newTypeFieldNode: NodeObj = {
         id: field + '_field' + key + '_parent',
@@ -233,17 +221,21 @@ const handleBtnClick = useCallback((key: any) =>  {
           }
           //pushing our newNode into our intialNodes array
           initialNodes.push(newTypeFieldNode);
+         // console.log('initialNodes -->', initialNodes)
           fieldInTypeYValue += 50;
-    }
-  
-   
-    //grabs the remaining fields
-    console.log('represents the remaining fields --->', schemaTypes[key].slice(5, Infinity));
-    //populate the remaining fields
 
+
+          //this only shows the remaining fields we need
+         //console.log('LINE 240 HERE remaining fields --->', schemaTypes[key].slice(5))
+          
+
+ 
+    }
     //function to grab the remaining fields
-  const viewMore = (key: any) => {
+
+  var viewMore = (key: any) => {
   let remainingFields = schemaTypes[key].slice(5);
+  console.log('remainingFields', remainingFields)
   for(let extraField of remainingFields) {
     let additionalFieldNode: NodeObj = {
       id: extraField + '_field' + key + '_parent',
@@ -254,49 +246,12 @@ const handleBtnClick = useCallback((key: any) =>  {
         }
         initialNodes.push(additionalFieldNode)
         fieldInTypeYValue += 50;
-  }
-  
-  
-}
-
-
-
-      //check if schemaTypes.length is <= 5
-      //if so push the field into our initialNodes array
-      //KEEP THIS CODE
-      // if(schemaTypes[key].length <= 5) {
-      //   let newTypeFieldNode: NodeObj = {
-      //     id: el + '_field' + key + '_parent',
-      //     position: {x: fieldInTypeXValue, y: fieldInTypeYValue},
-      //     data: { label: el},
-      //     parentNode: key,
-      //     extent: 'parent'
-      //   }
-      //   initialNodes.push(newTypeFieldNode)
-      //   fieldInTypeYValue += 50
-      //} 
-
-     //   initialNodes.push(newTypeFieldNode)
-      //fieldInTypeYValue += 50
-      
-      //initialNodes.push(newTypeFieldNode)
-      // nodeState.push(newTypeNode)
-      //console.log(initialNodes)
-    //}
-    // setNodes(nodeState)
+      }
+    }
   }}
-
-  // fit view on load
-  // const onLoad= (instance:any) => setTimeout(() => instance.fitView(), 0);
-
-
   return (
-    <>
+    <div>
         <div className="ml-4">
-        
-              {/* <div key={index}>
-                <h3>{type}:</h3> */}
-
                 <ul>
                   <div className="flow-container">
                     <div className="w-full h-[722px] border-2 border-blue-950 rounded-lg shadow p-2 mb-5 dark:border-white">
@@ -307,6 +262,7 @@ const handleBtnClick = useCallback((key: any) =>  {
                       onEdgesChange={onEdgesChange}
                       //onConnect={onConnect}
                       nodeTypes={nodeTypes}
+                      
                       onNodeClick={onNodeClick}
                       fitView
                     >
@@ -314,15 +270,11 @@ const handleBtnClick = useCallback((key: any) =>  {
                       <MiniMap className="dark:bg-slate-300"/>
                       {/* removed the TS error here that was caused by the variant */}
                       <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
-                      
                     </ReactFlow>
-                    
                   </div>
-                
                   </div>
                 </ul>
               </div>
-      {/* </></div> */}
-    </>
+    </div>
   );
 }

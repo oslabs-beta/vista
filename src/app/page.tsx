@@ -5,10 +5,15 @@ import { DisplayData } from "@/app/components/DisplayData";
 import { useState } from "react";
 import { SessionProvider } from "next-auth/react";
 import QueryContainer from "./components/QueryContainer";
+import TextUpdaterNode from "./components/viewMoreNode";
+
+
+
 
 export default function Home({ session }: any) {
   // data fetching: https://youtu.be/gSSsZReIFRk?t=293
   const [data, setData] = useState({endpoint:""});
+  //const [schema, setSchema] = useState(null);
   const [clickField, setClickField] = useState({});
   const childToParent = (childData: any) => { //TODO: type
     setData(childData);
@@ -24,6 +29,8 @@ export default function Home({ session }: any) {
           </div>
           <div className="h-screen dark:bg-slate-800">
             <QueryContainer endpoint={data.endpoint} clickField={clickField} />
+              {/* <TextUpdaterNode data={data} isConnectable={true} /> */}
+            
           </div>
         </div>
       </SessionProvider>
