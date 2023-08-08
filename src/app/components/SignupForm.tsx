@@ -7,9 +7,6 @@ export default function SignupForm(this: any, {action, setUsername, setPassword,
   const userTakenMsg = 'Email address is already in use, sign in or use a different one to sign up.';
   const userCreatedMsg = 'User successfully created!';
   const router = useRouter();
-  console.log(window.location.href);
-  console.log(window.location.pathname);
-  console.log(process.env.NEXTAUTH_URL);
   return (
     <>
       <form className="space-y-6" action={action}>
