@@ -184,7 +184,19 @@ export function DisplayData(props: Props) { // TODO: type
     // push the edges to the initial edges array (is it better to use a hook here?)
     initialEdges.push(newEdgeForFields);
 
+    const numberOfFields = schema.types[field.type].length;
 
+    const desiredNodeHeight = (53 * numberOfFields);
+
+    let height;
+
+    if(field.reqArgs.length >= 1) {
+      height = 100 + (50 * numberOfFields);
+    } else if(numberOfFields < 5) {
+      height = 50 + (50 * numberOfFields);
+    } else if (numberOfFields >= 5) {
+      height = desiredNodeHeight;
+    }
 
     //render types and their fields
     const newTypeOfFieldNode: Node = {
@@ -198,7 +210,8 @@ export function DisplayData(props: Props) { // TODO: type
       },
       style: {
         width: 200,
-        height: 400,
+        // height: field.reqArgs.length >= 1 ? 100 + (50 * numberOfFields) : desiredNodeHeight,
+        height: height,
       },
       hidden: true,
       // zIndex: 96,
