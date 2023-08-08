@@ -37,7 +37,7 @@ export default function SaveModal(props: SaveModalProps) {
         setIsSaveModalOpen(false);
         setIsSaveResponseModalOpen(true);
     };
-    function handleQueryNameChange(e: ChangeEvent) {
+    function handleQueryNameChange(e: ChangeEvent<HTMLInputElement>) {
         setQueryName(e.target.value); // TODO: don't understand why we're getting this error.
         console.log('this is e.target.value => ', e.target.value);
         console.log('queryName has been updated to: ', queryName);
