@@ -11,36 +11,17 @@ export default function QueryGenerator(QueryGeneratorProps: QueryGenerator) {
     queryAsString,
     setQueryAsString,
     setIsSaveModalOpen,
+    queryAsObj,
+    setQueryAsObj,
   } = QueryGeneratorProps;
 
-  const [queryAsObj, setQueryAsObj] = useState({ query: {} });
+  // const [queryAsObj, setQueryAsObj] = useState({ query: {} });
   
   useEffect(() => {
     childToParent(queryAsString);   
   });
 
-  // useEffect(() => {
-  useEffect(() => {
-    if(clickField.field && clickField.type) {
-      updateQueryAsObj(clickField.field.toLowerCase(), clickField.type.toLowerCase());
-      console.log('updated query as object')
-    }
-  }, [clickField])
-
-  const updateQueryAsObj = (fieldName: string, typeName: string) => {
-    //make a deep copy of queryAsObj
-    const tempObj = JSON.parse(JSON.stringify(queryAsObj));
-    //@ts-ignore
-    if (!tempObj.query[typeName]) {
-      tempObj.query[typeName] = {};
-    }
-    tempObj.query[typeName][fieldName] = true;
-    //update object in state
-    setQueryAsObj(tempObj);
-    //update string in state
-    setQueryAsString(jsonToGraphQLQuery(tempObj, { pretty: true }));
-    
-  };
+  
   
   return (
       <div className="bg-white rounded-lg shadow p-4 max-w-md border-dashed border-2 border-sky-500 dark:bg-slate-600 dark:border-white mx-2">

@@ -9,13 +9,13 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export function EndpointForm({ childToParent }: any) {
-  console.log({childToParent})
+  // console.log({childToParent})
   const [ isLoggedIn, setIsLoggedIn ] = useState(false);
   const { data: instance } = useSession();
   const image: any = instance?.user?.image;
 
   useEffect(() => {
-    console.log('this is the instance, aka session object ---->', instance)
+    // console.log('this is the instance, aka session object ---->', instance)
  
     setIsLoggedIn(!!instance);
   }, [instance])
@@ -52,7 +52,7 @@ const onSignOut = () => {
     if (typeof endpoint === "string") {
       schemaAndEndpoint.endpoint = endpoint!;
     }
-    console.log("schema endpoint:", schemaAndEndpoint);
+    // console.log("schema endpoint:", schemaAndEndpoint);
     childToParent(schemaAndEndpoint);
   };
   const { data: session, status } = useSession();

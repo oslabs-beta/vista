@@ -13,7 +13,9 @@ export default function QueryContainer(QueryContainerProps: QueryContainerProps)
     clickField, 
     setIsSaveModalOpen, 
     queryAsString, 
-    setQueryAsString 
+    setQueryAsString,
+    queryAsObj,
+    setQueryAsObj,
   } = QueryContainerProps;
 
   const [data, setData] = useState("");
@@ -23,7 +25,15 @@ export default function QueryContainer(QueryContainerProps: QueryContainerProps)
   return (
     //matt added mt-10 for the margin top to help with the query container from signing in vs signing out
     <div className="ml-6 dark:bg-slate-800 mt-10">
-      <QueryGenerator childToParent={childToParent} clickField={clickField} queryAsString={queryAsString} setQueryAsString={setQueryAsString} setIsSaveModalOpen={setIsSaveModalOpen} />
+      <QueryGenerator
+        childToParent={childToParent}
+        clickField={clickField}
+        queryAsString={queryAsString}
+        setQueryAsString={setQueryAsString}
+        setIsSaveModalOpen={setIsSaveModalOpen}
+        queryAsObj={queryAsObj}
+        setQueryAsObj={setQueryAsObj}
+      />
       <QueryResult data={data} endpoint={endpoint} />
     </div>
   );
