@@ -8,6 +8,7 @@ const bcrypt = require('bcrypt');
 // resource: https://www.youtube.com/watch?v=A5ZN--P9vXM&pp=ygUObmV4dGF1dGggb2F1dGg%3D
 const handler = NextAuth({
 
+
     // providers array allows nextauth to handle oauth; just need ot import the providers
     providers: [
         CredentialsProvider({
@@ -53,6 +54,7 @@ const handler = NextAuth({
         }),
 
     ],
+   
 
     // unsure of why we need this currently.
     secret: process.env.JWT_SECRET

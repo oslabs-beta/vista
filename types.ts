@@ -117,6 +117,7 @@ export type SaveResponseModalProps = {
 };
 
 export type ProfileProps = {
+  image: string | undefined
   name: string,
   picture: string,
   linkedIn: string,
