@@ -70,7 +70,9 @@ export default function Home({ session }: any) {
     if (!tempObj.query[parent]) {
       tempObj.query[parent] = {};
     }
-    tempObj.query[parent][child] = true;
+    if(child !== ""){
+      tempObj.query[parent][child] = true;
+    }
     
     // add "__args" object if args are required
     if (args) {

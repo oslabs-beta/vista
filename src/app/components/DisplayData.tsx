@@ -92,17 +92,29 @@ export function DisplayData(props: Props) { // TODO: type
     if (node.data.queryField) {
       // toggle visibility of it's type node and edge
       toggleNodeEdge(node.data.label + '-' + node.data.type, node.data.label + '_to_' + node.data.label + '-' + node.data.type);
+      // send clicked node data to query generator
+      props.setClickField(
+        {
+          type: node.data.field,
+          field: node.data.label,
+          data: node.data,
+        }
+      )
+    }
+    else if(node.data.isObject) {
+      // TODO: make this non clickable and add a tootltip on hover
+    }
+    // case: is a queryable field --> update query generator
+    else if(node.data.isObject === false || node.data.isArg === false) {
+      // console.log('props.queryAsObj', props.queryAsObj);
+      // console.log('node.data', node.data);
+      const queryAsObjDeepCopy = JSON.parse(JSON.stringify(props.queryAsObj));
+      // console.log('queryAsObjDeepCopy', queryAsObjDeepCopy);
+      queryAsObjDeepCopy.query[node.data.field][node.data.label] = true;
+      // console.log('queryAsObjDeepCopy with new field', queryAsObjDeepCopy);
+      props.setQueryAsObj(queryAsObjDeepCopy);
     }
 
-    // send clicked node data to query generator
-    props.setClickField(
-      {
-        // type: node.parentNode || "",
-        type: node.data.field,
-        field: node.data.label,
-        data: node.data,
-      }
-    )
   };
 
   const onNodesChange = useCallback((changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)), []);
@@ -226,7 +238,11 @@ export function DisplayData(props: Props) { // TODO: type
       let newTypeFieldNode: Node = {
         id: el.name + '_field_' + field.name + '_parent',
         position: {x: fieldInTypeXValue, y: fieldInTypeYValue},
-        data: { label: el.isObject ? el.name + '...' : el.name, isObject: el.isObject},
+        data: {
+          label: el.isObject ? el.name + '...' : el.name,
+          isObject: el.isObject,
+          field: field.name,
+        },
         parentNode: field.name + '-' + field.type,
         extent: 'parent',
         type: 'noHandleNode',
