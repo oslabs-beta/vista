@@ -53,6 +53,7 @@ const handler = NextAuth({
         }),
 
     ],
+
     // unsure of why we need this currently.
     secret: process.env.JWT_SECRET
 
