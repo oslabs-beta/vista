@@ -21,7 +21,6 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import { CircularProgress } from "@mui/material";
 
-// import TextUpdaterNode from '@/app/components/nodes/TextUpdaterNode';
 import NoHandleNode from './NoHandleNode';
 import InputNode from './InputNode';
 
@@ -32,14 +31,12 @@ const initialNodes: Node[] = [
     id: 'query',
     position: { x: 500, y: 0 },
     data: { label: 'Root Query' },
-    // zIndex: 100
   },
-  // { id: 'types', position: { x: 750, y: 200 }, data: { label: 'Types'}},
+ 
   {
     id: 'fields',
     position: { x: 250, y: 200 },
     data: { label: 'Fields'},
-    // zIndex: 99
   },
 ]
 
@@ -48,8 +45,6 @@ let yIndexForFields = 300;
 
 let xIndexForTypes = 750;
 let yIndexForTypes= 300;
-
-
 
 const initialEdges: Edge[] = [
 //   {
@@ -80,24 +75,10 @@ const hideEdge = (toggled: string) => (edge: Edge) => {
   return edge;
 }
 
-
-
-export function DisplayData(props: Props) { // TODO: type
-  // {props.data.err && alert('Please enter a valid endpoint')}
-  // {!props.data.schema && "No data, please enter an endpoint above."}
-  // {props.data.schema && Object.keys(props.data.schema).map((key, index) => {
-  // return (
-
+export function DisplayData(props: Props) { 
   const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
 
-  // const [unhiddenNodes, setUnHiddenNodes] = useState( new Set());
-
-  // useEffect(() => {
-  //   setNodes((nds) => nds.map(hide(unhiddenNodes)))
-  // }, [unhiddenNodes])
-  
-  // const nodeTypes = useMemo(() => ({ textUpdater: TextUpdaterNode }), []);
   const nodeTypes = useMemo(() => (
     {
       noHandleNode: NoHandleNode,
@@ -108,40 +89,22 @@ export function DisplayData(props: Props) { // TODO: type
   const maxDepthWarning = 'Maximum depth supported by current version of vista has been reached.'
 
   const onNodeClick = (event:any, node:Node) => {
-    // if the node that was clicked is a field on Query type
     if (node.data.queryField) {
-      // set id of node that should be hidden/unhidden
       const nodeToToggle = node.data.label + '-' + node.data.type;
       const edgeToToggle = node.data.label + '_to_' + node.data.label + '-' + node.data.type;
 
-      // toggle visibility of node
       setNodes((nds) => nds.map(hideNode(nodeToToggle)));
       setEdges((eds) => eds.map(hideEdge(edgeToToggle)));
     }
-
-    // console.log('click node', node);
-    // alert(`should display node for type ${node.data.type}`)
-
-    // send clicked node data to query generator
     props.setClickField({type: node.parentNode || "", field: node.data.label})
   }
-
-  // const onNodesChange = useCallback(
-  //   (changes:any) => setNodes((nds) => applyNodeChanges(changes, nds)), [setNodes]
-  // )
-
   const onNodesChange = useCallback((changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)), []);
-
   const onEdgesChange = useCallback((changes: EdgeChange[]) => setEdges((eds) => applyEdgeChanges(changes, eds)),[] );
 
   const schema = props.data.schema;
   if (!schema) {
-    return null; // or render an error message, loading state, or fallback UI
+    return null; 
   }
-
-// iterate through our type elements and set each label to the type
-
-// render a node for each field in the query type
   const schemaFields = schema.fields
   let numOfNodes = 0;
   initialNodes.length === 2 && schemaFields.map((field: any, i: any) => {
@@ -149,52 +112,42 @@ export function DisplayData(props: Props) { // TODO: type
       id: field.name,
       position: { x: xIndexForFields, y: yIndexForFields }, 
       data: {
-        queryField: true, // to read from onclick function
+        queryField: true, 
         label: field.name,
         arguments: [...field.reqArgs],
-        type: field.type // added this in order to link with it's type and fields on click
+        type: field.type 
       },
-      // zIndex: 98,
-      // type: "output",
     };
     
-    // push them to the initial nodes array (is it better to use a hook)
     initialNodes.push(newNode);
-    // nodeState.push(newNode);
     numOfNodes++;
 
-    // set the x and y positions:
     if (numOfNodes % 6 === 0 && numOfNodes !== 0) {
-      xIndexForFields -= 300; // Decrement x value for a new column
-      yIndexForFields = 300; // Reset y value for a new column
+      xIndexForFields -= 300; 
+      yIndexForFields = 300; 
     } else {
-      yIndexForFields += 50; // Increment y value for the next row in the same column
+      yIndexForFields += 50; 
     }
-    // create a new edge to connect each type to the root query
     const newEdgeForFields = {
       id: `${field.name} edge`,
       source: 'fields',
       target: field.name,
-      // type: 'floating',
       markerEnd: {
         type: MarkerType.ArrowClosed
       }
     };
-
-    // push the edges to the initial edges array (is it better to use a hook here?)
     initialEdges.push(newEdgeForFields);
-
     const numberOfFields = schema.types[field.type].length;
-
     const desiredNodeHeight = (53 * numberOfFields);
-
     let height;
+    let fieldArgLength = field.reqArgs.length;
 
     if(field.reqArgs.length >= 1) {
-      height = 100 + (50 * numberOfFields);
+      // height = 100 + (50 * numberOfFields);
+      height = 50 + (fieldArgLength * 50) + (50 * numberOfFields);
     } else if(numberOfFields < 5) {
       height = 50 + (50 * numberOfFields);
-    } else if (numberOfFields >= 5) {
+    } else if (numberOfFields >= 5 && fieldArgLength === 0) {
       height = desiredNodeHeight;
     }
 
@@ -210,7 +163,6 @@ export function DisplayData(props: Props) { // TODO: type
       },
       style: {
         width: 200,
-        // height: field.reqArgs.length >= 1 ? 100 + (50 * numberOfFields) : desiredNodeHeight,
         height: height,
       },
       hidden: true,
