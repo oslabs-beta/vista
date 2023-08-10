@@ -2,13 +2,10 @@ import NextAuth from "next-auth"
 import GithubProvider from "next-auth/providers/github"
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { QueryResult } from "pg";
 import { db } from '../../../../utils/database';
 const bcrypt = require('bcrypt');
-
-// resource: https://www.youtube.com/watch?v=A5ZN--P9vXM&pp=ygUObmV4dGF1dGggb2F1dGg%3D
 const handler = NextAuth({
-
-
     // providers array allows nextauth to handle oauth; just need ot import the providers
     providers: [
         CredentialsProvider({
@@ -24,24 +21,24 @@ const handler = NextAuth({
                 try{
                     // look up user
                     const query: string = 'SELECT * FROM users WHERE username=$1;'
-                    const user: any = await db.query(query, [credentials?.username]); // TODO: type
+                    const user: QueryResult<any> = await db.query(query, [credentials?.username]);
                     // throw error if user does not exist in db
                     if(!user.rows[0]) {
                         throw new Error('username/password is incorrect');
                     }
                     // compare provided password to hash stored in db
-                    const match = await bcrypt.compare(credentials?.password, user.rows[0].password);
+                    const match: boolean = await bcrypt.compare(credentials?.password, user.rows[0].password);
                     if(match) {
-                        // any object returned will be saved in user property of JWT 
-                        return user;
+                        // any object returned will be saved in user property of JWT
+                        const userData = { userId: user.rows[0]._id, email: user.rows[0].username };
+                        return userData;
                     } else {
                         // returning null results in an error being displayed that advises user to check their details
                         return null;
-                    }    
+                    }
                 } catch(error) {
                     console.log('error with credential authentication: ', error);
                 }
-    
             }
         }),
         GithubProvider({
@@ -52,14 +49,10 @@ const handler = NextAuth({
             clientId: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET
         }),
-
     ],
    
 
     // unsure of why we need this currently.
     secret: process.env.JWT_SECRET
-
-    
 })
-
 export {handler as GET, handler as POST}
