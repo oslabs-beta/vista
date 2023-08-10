@@ -122,6 +122,7 @@ export function DisplayData(props: Props) {
     initialNodes.push(newNode);
     numOfNodes++;
 
+
     if (numOfNodes % 6 === 0 && numOfNodes !== 0) {
       xIndexForFields -= 300; 
       yIndexForFields = 300; 
@@ -168,6 +169,9 @@ export function DisplayData(props: Props) {
       hidden: true,
       // zIndex: 96,
     }
+    console.log('HELLOHELLOHELLO', newTypeNode)
+    
+    
 
     const newTypeOfFieldEdge = {
       id: field.name + '_to_' + field.name + '-' + field.type,
@@ -219,6 +223,7 @@ export function DisplayData(props: Props) {
       let newTypeFieldNode: Node = {
         id: el.name + '_field_' + field.name + '_parent',
         position: {x: fieldInTypeXValue, y: fieldInTypeYValue},
+
         data: { label: el.isObject ? el.name + '...' : el.name, isObject: el.isObject},
         parentNode: field.name + '-' + field.type,
         extent: 'parent',
@@ -226,7 +231,12 @@ export function DisplayData(props: Props) {
         type: 'noHandleNode',
         draggable: false,
         hidden: true,
+
       }
+      // // Generate a unique ID for the data-test attribute
+      // const dataTestId = uuid();
+      // // Add a data-test attribute to the node
+      
       fieldInTypeYValue += 50
       
 
