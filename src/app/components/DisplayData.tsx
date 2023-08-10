@@ -238,7 +238,6 @@ export function DisplayData(props: Props) {
       
       fieldInTypeYValue += 50
       
-
       initialNodes.push(newTypeFieldNode)
     }
 
@@ -270,13 +269,10 @@ export function DisplayData(props: Props) {
 
                   <div className="w-full h-[722px] border-2 border-blue-950 rounded-lg shadow p-2 mb-5 dark:border-white">
                    <ReactFlow
-                      // onLoad={onLoad}
                       nodes={nodes}
                       edges={edges}
                       onNodesChange={onNodesChange}
                       onEdgesChange={onEdgesChange}
-                      //onConnect={onConnect}
-                      //
                       onNodeClick={onNodeClick}
                       fitView
 
@@ -285,7 +281,6 @@ export function DisplayData(props: Props) {
                     >
                       <Controls className="dark:bg-slate-300"/>
                       <MiniMap className="dark:bg-slate-300"/>
-                      {/* removed the TS error here that was caused by the variant */}
                       <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
                     </ReactFlow>
                   </div>

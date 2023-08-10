@@ -5,7 +5,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { QueryResult } from "pg";
 import { db } from '../../../../utils/database';
 const bcrypt = require('bcrypt');
-// resource: https://www.youtube.com/watch?v=A5ZN--P9vXM&pp=ygUObmV4dGF1dGggb2F1dGg%3D
 const handler = NextAuth({
     // providers array allows nextauth to handle oauth; just need ot import the providers
     providers: [
@@ -22,7 +21,7 @@ const handler = NextAuth({
                 try{
                     // look up user
                     const query: string = 'SELECT * FROM users WHERE username=$1;'
-                    const user: QueryResult<any> = await db.query(query, [credentials?.username]); // TODO: type
+                    const user: QueryResult<any> = await db.query(query, [credentials?.username]);
                     // throw error if user does not exist in db
                     if(!user.rows[0]) {
                         throw new Error('username/password is incorrect');
@@ -51,6 +50,8 @@ const handler = NextAuth({
             clientSecret: process.env.GOOGLE_CLIENT_SECRET
         }),
     ],
+   
+
     // unsure of why we need this currently.
     secret: process.env.JWT_SECRET
 })

@@ -112,7 +112,7 @@ const onSignOut = () => {
         </button>
 
         {/* User Account Dropdown */}
-        <div className="flex items-center space-x-1.5">
+        <div className="flex items-center space-x-1.5 z-0">
           <Menu as='div' className='relative inline-block text-left'>
             <div>
               {/* Account Button */} 
