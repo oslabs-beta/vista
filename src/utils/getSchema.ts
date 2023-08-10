@@ -24,7 +24,7 @@
 "use server";
 import { GraphQLClient } from 'graphql-request' //fetch from GraphQL API: https://youtu.be/F3BWdFXEJPk
 import { getIntrospectionQuery } from 'graphql';
-import { parseSchemaAndFormat } from './parseSchemaAndFormat';
+import { parseSchemaAndFormat } from '././parseSchemaAndFormat';
 import { request } from "graphql-request"
 
 
@@ -34,7 +34,6 @@ export async function getSchema(data: FormData) {
   if(typeof endpoint !== 'string' || endpoint.length === 0) {
     throw new Error('Invalid endpoint');
   }
-
   const schema = await parseSchemaAndFormat(endpoint);
   console.log('this is the schema', JSON.stringify(schema));
   let err = false;

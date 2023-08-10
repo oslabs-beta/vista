@@ -16,8 +16,8 @@ const handler = NextAuth({
             name: "Credentials",
             // 'credentials' is used to generate a form on the sign-in page
             credentials: {
-                username: { label: "Username", type: "text" },
-                password: { label: "Password", type: "password" }
+                username: { label: "Username", type: "text", "data-testid": "username-input" },
+                password: { label: "Password", type: "password", "data-testid": "password-input" }
             },
             // authorize is used to query db with provided credentials & authenticate user
             async authorize(credentials, req) {

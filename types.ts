@@ -3,6 +3,7 @@ import {Dispatch, SetStateAction} from "react"
 export type Props = {
     data: Data,
     setClickField: Dispatch<SetStateAction<{type: string, field: string}>>
+    setData: Dispatch<SetStateAction<Data>>
   }
 
 export type SchemaData = {
@@ -28,11 +29,19 @@ export type Field = {
     errorMessage?: string
 }
 
+// type SchemaTypes = {
+//     [index: string]: string[]
+// }
 type SchemaTypes = {
-    [index: string]: string[]
+    [index: string]: SchemaTypesField[],
 }
 
-export type ChildToParent = (schema: Data, endpoint: string) => void
+type SchemaTypesField = {
+  isObject: boolean,
+  name: string,
+}
+
+export type ChildToParent = (query: string) => void
 
 export type ChildData = { schema: {fields: never[]; types: {}; }, endpoint: string }
 

@@ -17,7 +17,7 @@ export default function QueryContainer(QueryContainerProps: QueryContainerProps)
   } = QueryContainerProps;
 
   const [data, setData] = useState("");
-  const childToParent = (childData: any) => {
+  const childToParent = (childData: string) => {
     setData(childData);
   };
   return (
