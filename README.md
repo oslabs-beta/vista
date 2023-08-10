@@ -4,7 +4,8 @@ Vista is a visual tool that allows you to view the results of querying a GraphQL
 
 ## Features
 * Visible Schema Connectivity: Render a visualization of your schema in an interactive, node-based graph from an API endpoint that allows you to easily comprehend the schema structure.
-<img width="1075" alt="Screen Shot 2023-08-09 at 6 06 50 PM" src="https://github.com/oslabs-beta/vista/assets/32287834/f73cf252-221a-4679-8d8c-1868cb2a635f">
+
+![gif](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNzNyeXNsbmR2Yzg1bWlrM2ZoeXhtYXI5M2lyNDQ1ZnBpaGt6bGp0aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3VAPlRRsgrIQUpgpU6/giphy.gif)
 
   
 * Interactive Nodes: Dynamically build queries to access the data you need utilizing simple point & click functionality of the GraphQL fields.
@@ -12,7 +13,7 @@ Vista is a visual tool that allows you to view the results of querying a GraphQL
 * Ready To Use: Option to copy generated queries based on your interaction with the data.
 * Save for Later: Save desired queries for future reference.
 <img width="477" alt="Screen Shot 2023-08-09 at 6 09 02 PM" src="https://github.com/oslabs-beta/vista/assets/32287834/73151e8f-4b26-4a18-98c2-d72bd0e4e504">
-
+  
 
 ## How to use Vista
  * Enter the GraphQL API endpoint that you intend to query into the search bar. Vista leverages the GraphQL introspection system and renders the queryable fields and types from the provided endpoint.
