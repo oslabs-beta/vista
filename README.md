@@ -23,4 +23,17 @@ Vista is a visual tool that allows you to view the results of querying a GraphQL
  * Copy and/or save the generated GraphQL query that is created for you in the *Query Generator*.
    [gif of screen with indicated fields once everything is rendered]
 
+### Contributors
+
+[Charlie Charboneau](https://github.com/CharlieCharboneau)  
+
+[Nestor Cayanan](https://github.com/nestorcayananjr)  
+
+[Lucas Contreras](https://github.com/lucascontreras)  
+
+[Matt Mattox](https://github.com/heyitsmattox)  
+
+[Stephanie Serrano](http://github.com/stephanie-115)  
+
+
 
