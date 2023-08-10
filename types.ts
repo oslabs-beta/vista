@@ -3,8 +3,10 @@ import {Dispatch, SetStateAction} from "react"
 export type Props = {
     data: Data,
     // setClickField: Dispatch<SetStateAction<{type: string, field: string}>>
-    setClickField: Dispatch<SetStateAction<{type: string, field: string, data: Data}>>
-    setData: Dispatch<SetStateAction<Data>>
+    setClickField: Dispatch<SetStateAction<{type: string, field: string, data: Data}>>,
+    setData: Dispatch<SetStateAction<Data>>,
+    queryAsObj?: object,
+    setQueryAsObj?: Dispatch<SetStateAction<object>>,
   }
 
 export type SchemaData = {

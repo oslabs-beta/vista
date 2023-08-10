@@ -7,15 +7,10 @@ export default function QueryGenerator(QueryGeneratorProps: QueryGenerator) {
 
   const {
     childToParent,
-    clickField,
     queryAsString,
-    setQueryAsString,
     setIsSaveModalOpen,
-    queryAsObj,
-    setQueryAsObj,
   } = QueryGeneratorProps;
 
-  // const [queryAsObj, setQueryAsObj] = useState({ query: {} });
   
   useEffect(() => {
     childToParent(queryAsString);   

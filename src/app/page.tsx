@@ -14,6 +14,7 @@ import { jsonToGraphQLQuery } from "json-to-graphql-query";
 export default function Home({ session }: any) {
   // data fetching: https://youtu.be/gSSsZReIFRk?t=293
   const [data, setData] = useState<Data>({schema:{fields: [], types: {}}, endpoint:""});
+  //@ts-ignore
   const [clickField, setClickField] = useState<ClickField>({ type: "", field: "" });
   
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
@@ -33,8 +34,7 @@ export default function Home({ session }: any) {
       console.log('query as object', queryAsObj);
       const queryAsObjDeepCopy = JSON.parse(JSON.stringify(queryAsObj));
       console.log('queryAsObjDeepCopy',queryAsObjDeepCopy);
-      // console.log(queryAsObjDeepCopy.query.continent['__args']);
-      // console.log(queryAsObjDeepCopy.query.continent.__args);
+      //@ts-ignore
       queryAsObjDeepCopy.query[argument.field]["__args"][argument.argument] = argument.value;
       setQueryAsObj(queryAsObjDeepCopy);
     }
@@ -64,7 +64,7 @@ export default function Home({ session }: any) {
 
   const updateQueryAsObj = (child: string, parent: string, args: string[]) => {
     //make a deep copy of queryAsObj
-    const tempObj = JSON.parse(JSON.stringify(queryAsObj)); //FIXME: here not showing args
+    const tempObj = JSON.parse(JSON.stringify(queryAsObj));
     console.log('tempObj1', tempObj);
     //@ts-ignore
     if (!tempObj.query[parent]) {
@@ -100,9 +100,11 @@ export default function Home({ session }: any) {
               data.schema.fields.length &&
               <DisplayData
                 data={data}
+                //@ts-ignore
                 setClickField={setClickField}
                 setData={setData}
                 queryAsObj={queryAsObj}
+                //@ts-ignore
                 setQueryAsObj={setQueryAsObj}
                 setArgument={setArgument}
                 // argModified={argModified}
@@ -116,6 +118,7 @@ export default function Home({ session }: any) {
               setIsSaveModalOpen={setIsSaveModalOpen}
               queryAsString={queryAsString}
               setQueryAsString={setQueryAsString}
+              //@ts-ignore
               queryAsObj={queryAsObj}
               setQueryAsObj={setQueryAsObj}
             />

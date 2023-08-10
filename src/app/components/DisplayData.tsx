@@ -115,6 +115,7 @@ export function DisplayData(props: Props) { // TODO: type
       // console.log('queryAsObjDeepCopy', queryAsObjDeepCopy);
       queryAsObjDeepCopy.query[node.data.field][node.data.label] = true;
       // console.log('queryAsObjDeepCopy with new field', queryAsObjDeepCopy);
+      //@ts-ignore
       props.setQueryAsObj(queryAsObjDeepCopy);
     }
 
@@ -226,9 +227,11 @@ export function DisplayData(props: Props) { // TODO: type
           data: {
             label: stringForLabel[j],
             isArg: j === 0,
+            //@ts-ignore
             argModified: props.argModified,
             field: field.name,
             argument: field.reqArgs[i],
+            //@ts-ignore
             setArgument: props.setArgument,
           },
           parentNode: field.name + '-' + field.type,
@@ -302,7 +305,8 @@ export function DisplayData(props: Props) { // TODO: type
 
               onNodeClick={onNodeClick}
               fitView
-
+              
+              //@ts-ignore
               nodeTypes={nodeTypes}
             >
               <Controls className="dark:bg-slate-300"/>

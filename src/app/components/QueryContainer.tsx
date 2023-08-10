@@ -14,7 +14,9 @@ export default function QueryContainer(QueryContainerProps: QueryContainerProps)
     setIsSaveModalOpen, 
     queryAsString, 
     setQueryAsString,
+    //@ts-ignore
     queryAsObj,
+    //@ts-ignore
     setQueryAsObj,
   } = QueryContainerProps;
 
@@ -31,6 +33,7 @@ export default function QueryContainer(QueryContainerProps: QueryContainerProps)
         queryAsString={queryAsString}
         setQueryAsString={setQueryAsString}
         setIsSaveModalOpen={setIsSaveModalOpen}
+        //@ts-ignore
         queryAsObj={queryAsObj}
         setQueryAsObj={setQueryAsObj}
       />
