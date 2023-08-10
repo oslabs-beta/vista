@@ -13,10 +13,12 @@ export async function parseSchemaAndFormat(apiEndpoint: string) {
 
     const schemaData:SchemaData = {fields: [], types: {}};
 
+
     const introspectionQueryData:any = await request (apiEndpoint, getIntrospectionQuery());
 
     const arrayOfFieldObjects:ArrayOfFields = [];
 
+    // @ts-ignore
     const fieldsFromIntrospectionQuery = introspectionQueryData.__schema.types;
 
 
@@ -30,6 +32,13 @@ export async function parseSchemaAndFormat(apiEndpoint: string) {
 
           fieldObjectTemplate.name = field.name;
           fieldObjectTemplate.type = field.type.name;
+
+          //accounting for type modifiers such as Lists and Non-Null types by traversing the type object until name is not null
+          let currentOfType = field.type;
+          while (!fieldObjectTemplate.type) {
+            fieldObjectTemplate.type = currentOfType.ofType.name;
+            currentOfType = currentOfType.ofType;
+          }
 
           if (field.args){
             for (const arg of field.args){
@@ -53,7 +62,31 @@ export async function parseSchemaAndFormat(apiEndpoint: string) {
         const fieldsOfTheType = [];
 
         for (const field of type.fields){
-          fieldsOfTheType.push(field.name)
+          // fieldsOfTheType.push(field.name)
+          console.log('current type:', type.name);
+          console.log('current field:', field.name);
+          let name = field.name;
+
+          //check if the field is of kind object meaning it adds a new level of nesting we currently don't support
+          // console.log(`type of field ${field.name}`, JSON.stringify(field.type));
+          let kindOfTypeOfField = field.type.kind;
+          let ofType = field.type.ofType;
+          let isObject = false;
+          while(ofType) {
+            kindOfTypeOfField = ofType.kind;
+            ofType = ofType.ofType;
+            if (kindOfTypeOfField === "OBJECT") {
+              isObject = true;
+              break;
+            }
+          }
+          fieldsOfTheType.push(
+            {
+              name,
+              isObject,
+            }
+          )
+
         }
 
         schemaData.types[type.name] = fieldsOfTheType;

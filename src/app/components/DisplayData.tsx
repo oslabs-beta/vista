@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import React, { useCallback, useState, Suspense } from "react";
+import React, { useCallback, useMemo, useState, Suspense, useEffect } from "react";
 import { Props } from '../../../types'
 
 import ReactFlow, { 
@@ -20,12 +20,24 @@ import ReactFlow, {
 
 import 'reactflow/dist/style.css';
 import { CircularProgress } from "@mui/material";
+
+import NoHandleNode from './NoHandleNode';
+import InputNode from './InputNode';
+
 import { data } from "autoprefixer";
 
 const initialNodes: Node[] = [ 
-  { id: 'query', position: { x: 500, y: 0 }, data: { label: 'Root Query' } },
-  { id: 'types', position: { x: 750, y: 200 }, data: { label: 'Types'}},
-  { id: 'fields', position: { x: 250, y: 200 }, data: { label: 'Fields'}},
+  {
+    id: 'query',
+    position: { x: 500, y: 0 },
+    data: { label: 'Root Query' },
+  },
+ 
+  {
+    id: 'fields',
+    position: { x: 250, y: 200 },
+    data: { label: 'Fields'},
+  },
 ]
 
 let xIndexForFields = 400;
@@ -34,15 +46,13 @@ let yIndexForFields = 300;
 let xIndexForTypes = 750;
 let yIndexForTypes= 300;
 
-
-
 const initialEdges: Edge[] = [
-  {
-  id: '1',
-  source: 'query', 
-  target: 'types',
-  markerEnd: { type: MarkerType.ArrowClosed },
-},
+//   {
+//   id: '1',
+//   source: 'query', 
+//   target: 'types',
+//   markerEnd: { type: MarkerType.ArrowClosed },
+// },
   {
   id: '2',
   source: 'query', 
@@ -51,108 +61,177 @@ const initialEdges: Edge[] = [
 }
 ];
 
+//toggle display onclick of fields of query type
+const hideNode = (toggled: string) => (node: Node) => {
+  if(toggled === node.id || toggled === node.parentNode) {
+    node.hidden = !node.hidden;
+  }
+  return node;
+}
+const hideEdge = (toggled: string) => (edge: Edge) => {
+  if(toggled === edge.id) {
+    edge.hidden = !edge.hidden;
+  }
+  return edge;
+}
 
-
-export function DisplayData(props: Props) { // TODO: type
-  // {props.data.err && alert('Please enter a valid endpoint')}
-  // {!props.data.schema && "No data, please enter an endpoint above."}
-  // {props.data.schema && Object.keys(props.data.schema).map((key, index) => {
-  // return (
-  
+export function DisplayData(props: Props) { 
   const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
+
+  const nodeTypes = useMemo(() => (
+    {
+      noHandleNode: NoHandleNode,
+      inputNode: InputNode,
+    }
+  ), []);
   
+  const maxDepthWarning = 'Maximum depth supported by current version of vista has been reached.'
+
   const onNodeClick = (event:any, node:Node) => {
+    if (node.data.queryField) {
+      const nodeToToggle = node.data.label + '-' + node.data.type;
+      const edgeToToggle = node.data.label + '_to_' + node.data.label + '-' + node.data.type;
+
+      setNodes((nds) => nds.map(hideNode(nodeToToggle)));
+      setEdges((eds) => eds.map(hideEdge(edgeToToggle)));
+    }
     props.setClickField({type: node.parentNode || "", field: node.data.label})
   }
-
-  // const onNodesChange = useCallback(
-  //   (changes:any) => setNodes((nds) => applyNodeChanges(changes, nds)), [setNodes]
-  // )
-
   const onNodesChange = useCallback((changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)), []);
-
   const onEdgesChange = useCallback((changes: EdgeChange[]) => setEdges((eds) => applyEdgeChanges(changes, eds)),[] );
 
   const schema = props.data.schema;
   if (!schema) {
-    return null; // or render an error message, loading state, or fallback UI
+    return null; 
   }
-
-// iterate through our type elements and set each label to the type
-
   const schemaFields = schema.fields
   let numOfNodes = 0;
-
-  schemaFields.map((field: any, i: any) => {
-    let newNode: Node = { 
+  initialNodes.length === 2 && schemaFields.map((field: any, i: any) => {
+    let newNode: Node = {
       id: field.name,
       position: { x: xIndexForFields, y: yIndexForFields }, 
-      data: { label: field.name },
-      type: "output",
+      data: {
+        queryField: true, 
+        label: field.name,
+        arguments: [...field.reqArgs],
+        type: field.type 
+      },
     };
-    // // Generate a unique ID for the data-test attribute
-    // const dataTestId = uuid();
-    // // Add a data-test attribute to the node
-    // newNode.data["data-testid"] = dataTestId;
-    // console.log('THIS IS THE DATA TEST ID:', dataTestId)
     
+    initialNodes.push(newNode);
+    numOfNodes++;
 
 
-      // push them to the initial nodes array (is it better to use a hook)
-      initialNodes.push(newNode);
-      // nodeState.push(newNode);
-      numOfNodes++;
-
-    // set the x and y positions:
     if (numOfNodes % 6 === 0 && numOfNodes !== 0) {
-      xIndexForFields -= 300; // Decrement x value for a new column
-      yIndexForFields = 300; // Reset y value for a new column
+      xIndexForFields -= 300; 
+      yIndexForFields = 300; 
     } else {
-      yIndexForFields += 50; // Increment y value for the next row in the same column
+      yIndexForFields += 50; 
     }
-    // create a new edge to connect each type to the root query
-    const newEdgeForFields = { id: `${field.name} edge`, source: 'fields', target: field.name, markerEnd: { type: MarkerType.ArrowClosed }};
-
-    // push the edges to the initial edges array (is it better to use a hook here?)
+    const newEdgeForFields = {
+      id: `${field.name} edge`,
+      source: 'fields',
+      target: field.name,
+      markerEnd: {
+        type: MarkerType.ArrowClosed
+      }
+    };
     initialEdges.push(newEdgeForFields);
-  });
+    const numberOfFields = schema.types[field.type].length;
+    const desiredNodeHeight = (53 * numberOfFields);
+    let height;
+    let fieldArgLength = field.reqArgs.length;
 
-  const schemaTypes = schema.types
-  if(numOfNodes + 3 === initialNodes.length) {
-    for (let key in schemaTypes){
+    if(field.reqArgs.length >= 1) {
+      // height = 100 + (50 * numberOfFields);
+      height = 50 + (fieldArgLength * 50) + (50 * numberOfFields);
+    } else if(numberOfFields < 5) {
+      height = 50 + (50 * numberOfFields);
+    } else if (numberOfFields >= 5 && fieldArgLength === 0) {
+      height = desiredNodeHeight;
+    }
 
-    let newTypeNode: Node = { 
-      id: key,
-      position: { x: xIndexForTypes, y: yIndexForTypes }, 
-      data: { label: key },
+    //render types and their fields
+    const newTypeOfFieldNode: Node = {
+      id: field.name + '-' + field.type,
+      position: {
+        x: xIndexForTypes,
+        y: yIndexForTypes,
+      },
+      data: {
+        label: field.type
+      },
       style: {
         width: 200,
-        height: 400 
-      } ,
+        height: height,
+      },
+      hidden: true,
+      // zIndex: 96,
     }
     console.log('HELLOHELLOHELLO', newTypeNode)
     
     
 
-    xIndexForTypes += 215
+    const newTypeOfFieldEdge = {
+      id: field.name + '_to_' + field.name + '-' + field.type,
+      source: field.name,
+      target: field.name + '-' + field.type,
+      // type: 'floating',
+      markerEnd: {
+        type: MarkerType.ArrowClosed
+      },
+      hidden: true,
+    };
+    // console.log('new edge:', newTypeOfFieldEdge);
 
-    let newTypeEdge: Edge = {id: `${key} edge`, source: 'types', target: key, markerEnd: { type: MarkerType.ArrowClosed }};
+    initialNodes.push(newTypeOfFieldNode);
+    initialEdges.push(newTypeOfFieldEdge);
 
-    initialNodes.push(newTypeNode);
-    initialEdges.push(newTypeEdge);
+    xIndexForTypes +=215
 
-    
     let fieldInTypeYValue: number = 40;
     let fieldInTypeXValue: number = 25
 
-    for (let el of schemaTypes[key]){
+    //for each required argument, render the custom node with input field and a second custom node without an input field
+    for (let i = 0; i < field.reqArgs.length; i++) {
+      const stringForId = ['_argument_', '_field_'];
+      const stringForLabel = [field.reqArgs[i] + '*', field.reqArgs[i]];
+      const stringForType = ['inputNode', 'noHandleNode']; //change when j=0 for custom node with input field
+      for (let j = 0; j < 2; j++) {
+        let newTypeFieldNode: Node = {
+          id: field.reqArgs[i] + stringForId[j] + field.name + '_parent',
+          position: {x: fieldInTypeXValue, y: fieldInTypeYValue},
+          data: { label: stringForLabel[j] },
+          parentNode: field.name + '-' + field.type,
+          extent: 'parent',
+          // zIndex: 97,
+          type: stringForType[j],
+          draggable: false,
+          hidden: true,
+        }
+        fieldInTypeYValue += 50
+        initialNodes.push(newTypeFieldNode)
+      }
+    }
+
+    //render the remaining fields of the type that are not arguments
+    for (let el of schema.types[field.type]){
+      // console.log('el', el);
+      if (field.reqArgs.includes(el.name)) continue;
+      console.log(`field ${el.name}, isObject ${el.isObject}`);
       let newTypeFieldNode: Node = {
-        id: el + '_field' + key + '_parent',
+        id: el.name + '_field_' + field.name + '_parent',
         position: {x: fieldInTypeXValue, y: fieldInTypeYValue},
-        data: { label: el },
-        parentNode: key,
+
+        data: { label: el.isObject ? el.name + '...' : el.name, isObject: el.isObject},
+        parentNode: field.name + '-' + field.type,
         extent: 'parent',
+        // zIndex: 97,
+        type: 'noHandleNode',
+        draggable: false,
+        hidden: true,
+
       }
       // // Generate a unique ID for the data-test attribute
       // const dataTestId = uuid();
@@ -163,18 +242,14 @@ export function DisplayData(props: Props) { // TODO: type
 
       initialNodes.push(newTypeFieldNode)
     }
-    // setNodes(nodeState)
-  }}
+
+  });
 
   const handleClick = () => {
     props.setData({schema:{fields: [], types: {}}, endpoint:""})
     const userInputtedEndpoint = document.getElementById('simple-search') as HTMLInputElement
     userInputtedEndpoint.value = ""
   }
-
-
-  // fit view on load
-  // const onLoad= (instance:any) => setTimeout(() => instance.fitView(), 0);
 
   return (
     
@@ -187,7 +262,7 @@ export function DisplayData(props: Props) { // TODO: type
                      }}
                    >
                      Reset
-                     <svg aria-hidden="true" className="w-5 h-5 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                     <svg aria-hidden="true" className="w-5 h-5 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                    </button>
               {/* <div key={index}>
                 <h3>{type}:</h3> */}
@@ -205,6 +280,8 @@ export function DisplayData(props: Props) { // TODO: type
                       //
                       onNodeClick={onNodeClick}
                       fitView
+
+                      nodeTypes={nodeTypes}
                     >
                       <Controls className="dark:bg-slate-300"/>
                       <MiniMap className="dark:bg-slate-300"/>
