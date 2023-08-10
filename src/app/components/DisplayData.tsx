@@ -280,6 +280,7 @@ export function DisplayData(props: Props) {
                       onNodeClick={onNodeClick}
                       fitView
 
+                      //@ts-ignore
                       nodeTypes={nodeTypes}
                     >
                       <Controls className="dark:bg-slate-300"/>
