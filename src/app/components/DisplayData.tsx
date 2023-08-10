@@ -19,7 +19,6 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import { CircularProgress } from "@mui/material";
 
-// import TextUpdaterNode from '@/app/components/nodes/TextUpdaterNode';
 import NoHandleNode from './NoHandleNode';
 import InputNode from './InputNode';
 import ObjectNode from './ObjectNode';
@@ -30,6 +29,7 @@ const initialNodes: Node[] = [
     position: { x: 500, y: 0 },
     data: { label: 'Root Query' },
   },
+  // { id: 'types', position: { x: 750, y: 200 }, data: { label: 'Types'}},
   {
     id: 'fields',
     position: { x: 250, y: 200 },
@@ -121,7 +121,6 @@ export function DisplayData(props: Props) { // TODO: type
   };
 
   const onNodesChange = useCallback((changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)), []);
-
   const onEdgesChange = useCallback((changes: EdgeChange[]) => setEdges((eds) => applyEdgeChanges(changes, eds)),[] );
 
   const schema = props.data.schema;
@@ -139,22 +138,20 @@ export function DisplayData(props: Props) { // TODO: type
       id: field.name,
       position: { x: xIndexForFields, y: yIndexForFields }, 
       data: {
-        queryField: true, // to read from onclick function
+        queryField: true, 
         label: field.name,
         arguments: [...field.reqArgs],
-        type: field.type // added this in order to link with it's type and fields on click
+        type: field.type 
       },
     };
     
-    // push them to the initial nodes array (is it better to use a hook)
     initialNodes.push(newNode);
-    // nodeState.push(newNode);
     numOfNodes++;
 
-    // set the x and y positions:
+
     if (numOfNodes % 6 === 0 && numOfNodes !== 0) {
-      xIndexForFields -= 300; // Decrement x value for a new column
-      yIndexForFields = 300; // Reset y value for a new column
+      xIndexForFields -= 300; 
+      yIndexForFields = 300; 
     } else {
       yIndexForFields += 50; // Increment y value for the next row in the same column
     };
@@ -167,9 +164,20 @@ export function DisplayData(props: Props) { // TODO: type
         type: MarkerType.ArrowClosed
       }
     };
-
-    // push the edges to the initial edges array (is it better to use a hook here?)
     initialEdges.push(newEdgeForFields);
+    const numberOfFields = schema.types[field.type].length;
+    const desiredNodeHeight = (53 * numberOfFields);
+    let height;
+    let fieldArgLength = field.reqArgs.length;
+
+    if(field.reqArgs.length >= 1) {
+      // height = 100 + (50 * numberOfFields);
+      height = 50 + (fieldArgLength * 50) + (50 * numberOfFields);
+    } else if(numberOfFields < 5) {
+      height = 50 + (50 * numberOfFields);
+    } else if (numberOfFields >= 5 && fieldArgLength === 0) {
+      height = desiredNodeHeight;
+    }
 
     //render types and their fields
     const newTypeOfFieldNode: Node = {
@@ -183,7 +191,7 @@ export function DisplayData(props: Props) { // TODO: type
       },
       style: {
         width: 200,
-        height: 400,
+        height: height,
       },
       hidden: true,
     };
@@ -251,7 +259,12 @@ export function DisplayData(props: Props) { // TODO: type
         type: el.isObject ? 'objectNode' : 'noHandleNode',
         draggable: false,
         hidden: true,
+
       }
+      // // Generate a unique ID for the data-test attribute
+      // const dataTestId = uuid();
+      // // Add a data-test attribute to the node
+      
       fieldInTypeYValue += 50
       
       initialNodes.push(newTypeFieldNode)

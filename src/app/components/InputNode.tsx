@@ -25,7 +25,7 @@ export default function InputNode(props: Node) {
         {/* <input type="text" className='border-[1px] border-gray-900 w-[100%]' onChange={e => changeArgument(e)} /> */}
         <input
           type="text"
-          className='border-[1px] border-gray-900 w-[100%] pl-1 pr-1'
+          className='border-[1px] border-gray-900 w-[100%] pl-1 pr-1 text-xs h-5'
           onChange = { e => props.data.setArgument({value: e.target.value, field: props.data.field, argument: props.data.argument}) }
           placeholder='required'
         />

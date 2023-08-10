@@ -135,3 +135,10 @@ export type SaveResponseModalProps = {
   setIsSaveResponseModalOpen: (status: boolean) => void,
   saveResponseStatus: boolean,
 };
+
+export type ProfileProps = {
+  name: string,
+  picture: string,
+  linkedIn: string,
+  gitHub: string
+}

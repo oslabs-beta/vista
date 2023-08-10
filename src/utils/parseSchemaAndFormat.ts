@@ -13,8 +13,8 @@ export async function parseSchemaAndFormat(apiEndpoint: string) {
 
     const schemaData:SchemaData = {fields: [], types: {}};
 
-    const introspectionQueryData:unknown = await request (apiEndpoint, getIntrospectionQuery());
-    // console.log('introspectionQueryData', JSON.stringify(introspectionQueryData));
+
+    const introspectionQueryData:any = await request (apiEndpoint, getIntrospectionQuery());
 
     const arrayOfFieldObjects:ArrayOfFields = [];
 
