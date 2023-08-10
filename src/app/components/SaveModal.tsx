@@ -1,27 +1,28 @@
 import React, { ChangeEvent, MouseEvent, FormEvent, useState } from "react";
+import { useSession } from "next-auth/react";
 import { Dialog } from '@headlessui/react';
 import { SaveModalProps } from "../../../types";
-
 export default function SaveModal(props: SaveModalProps) {
-    const { isSaveModalOpen, 
-            setIsSaveModalOpen, 
-            setIsSaveResponseModalOpen, 
-            setSaveResponseStatus, 
-            query, 
-            endpoint, 
+    const { isSaveModalOpen,
+            setIsSaveModalOpen,
+            setIsSaveResponseModalOpen,
+            setSaveResponseStatus,
+            query,
+            endpoint,
         } = props;
-
     const [queryName, setQueryName] = useState('');
-
+    const { data: instance } = useSession();
+    console.log('this is the session from within the savemodal => ', instance);
+    const userEmail: string | undefined | null = instance?.user.email;
     async function handleSaveQuery(e: FormEvent) {
         e.preventDefault();
-
         const queryData = {
             queryName,
             queryText: query,
             endpoint,
+            userEmail
         }
-        const res = await fetch('http://localhost:3000/api/queries', {
+        const res = await fetch('/api/queries', {
             method: "POST",
             mode: "cors",
             credentials: "same-origin",
@@ -31,7 +32,6 @@ export default function SaveModal(props: SaveModalProps) {
             body: JSON.stringify(queryData)
         })
         console.log('this is the response from posting query to DB => ', res);
-
         // const responseMessage = (res.ok) ? 'Query Saved Succesfully!' : 'Something Went Wrong'
         setSaveResponseStatus(res.ok);
         setIsSaveModalOpen(false);
