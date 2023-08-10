@@ -1,16 +1,16 @@
 import React from "react"
 import Link from "next/link"
-import Logo from "../../../../../public/Logo"
+import LogoWhite from "../../../../../public/LogoWhite"
 
 
 const Navbar = () => {
     return (
         <>
-          <div className="w-full h-20 bg-secondary sticky top-0 z-10">
-            <div className="container mx-auto px-4 h-full">
+          <div className="w-full h-20 bg-secondary sticky top-0 z-10 mx-auto px-4">
+            
               <div className="flex justify-between items-center h-full">
                 <Link href="/">
-                  <Logo />
+                  <LogoWhite />
                 </Link>
                 <ul className="hidden md:flex gap-x-6 text-white">
                   <li>
@@ -19,7 +19,7 @@ const Navbar = () => {
                     </Link>
                   </li>   
                   <li>
-                    <Link href="/about">
+                    <Link href="/landing/#contributors">
                       <p>Contributors</p>
                     </Link>
                   </li>
@@ -35,7 +35,7 @@ const Navbar = () => {
                   </li>
                 </ul>
               </div>
-            </div>
+            
           </div>
         </>
       );
