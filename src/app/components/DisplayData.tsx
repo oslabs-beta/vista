@@ -22,6 +22,7 @@ import { CircularProgress } from "@mui/material";
 // import TextUpdaterNode from '@/app/components/nodes/TextUpdaterNode';
 import NoHandleNode from './NoHandleNode';
 import InputNode from './InputNode';
+import ObjectNode from './ObjectNode';
 
 const initialNodes: Node[] = [ 
   {
@@ -69,6 +70,7 @@ const hideEdge = (toggled: string) => (edge: Edge) => {
 const nodeTypes = {
   noHandleNode: NoHandleNode,
   inputNode: InputNode,
+  objectNode: ObjectNode,
 };
 
 export function DisplayData(props: Props) { // TODO: type
@@ -103,6 +105,7 @@ export function DisplayData(props: Props) { // TODO: type
     }
     else if(node.data.isObject) {
       // TODO: make this non clickable and add a tootltip on hover
+      // max depth level supported: 2
     }
     // case: is a queryable field --> update query generator
     else if(node.data.isObject === false || node.data.isArg === false) {
@@ -245,7 +248,7 @@ export function DisplayData(props: Props) { // TODO: type
         },
         parentNode: field.name + '-' + field.type,
         extent: 'parent',
-        type: 'noHandleNode',
+        type: el.isObject ? 'objectNode' : 'noHandleNode',
         draggable: false,
         hidden: true,
       }
