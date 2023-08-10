@@ -13,9 +13,14 @@ const Navbar = () => {
                   <LogoWhite />
                 </Link>
                 <ul className="hidden md:flex gap-x-6 text-white">
+                <li>
+                    <Link href="/signup">
+                      <p>Create Account</p>
+                    </Link>
+                  </li>
                   <li>
-                    <Link href="/services">
-                      <p>Docs</p>
+                    <Link href="/landing">
+                      <p>About</p>
                     </Link>
                   </li>   
                   <li>
@@ -24,13 +29,8 @@ const Navbar = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link href="/signup">
-                      <p>Register</p>
-                    </Link>
-                  </li>
-                  <li>
                     <Link href="/login">
-                      <p>Login</p>
+                      <p>Sign in</p>
                     </Link>
                   </li>
                 </ul>
