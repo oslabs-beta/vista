@@ -169,7 +169,6 @@ export function DisplayData(props: Props) {
       hidden: true,
       // zIndex: 96,
     }
-    console.log('HELLOHELLOHELLO', newTypeNode)
     
     
 
