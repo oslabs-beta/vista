@@ -17,6 +17,7 @@ const handler = NextAuth({
                 password: { label: "Password", type: "password", "data-testid": "password-input" }
             },
             // authorize is used to query db with provided credentials & authenticate user
+            //@ts-ignore
             async authorize(credentials, req) {
                 try{
                     // look up user

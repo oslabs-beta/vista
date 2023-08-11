@@ -2,13 +2,16 @@ import {Dispatch, SetStateAction} from "react"
 
 export type Props = {
     data: Data,
-    setClickField: Dispatch<SetStateAction<{type: string, field: string}>>
-    setData: Dispatch<SetStateAction<Data>>
+    // setClickField: Dispatch<SetStateAction<{type: string, field: string}>>
+    setClickField: Dispatch<SetStateAction<{type: string, field: string, data: Data}>>,
+    setData: Dispatch<SetStateAction<Data>>,
+    queryAsObj?: object,
+    setQueryAsObj?: Dispatch<SetStateAction<object>>,
   }
 
 export type SchemaData = {
     fields: SchemaFields,
-    types: SchemaTypes
+    types: SchemaTypes,
   }
 
 
@@ -63,7 +66,17 @@ export type QueryGenerator = {
 
 export type QueryResult = {data: any, endpoint: string}
 
-export type ClickField = {type: string, field: string}
+export type ClickField = {
+  type: string,
+  field: string,
+  data: {
+    isArg?: boolean,
+    arguments: string[],
+    label: string,
+    queryField: boolean,
+    type: string,
+  }
+}
 
 export type TypesData = {
   __schema: {

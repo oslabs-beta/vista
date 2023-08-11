@@ -13,6 +13,7 @@ export default function SaveModal(props: SaveModalProps) {
     const [queryName, setQueryName] = useState('');
     const { data: instance } = useSession();
     console.log('this is the session from within the savemodal => ', instance);
+    //@ts-ignore
     const userEmail: string | undefined | null = instance?.user.email;
     async function handleSaveQuery(e: FormEvent) {
         e.preventDefault();

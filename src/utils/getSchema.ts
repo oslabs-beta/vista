@@ -35,7 +35,7 @@ export async function getSchema(data: FormData) {
     throw new Error('Invalid endpoint');
   }
   const schema = await parseSchemaAndFormat(endpoint);
-  console.log('this is the schema', JSON.stringify(schema));
+  // console.log('this is the schema', JSON.stringify(schema));
   let err = false;
   if(Object.keys(schema).length === 0) err = true;
   
