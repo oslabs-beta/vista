@@ -61,7 +61,7 @@ describe("e2e Test for Vista", () => {
   });
 
   // Have user successfully sign out
-  xit("Should successfully log out the user to the application using their own credentials", () => {
+  it("Should successfully log out the user to the application using their own credentials", () => {
     // custom command
     cy.login("steph@dangernoodles.com", "123456789");
 
