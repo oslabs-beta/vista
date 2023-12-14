@@ -43,6 +43,7 @@ export default function QueryGenerator(QueryGeneratorProps: QueryGenerator) {
               </svg>
             </button>
             <button
+              data-testid="queryGenerator_saveQuery"
               type="button"
               onClick={() => {setIsSaveModalOpen(true)}}
               className="ml-1 bg-white text-white px-3 py-1 rounded-xl border border-blue-400 dark:bg-slate-500 dark:border-white dark:hover:bg-slate-300 dark:hover:text-slate-900"
