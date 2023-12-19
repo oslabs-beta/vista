@@ -1,8 +1,8 @@
 import { NextResponse, NextRequest} from "next/server";
 
+// sets the cookie when visiting the homepage
 
 export async function middleware (req: NextRequest){
-    console.log('inside the middleware')
     if (req.cookies.has('vista')) return;
 
     const response = NextResponse.next();
@@ -11,5 +11,5 @@ export async function middleware (req: NextRequest){
 }
 
 export const config = {
-    matcher: '/'
+    matcher: '/aldkjf'
 };

@@ -9,8 +9,9 @@ import { ChildData, ClickField, Data } from "../../../types";
 import SaveModal from "./SaveModal";
 import SaveResponseModal from "./SaveResponseModal";
 import { jsonToGraphQLQuery } from "json-to-graphql-query";
-import TutorialModal from "./TutorialModal";
-import { checkForCookies } from "@/utils/checkForCookies";
+import WelcomeDialog from "./tutorial/WelcomeDialog";
+import ApiEndpointDialog from "./tutorial/ApiEndpointDialog";
+import ReactFlowDialog from "./tutorial/ReactFlowDialog";
 
 export default function App({ session, cookie }: any) {
   // data fetching: https://youtu.be/gSSsZReIFRk?t=293
@@ -23,7 +24,9 @@ export default function App({ session, cookie }: any) {
   const [queryAsObj, setQueryAsObj] = useState({ query: {} });
   const [argument, setArgument] = useState({});
   const [saveResponseStatus, setSaveResponseStatus] = useState(false);
-  const [isTutorialModalOpen, setIsTutorialModalOpen] = useState(cookie);
+  const [welcomeDialog, setWelcomeDialog] = useState(cookie);
+  const [apiEndpointDialog, setApiEndpointDialog] = useState(false);
+  const [reactFlowDialog, setReactFlowDialog] = useState(false)
 
   const childToParent = (childData: ChildData): void => {
     setData(childData);
@@ -100,11 +103,25 @@ export default function App({ session, cookie }: any) {
   return (
     <>
       <SessionProvider session={session}>
-        {!isTutorialModalOpen && <TutorialModal 
-        isTutorialModalOpen={isTutorialModalOpen}
-        setIsTutorialModalOpen={setIsTutorialModalOpen}
+
+        {!welcomeDialog && <WelcomeDialog 
+        welcomeDialog = {welcomeDialog}
+        setWelcomeDialog = {setWelcomeDialog}
+        setApiEndpointDialog = {setApiEndpointDialog}
         />}
-        <EndpointForm childToParent={childToParent} />
+
+        {apiEndpointDialog && <ApiEndpointDialog 
+        apiEndpointDialog = {apiEndpointDialog} 
+        setApiEndpointDialog = {setApiEndpointDialog}
+        setReactFlowDialog = {setReactFlowDialog}
+        />}
+
+        {reactFlowDialog && <ReactFlowDialog
+        reactFlowDialog = {reactFlowDialog}
+        setReactFlowDialog = {setReactFlowDialog}
+        />}
+
+        <EndpointForm apiEndpointDialog={apiEndpointDialog} childToParent={childToParent} />
         <div className="grid grid-cols-3">
           <div className="col-span-2 dark:bg-slate-800">
             {

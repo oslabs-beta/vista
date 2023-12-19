@@ -2,8 +2,7 @@
 
 import { cookies } from 'next/headers';
 
+// checking for the cookies
 export async function checkForCookies() {
-    const vistaCookie = cookies().get('vista')
-    if (vistaCookie) return true;
-    return false;
+    return cookies().get('vista')
 }
