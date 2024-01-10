@@ -29,7 +29,7 @@ export default function WelcomeDialog({welcomeDialog, setWelcomeDialog, setApiEn
       >
             <Dialog onClose={closeModal} >
                 {/* backdrop */}
-                <div className='fixed inset-0 bg-slate-400 bg-opacity-60 bg-blur-50 backdrop-blur-sm' aria-hidden='true'/>
+                {/* <div className='fixed inset-0 bg-slate-400 bg-opacity-60 bg-blur-50 backdrop-blur-sm' aria-hidden='true'/> */}
                 {/* fullscreen container - used for positioning */}
                 <div className='flex flex-col items-center justify-center z-10 overflow-y-auto'>
                     <Dialog.Panel

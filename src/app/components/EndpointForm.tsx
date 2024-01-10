@@ -3,7 +3,6 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import ApiEndpointDialog from "./tutorial/ApiEndpointDialog";
 
 export function EndpointForm({ apiEndpointDialog, childToParent }: any) {
   // console.log({childToParent})
@@ -52,6 +51,7 @@ const onSignOut = () => {
     // console.log("schema endpoint:", schemaAndEndpoint);
     childToParent(schemaAndEndpoint);
   };
+
   const { data: session, status } = useSession();
 
   function checkIfLoggedIn() {

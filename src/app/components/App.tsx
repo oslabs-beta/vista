@@ -29,6 +29,7 @@ export default function App({ session, cookie }: any) {
   const [reactFlowDialog, setReactFlowDialog] = useState(false)
 
   const childToParent = (childData: ChildData): void => {
+    console.log('inside childToParent', childData)
     setData(childData);
   };
   
@@ -94,11 +95,6 @@ export default function App({ session, cookie }: any) {
     setQueryAsString(jsonToGraphQLQuery(tempObj, { pretty: true }));
   };
 
-  /*
-  CHECK IF THE USER HAS VISITED BEFORE VIA THE COOKIE 
-  */
-
-  console.log(cookie);
 
   return (
     <>
@@ -110,18 +106,19 @@ export default function App({ session, cookie }: any) {
         setApiEndpointDialog = {setApiEndpointDialog}
         />}
 
-        {apiEndpointDialog && <ApiEndpointDialog 
-        apiEndpointDialog = {apiEndpointDialog} 
-        setApiEndpointDialog = {setApiEndpointDialog}
-        setReactFlowDialog = {setReactFlowDialog}
-        />}
-
         {reactFlowDialog && <ReactFlowDialog
         reactFlowDialog = {reactFlowDialog}
         setReactFlowDialog = {setReactFlowDialog}
         />}
-
-        <EndpointForm apiEndpointDialog={apiEndpointDialog} childToParent={childToParent} />
+        
+          <EndpointForm apiEndpointDialog={apiEndpointDialog} childToParent={childToParent} />
+          {apiEndpointDialog && <ApiEndpointDialog 
+          apiEndpointDialog = {apiEndpointDialog} 
+          setApiEndpointDialog = {setApiEndpointDialog}
+          setReactFlowDialog = {setReactFlowDialog}
+          childToParent = {childToParent}
+          />}
+        
         <div className="grid grid-cols-3">
           <div className="col-span-2 dark:bg-slate-800">
             {
