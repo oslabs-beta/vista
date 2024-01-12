@@ -37,7 +37,8 @@ export async function getSchema(data: FormData) {
   const schema = await parseSchemaAndFormat(endpoint);
   // console.log('this is the schema', JSON.stringify(schema));
   let err = false;
-  if(Object.keys(schema).length === 0) err = true;
-  
+  if (schema.fields.length === 0 || Object.keys(schema.types).length === 0) {
+    err = true;
+  }
   return {schema, err};
 }
