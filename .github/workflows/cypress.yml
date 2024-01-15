@@ -28,8 +28,10 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action/@v6
         with:
-            build: npm run prestart
-            start: npm run start
+            browser: chrome
+            build: yarn build
+            start: yarn start
+            wait-on: "http://localhost:3000"
 
 
       # Runs a set of commands using the runners shell
