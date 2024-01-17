@@ -9,7 +9,7 @@
     "test": "jest",
     "lint": "next lint",
     "cypress:open": "cypress open",
-    "cy:run": "cypress run --e2e --browser chrome --config baseUrl=http://localhost:8080",
+    "cy:run": "cypress run --e2e --browser chrome --config baseUrl=http://localhost:3000",
     "e2e": "start-test start 8080 cy:run"
   },
   "dependencies": {
