@@ -14,12 +14,12 @@ export default function ReactFlowDialog({reactFlowDialog, setReactFlowDialog}: R
     }
 
     return ( 
-        <Dialog as='div' open={reactFlowDialog} onClose={closeModal} >
+        <Dialog as='div' open={reactFlowDialog} onClose={() => {}} >
             {/* backdrop */}
             {/* fullscreen container - used for positioning */}
             <div className='pl-4'>
             <Dialog.Panel
-                        className='flex flex-col items-center justify-center border dark:border-white fixed inset-x-90 inset-y-60 max-w-md h-48 px-10 overflow-hidden rounded-2xl bg-white bg-opacity-10 shadow-xl dark:bg-opacity-90 dark:bg-slate-700'
+                        className='flex flex-col items-center justify-center border dark:border-white fixed inset-x-90 inset-y-60 max-w-md h-48 px-10 overflow-hidden rounded-2xl bg-white bg-opacity-10 shadow-xl dark:bg-opacity-90 dark:bg-slate-700 shadow-xs shadow-secondary'
                         >
                         <Dialog.Title className='flex align-center text-2xl font-bold dark:text-white'>
                             Here is your schema!

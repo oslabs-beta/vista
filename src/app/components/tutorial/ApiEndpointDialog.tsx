@@ -24,13 +24,13 @@ export default function ApiEndpointDialog({childToParent, apiEndpointDialog, set
     }
 
     return ( 
-        <Dialog as='div' open={apiEndpointDialog} onClose={closeModal} >
+        <Dialog as='div' open={apiEndpointDialog} onClose={() => {}} >
             {/* backdrop */}
             {/* <div className='fixed inset-0 bg-slate-400 bg-opacity-60 bg-blur-50 backdrop-blur-sm' aria-hidden='true'/> */}
             {/* fullscreen container - used for positioning */}
             <div className='pl-4'>
             <Dialog.Panel
-                        className='flex flex-col items-center justify-center border dark:border-white fixed inset-x-90 inset-y-60 max-w-md h-48 px-10 overflow-hidden rounded-2xl bg-white bg-opacity-10 shadow-xl dark:bg-opacity-90 dark:bg-slate-700'
+                        className='flex flex-col items-center justify-center border dark:border-white fixed inset-x-90 inset-y-60 max-w-md h-48 px-10 overflow-hidden rounded-2xl bg-white bg-opacity-10 shadow-xl dark:bg-opacity-90 dark:bg-slate-700 shadow-xs shadow-secondary'
                         >
                         <Dialog.Title className='flex align-center text-2xl font-bold dark:text-white'>
                             Enter your GraphQL API
