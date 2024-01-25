@@ -32,6 +32,7 @@ export default function QueryResult({ data, endpoint }: QueryResult) {
   return (
       <div className="mt-4 bg-white dark:bg-slate-600 rounded-lg shadow p-4 max-w-md border-dashed border-2 border-sky-500 dark:border-white mx-2">
         <button
+          data-testid="queryResult_runQuery_button"
           className="ml-1 bg-blue-500 dark:bg-slate-500 text-white px-3 py-1 rounded-xl my-1 inline-flex dark:border dark:border-white dark:hover:bg-slate-300 dark:hover:text-slate-900"
           onClick={() => {
             queryData();

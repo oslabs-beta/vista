@@ -12,7 +12,7 @@ export default function SaveModal(props: SaveModalProps) {
         } = props;
     const [queryName, setQueryName] = useState('');
     const { data: instance } = useSession();
-    console.log('this is the session from within the savemodal => ', instance);
+    // console.log('this is the session from within the savemodal => ', instance);
     //@ts-ignore
     const userEmail: string | undefined | null = instance?.user.email;
     async function handleSaveQuery(e: FormEvent) {
@@ -70,6 +70,7 @@ export default function SaveModal(props: SaveModalProps) {
                             onSubmit={(e) => {handleSaveQuery(e)}}>
                             <div className='flex flex-col justify-center items-center'>
                                 <input
+                                    data-testid='saveQuery_queryName'
                                     type='text'
                                     placeholder=' enter query name'
                                     onChange={(e) => {handleQueryNameChange(e)}}
@@ -84,6 +85,7 @@ export default function SaveModal(props: SaveModalProps) {
                             <div className='flex flex-row justify-center w-full'>
                                 <button
                                     // onClick={(e) => {handleSaveQuery(e)}}
+                                    data-testid='button_saveQuery_saveQueryButton'
                                     type='submit'
                                     className='w-1/3 m-2.5 p-2 rounded-xl dark:bg-slate-500 dark:hover:bg-slate-300 dark:text-white dark:hover:text-slate-800'>Save</button>
                                 <button

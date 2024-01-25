@@ -14,7 +14,20 @@
 //
 //
 // -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
+
+Cypress.Commands.add('login', (email, password) => {
+  cy.visit('/')
+  cy.get('[data-testid="account-button"]').should('exist');
+  cy.get('[data-testid="account-button"]').click();
+  cy.get('[data-testid="sign-in-button"]').should('exist');
+  cy.get('[data-testid="sign-in-button"]').click();
+  cy.get('[data-testid="username-input"]').should('exist');
+  cy.get('[data-testid="username-input"]').type('steph@dangernoodles.com');
+  cy.get('[data-testid="password-input"]').should('exist');
+  cy.get('[data-testid="password-input"]').type('123456789')
+  cy.contains('Sign in with Credentials').click()
+  cy.get('[data-testid="endpoint-form"]').should('exist');
+})
 //
 //
 // -- This is a child command --
@@ -28,13 +41,8 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 //
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-// }
+declare namespace Cypress {
+  interface Chainable {
+    login(email: string, password: string): Chainable<void>
+  }
+}
