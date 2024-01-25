@@ -1,65 +1,25 @@
-import { GraphQLClient, gql, request } from "graphql-request";
-import { getIntrospectionQuery } from "graphql";
-import {
-  SchemaData,
-  Field,
-  TypesData,
-  BuildingTheSchemaObject,
-  ArrayOfFields,
-  QueryFieldsSchema,
-  FieldObject,
-} from "../../types";
-import { fetchGraphQLSchema } from "./requestWrapper";
-
-// types to ignore
-const typesToIgnore: string[] = [
-  "Query",
-  "String",
-  "Boolean",
-  "__Schema",
-  "__Type",
-  "__TypeKind",
-  "__Field",
-  "__InputValue",
-  "__EnumValue",
-  "__Directive",
-  "ID",
-  "Int",
-  "__DirectiveLocation",
-  "CacheControlScope",
-  "Upload",
-];
-
-// helper function to determine essential types
-function isEssentialTypePresent(types: any, essentialTypes: any) {
-  return essentialTypes.every((essentialType: any) =>
-    types.some((type: { name: any }) => type.name === essentialType)
-  );
-}
+import { SchemaData, ArrayOfFields, FieldObject} from "../../types";
+import fetchGraphQLSchema from './requestWrapper';
+import isEssentialTypePresent from './isEssentialTypePresent';
 
 export async function parseSchemaAndFormat(apiEndpoint: string) {
-  const graphQLClient = new GraphQLClient(apiEndpoint);
-
-  // will be populated and returned to the FE
 
   const schemaData: SchemaData = { fields: [], types: {} };
 
   try {
-    const introspectionQueryData: any = await fetchGraphQLSchema(apiEndpoint);
+    const introspectionQueryData = await fetchGraphQLSchema(apiEndpoint);
 
     if (
       !introspectionQueryData ||
       !introspectionQueryData.__schema ||
       !introspectionQueryData.__schema.types
     ) {
-      console.error("Invalid schema format: Missing introspection data");
       throw new Error("Invalid schema format: Missing introspection data");
     }
 
     if (
       !isEssentialTypePresent(introspectionQueryData.__schema.types, ["Query"])
     ) {
-      console.error("Invalid schema format: Missing essential types");
       throw new Error("Invalid schema format: Missing essential types");
     }
 
