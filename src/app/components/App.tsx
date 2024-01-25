@@ -122,7 +122,7 @@ export default function App({ session, cookie }: any) {
         <div className="grid grid-cols-3">
           <div className="col-span-2 dark:bg-slate-800">
             {
-              data.schema.fields.length &&
+              data.endpoint &&
               <DisplayData
                 data={data}
                 //@ts-ignore
