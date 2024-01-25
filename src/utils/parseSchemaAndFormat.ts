@@ -1,6 +1,5 @@
 import { SchemaData, ArrayOfFields, FieldObject} from "../../types";
 import fetchGraphQLSchema from './requestWrapper';
-import isEssentialTypePresent from './isEssentialTypePresent';
 
 export async function parseSchemaAndFormat(apiEndpoint: string) {
 
@@ -8,26 +7,15 @@ export async function parseSchemaAndFormat(apiEndpoint: string) {
 
   try {
     const introspectionQueryData = await fetchGraphQLSchema(apiEndpoint);
-
-    if (
-      !introspectionQueryData ||
-      !introspectionQueryData.__schema ||
-      !introspectionQueryData.__schema.types
-    ) {
+    
+    if (!introspectionQueryData || !introspectionQueryData.types) {
       throw new Error("Invalid schema format: Missing introspection data");
     }
-
-    if (
-      !isEssentialTypePresent(introspectionQueryData.__schema.types, ["Query"])
-    ) {
-      throw new Error("Invalid schema format: Missing essential types");
-    }
-
+    
     const arrayOfFieldObjects: ArrayOfFields = [];
+    const fieldsFromIntrospectionQuery = introspectionQueryData.types;
 
-    // @ts-ignore
-    const fieldsFromIntrospectionQuery = introspectionQueryData.__schema.types;
-
+    //* Can this be refactored using filter/map 
     // parse the fields of the schema from the introspection query
     for (const obj of fieldsFromIntrospectionQuery) {
       if (obj.name.toLowerCase() === "query") {
@@ -61,17 +49,52 @@ export async function parseSchemaAndFormat(apiEndpoint: string) {
           }
           arrayOfFieldObjects.push(fieldObjectTemplate);
         }
+        break;
       }
     }
-
     schemaData.fields = arrayOfFieldObjects;
 
     // parse the types on the schema from the introspection query
 
+    // const test = fieldsFromIntrospectionQuery.filter((obj) => {
+    //   obj.kind.toLowerCase() === "object" && 
+    //   obj.name.toLowerCase() !== "query" && 
+    //   !type.name.includes("__")
+    // }).map((type) => {
+    //   console.log(type)
+    //   const fieldsOfTheType = [];
+    //   if (type && type.fields) {
+    //     for (const field of type.fields) {
+    //       let name = field.name;
+
+    //       // check if the field is of kind object meaning it adds a new level of nesting we currently don't support
+    //       let kindOfTypeOfField = field.type.kind;
+    //       let ofType = field.type.ofType;
+    //       let isObject = false;
+    //       while (ofType) {
+    //         kindOfTypeOfField = ofType.kind;
+    //         ofType = ofType.ofType;
+    //         if (kindOfTypeOfField === "OBJECT") {
+    //           isObject = true;
+    //           break;
+    //         }
+    //       }
+    //       fieldsOfTheType.push({
+    //         name,
+    //         isObject,
+    //       });
+    //     }
+    //   }
+
+    //   schemaData.types[type.name] = fieldsOfTheType;
+    //   console.log(schemaData.types, 'line 95')
+    // })
+
+
     for (const type of fieldsFromIntrospectionQuery) {
       if (
         type.kind.toLowerCase() === "object" &&
-        type.name.toLowerCase !== "query" &&
+        type.name.toLowerCase() !== "query" &&
         !type.name.includes("__")
       ) {
         const fieldsOfTheType = [];
