@@ -25,6 +25,7 @@ export default function QueryContainer(QueryContainerProps: QueryContainerProps)
     setData(childData);
   };
   return (
+    
     //matt added mt-10 for the margin top to help with the query container from signing in vs signing out
     <div className="ml-6 dark:bg-slate-800 mt-10">
       <QueryGenerator

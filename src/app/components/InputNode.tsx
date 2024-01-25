@@ -1,9 +1,10 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent } from 'react';
 import { Node } from 'reactflow';
 
 export default function InputNode(props: Node) {
 
   //function to handle changes in the input, should update the graphql query
+
   const changeArgument = (e: ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.value);
     // setArgument(e.target.value);
@@ -13,8 +14,6 @@ export default function InputNode(props: Node) {
       argument: props.data.argument
     });
   }
-
-  // console.log('queryAsObjDeepCopy from inputNode', props.data.queryAsObjDeepCopy);
 
   return (
     <div className="flex p-2 rounded-sm w-40 text-xs text-gray-900 text-center border border-solid border-red-500 bg-white shadow-md shadow-red-100">

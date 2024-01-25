@@ -1,12 +1,11 @@
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import dotenv from 'dotenv';
 
 export default function SignupForm(this: any, {action, setUsername, setPassword, setRePassword, passMatch, usernameTaken, createdUsername}: any) { //TODO: type
   const passNoMatchMsg = 'Passwords must match';
   const userTakenMsg = 'Email address is already in use, sign in or use a different one to sign up.';
   const userCreatedMsg = 'User successfully created!';
-  const router = useRouter();
+  
   return (
     <>
       <form className="space-y-6" action={action}>
