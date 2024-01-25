@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useEffect } from "react";
 import "tailwindcss/tailwind.css";
-import { jsonToGraphQLQuery } from "json-to-graphql-query";
 import { QueryGenerator } from "../../../types"
 
 export default function QueryGenerator(QueryGeneratorProps: QueryGenerator) {

@@ -15,7 +15,6 @@ export async function parseSchemaAndFormat(apiEndpoint: string) {
     const arrayOfFieldObjects: ArrayOfFields = [];
     const fieldsFromIntrospectionQuery = introspectionQueryData.types;
 
-    //* Can this be refactored using filter/map 
     // parse the fields of the schema from the introspection query
     for (const obj of fieldsFromIntrospectionQuery) {
       if (obj.name.toLowerCase() === "query") {
@@ -54,43 +53,6 @@ export async function parseSchemaAndFormat(apiEndpoint: string) {
     }
     schemaData.fields = arrayOfFieldObjects;
 
-    // parse the types on the schema from the introspection query
-
-    // const test = fieldsFromIntrospectionQuery.filter((obj) => {
-    //   obj.kind.toLowerCase() === "object" && 
-    //   obj.name.toLowerCase() !== "query" && 
-    //   !type.name.includes("__")
-    // }).map((type) => {
-    //   console.log(type)
-    //   const fieldsOfTheType = [];
-    //   if (type && type.fields) {
-    //     for (const field of type.fields) {
-    //       let name = field.name;
-
-    //       // check if the field is of kind object meaning it adds a new level of nesting we currently don't support
-    //       let kindOfTypeOfField = field.type.kind;
-    //       let ofType = field.type.ofType;
-    //       let isObject = false;
-    //       while (ofType) {
-    //         kindOfTypeOfField = ofType.kind;
-    //         ofType = ofType.ofType;
-    //         if (kindOfTypeOfField === "OBJECT") {
-    //           isObject = true;
-    //           break;
-    //         }
-    //       }
-    //       fieldsOfTheType.push({
-    //         name,
-    //         isObject,
-    //       });
-    //     }
-    //   }
-
-    //   schemaData.types[type.name] = fieldsOfTheType;
-    //   console.log(schemaData.types, 'line 95')
-    // })
-
-
     for (const type of fieldsFromIntrospectionQuery) {
       if (
         type.kind.toLowerCase() === "object" &&
@@ -126,7 +88,7 @@ export async function parseSchemaAndFormat(apiEndpoint: string) {
     }
 
     return schemaData;
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error in parseSchemaAndFormat: ", error);
     throw new Error("Failed to fetch schema: " + error.message);
   }
