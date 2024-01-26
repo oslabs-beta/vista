@@ -9,9 +9,8 @@ import { ChildData, ClickField, Data } from "../../../types";
 import SaveModal from "./SaveModal";
 import SaveResponseModal from "./SaveResponseModal";
 import { jsonToGraphQLQuery } from "json-to-graphql-query";
-import WelcomeDialog from "./tutorial/WelcomeDialog";
-import ApiEndpointDialog from "./tutorial/ApiEndpointDialog";
-import ReactFlowDialog from "./tutorial/ReactFlowDialog";
+import WelcomeDialog from "./tutorialModals/WelcomeDialog";
+import BaseDialog from "./tutorialModals/BaseDialog"
 
 export default function App({ session, cookie }: any) {
   // data fetching: https://youtu.be/gSSsZReIFRk?t=293
@@ -106,18 +105,24 @@ export default function App({ session, cookie }: any) {
         setApiEndpointDialog = {setApiEndpointDialog}
         />}
 
-        {reactFlowDialog && <ReactFlowDialog
-        reactFlowDialog = {reactFlowDialog}
-        setReactFlowDialog = {setReactFlowDialog}
+        <EndpointForm apiEndpointDialog={apiEndpointDialog} childToParent={childToParent} />
+        {apiEndpointDialog && <BaseDialog
+        openCurrentModal = {apiEndpointDialog} 
+        closeCurrentModalSetter = {setApiEndpointDialog}
+        openNextModalSetter = {setReactFlowDialog}
+        getSchema = {true}
+        childToParent = {childToParent}
+        title = {'Enter your GraphQL API'}
+        description = {'Vista allows you to visualize a GraphQL schema. We will use the Rick & Morty API as an example.'}
         />}
         
-          <EndpointForm apiEndpointDialog={apiEndpointDialog} childToParent={childToParent} />
-          {apiEndpointDialog && <ApiEndpointDialog 
-          apiEndpointDialog = {apiEndpointDialog} 
-          setApiEndpointDialog = {setApiEndpointDialog}
-          setReactFlowDialog = {setReactFlowDialog}
-          childToParent = {childToParent}
-          />}
+        {reactFlowDialog && <BaseDialog
+        openCurrentModal = {reactFlowDialog}
+        closeCurrentModalSetter = {setReactFlowDialog}
+        title = {'Here is your schema!'}
+        description = {'These are the fields that you can query on your schema. Clicking on a node will show you what fields you can query for.'}
+        />}
+        
         
         <div className="grid grid-cols-3">
           <div className="col-span-2 dark:bg-slate-800">
