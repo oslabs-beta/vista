@@ -1,13 +1,15 @@
 import { SchemaData, ArrayOfFields, FieldObject} from "../../types";
 import fetchGraphQLSchema from './requestWrapper';
+import getErrorMessage from "./getErrorMessage";
 
 export async function parseSchemaAndFormat(apiEndpoint: string) {
 
   const schemaData: SchemaData = { fields: [], types: {} };
   const introspectionQueryData = await fetchGraphQLSchema(apiEndpoint);
   let fieldsFromIntrospectionQuery;
+
+  if (!introspectionQueryData || !introspectionQueryData.types) throw new Error("Invalid schema format: Missing introspection data");
   
-  if (introspectionQueryData !== undefined && introspectionQueryData.types) {
     try {
       const arrayOfFieldObjects: ArrayOfFields = [];
       fieldsFromIntrospectionQuery = introspectionQueryData.types
@@ -51,8 +53,8 @@ export async function parseSchemaAndFormat(apiEndpoint: string) {
       }
       schemaData.fields = arrayOfFieldObjects;
     } catch (error) {
-      console.error(error);
-      throw new Error("Unable to retrieve fields from Introspection Query:" + error.message)
+      let errorMessage = getErrorMessage(error);
+      throw new Error("Unable to retrieve fields from Introspection Query:" + errorMessage)
     }
   
     try {
@@ -90,13 +92,9 @@ export async function parseSchemaAndFormat(apiEndpoint: string) {
         }
       }
     } catch (error) {
-      console.error(error);
-      throw new Error("Unable to parse fields on GraphQL schema's types: " + error.message);
+      let errorMessage = getErrorMessage(error);
+      throw new Error("Unable to retrieve fields from Introspection Query:" + errorMessage)
     }
 
     return schemaData;
   }
- else { 
-    throw new Error("Invalid schema format: Missing introspection data");
-  }
-}
