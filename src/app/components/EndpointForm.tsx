@@ -49,6 +49,7 @@ export function EndpointForm({ childToParent }: any) {
     
     childToParent(schemaAndEndpoint);
   };
+
   const { data: session, status } = useSession();
 
   function checkIfLoggedIn() {
@@ -74,6 +75,14 @@ export function EndpointForm({ childToParent }: any) {
               ></path>
             </svg>
           </div>
+{          apiEndpointDialog? <input
+            type="text"
+            name="endpoint-url"
+            id="simple-search"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:bg-slate-500 dark:focus:border-blue-500"
+            value="https://rickandmortyapi.com/graphql"
+            required
+          /> : 
           <input
             type="text"
             name="endpoint-url"
@@ -82,6 +91,7 @@ export function EndpointForm({ childToParent }: any) {
             placeholder="Enter GraphQL API endpoint..."
             required
           />
+          }
         </div>
         {/* Search Button */}
         <button
