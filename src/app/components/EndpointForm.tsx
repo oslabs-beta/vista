@@ -1,14 +1,10 @@
 import { getSchema } from "@/utils/getSchema";
-import { sign } from "crypto";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment, useEffect, useState } from "react";
-import Image from "next/image";
-
-
 import { useRouter } from "next/navigation";
 
-export function EndpointForm({ childToParent }: any) {
+export function EndpointForm({ apiEndpointDialog, childToParent }: any) {
   // console.log({childToParent})
   const [ isLoggedIn, setIsLoggedIn ] = useState(false);
   const { data: instance } = useSession();
@@ -55,6 +51,7 @@ const onSignOut = () => {
     // console.log("schema endpoint:", schemaAndEndpoint);
     childToParent(schemaAndEndpoint);
   };
+
   const { data: session, status } = useSession();
 
   function checkIfLoggedIn() {
@@ -81,6 +78,14 @@ const onSignOut = () => {
               ></path>
             </svg>
           </div>
+{          apiEndpointDialog? <input
+            type="text"
+            name="endpoint-url"
+            id="simple-search"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:bg-slate-500 dark:focus:border-blue-500"
+            value="https://rickandmortyapi.com/graphql"
+            required
+          /> : 
           <input
             type="text"
             name="endpoint-url"
@@ -89,6 +94,7 @@ const onSignOut = () => {
             placeholder="Enter GraphQL API endpoint..."
             required
           />
+          }
         </div>
         {/* Search Button */}
         <button

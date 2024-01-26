@@ -32,9 +32,6 @@ export type Field = {
     errorMessage?: string
 }
 
-// type SchemaTypes = {
-//     [index: string]: string[]
-// }
 type SchemaTypes = {
     [index: string]: SchemaTypesField[],
 }
@@ -46,7 +43,7 @@ type SchemaTypesField = {
 
 export type ChildToParent = (query: string) => void
 
-export type ChildData = { schema: {fields: never[]; types: {}; }, endpoint: string }
+export type ChildData = { schema: {fields: Field[]; types: {}; }, endpoint: string }
 
 export type QueryContainerProps = {
   endpoint: string,
@@ -144,3 +141,15 @@ export type ProfileProps = {
   linkedIn: string,
   gitHub: string
 }
+
+export type BaseDialogProps = {
+  openCurrentModal: boolean | undefined
+  closeCurrentModalSetter: Dispatch<SetStateAction<boolean>>
+  openNextModalSetter?: Dispatch<SetStateAction<boolean>>
+  getSchema? : boolean
+  childToParent?: (childData:ChildData) => void
+  title: string
+  description: string
+}
+
+
