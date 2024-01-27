@@ -1,6 +1,7 @@
 import { SchemaData, ArrayOfFields, FieldObject} from "../../types";
 import fetchGraphQLSchema from './requestWrapper';
 import getErrorMessage from "./getErrorMessage";
+import { IntrospectionType, IntrospectionObjectType, IntrospectionField } from "graphql";
 
 export async function parseSchemaAndFormat(apiEndpoint: string) {
 
@@ -12,12 +13,12 @@ export async function parseSchemaAndFormat(apiEndpoint: string) {
   
     try {
       const arrayOfFieldObjects: ArrayOfFields = [];
-      fieldsFromIntrospectionQuery = introspectionQueryData.types
+      fieldsFromIntrospectionQuery  = introspectionQueryData.types
 
       // parse the fields of the schema from the introspection 
       for (const obj of fieldsFromIntrospectionQuery) {
-        if (obj.name.toLowerCase() === "query") {
-          const fieldsOfTheQuery = obj.fields;
+        if (obj.name.toLowerCase() === "query" && obj.kind === 'OBJECT') {
+          const fieldsOfTheQuery = obj.fields
   
           for (const field of fieldsOfTheQuery) {
             const fieldObjectTemplate: FieldObject = {
@@ -32,6 +33,7 @@ export async function parseSchemaAndFormat(apiEndpoint: string) {
   
             // accounting for type modifiers such as Lists and Non-Null types by traversing the type object until name is not null
             let currentOfType = field.type;
+
             //! Review this part
             while (!fieldObjectTemplate.type) {
               fieldObjectTemplate.type = currentOfType.ofType.name;
@@ -60,7 +62,7 @@ export async function parseSchemaAndFormat(apiEndpoint: string) {
     try {
       for (const type of fieldsFromIntrospectionQuery) {
         if (
-          type.kind.toLowerCase() === "object" &&
+          type.kind === "OBJECT" &&
           type.name.toLowerCase() !== "query" &&
           !type.name.includes("__")
         ) {

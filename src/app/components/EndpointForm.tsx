@@ -4,7 +4,7 @@ import { Menu, Transition } from '@headlessui/react';
 import { Fragment, useEffect, useState } from "react"
 import { useRouter } from "next/navigation";
 
-export function EndpointForm({ childToParent }: any) {
+export function EndpointForm({ apiEndpointDialog, childToParent }: any) {
   const [ isLoggedIn, setIsLoggedIn ] = useState(false);
   const { data: instance } = useSession();
   const image: any = instance?.user?.image;
