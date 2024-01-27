@@ -1,7 +1,7 @@
 "use client";
 
 import { EndpointForm } from "@/app/components/EndpointForm";
-import { DisplayData } from "@/app/components/DisplayData";
+import { DisplaySchemaContainer } from "@/app/components/DisplaySchemaContainer";
 import { useState, useEffect } from "react";
 import { SessionProvider } from "next-auth/react";
 import QueryContainer from "./QueryContainer";
@@ -128,7 +128,7 @@ export default function App({ session, cookie }: any) {
           <div className="col-span-2 dark:bg-slate-800">
             {
               data.endpoint &&
-              <DisplayData
+              <DisplaySchemaContainer
                 data={data}
                 //@ts-ignore
                 setClickField={setClickField}

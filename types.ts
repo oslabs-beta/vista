@@ -1,6 +1,6 @@
 import {Dispatch, SetStateAction} from "react"
 
-export type Props = {
+export type DisplaySchemaContainerProps = {
     data: Data,
     // setClickField: Dispatch<SetStateAction<{type: string, field: string}>>
     setClickField: Dispatch<SetStateAction<{type: string, field: string, data: Data}>>,
