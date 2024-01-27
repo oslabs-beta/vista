@@ -1,7 +1,6 @@
 import { SchemaData, ArrayOfFields, FieldObject} from "../../types";
 import fetchGraphQLSchema from './requestWrapper';
 import getErrorMessage from "./getErrorMessage";
-import { IntrospectionType, IntrospectionObjectType, IntrospectionField } from "graphql";
 
 export async function parseSchemaAndFormat(apiEndpoint: string) {
 
