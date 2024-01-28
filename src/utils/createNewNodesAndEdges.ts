@@ -1,6 +1,8 @@
 import { Node, Edge, MarkerType } from 'reactflow'
+import { SchemaData } from '../../types'
+import {Dispatch, SetStateAction} from "react"
 
-export default function createNewNodesAndEdges(schema, setArgumentFunc){
+export default function createNewNodesAndEdges(schema: SchemaData, setArgumentFunc: Dispatch<SetStateAction<number | string>>){
     const newDataForFlow: {newNodes: Node[], newEdges: Edge[]} = {newNodes: [], newEdges: []}
     let xIndexForFields = 400;
     let yIndexForFields = 300;

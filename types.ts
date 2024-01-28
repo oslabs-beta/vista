@@ -1,4 +1,3 @@
-import SchemaDisplay from "@/app/components/SchemaDisplay"
 import {Dispatch, SetStateAction} from "react"
 
 export interface SchemaDisplayProps {
