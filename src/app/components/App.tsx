@@ -26,6 +26,7 @@ export default function App({ session, cookie }: any) {
   const [welcomeDialog, setWelcomeDialog] = useState(cookie);
   const [apiEndpointDialog, setApiEndpointDialog] = useState(false);
   const [reactFlowDialog, setReactFlowDialog] = useState(false)
+  const [submit, setSubmit] = useState(false)
 
   const childToParent = (childData: ChildData): void => {
     console.log('inside childToParent', childData)
@@ -105,7 +106,7 @@ export default function App({ session, cookie }: any) {
         setApiEndpointDialog = {setApiEndpointDialog}
         />}
 
-        <EndpointForm apiEndpointDialog={apiEndpointDialog} childToParent={childToParent} />
+        <EndpointForm apiEndpointDialog={apiEndpointDialog} childToParent={childToParent} setSubmit={setSubmit}/>
         {apiEndpointDialog && <BaseDialog
         openCurrentModal = {apiEndpointDialog} 
         closeCurrentModalSetter = {setApiEndpointDialog}
@@ -137,6 +138,8 @@ export default function App({ session, cookie }: any) {
                 //@ts-ignore
                 setQueryAsObj={setQueryAsObj}
                 setArgument={setArgument}
+                setSubmit={setSubmit}
+                submit={submit}
                 // argModified={argModified}
               />
             }

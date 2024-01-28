@@ -1,8 +1,7 @@
-"use server";
+"use client"
 import { parseSchemaAndFormat } from '././parseSchemaAndFormat';
 
 export async function getSchema(data: FormData) {
-  'use client'
   const endpoint = data.get('endpoint-url')?.valueOf();
   if(typeof endpoint !== 'string' || endpoint.length === 0) {
     throw new Error('Invalid endpoint');

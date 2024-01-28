@@ -4,26 +4,25 @@ import { Menu, Transition } from '@headlessui/react';
 import { Fragment, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-export function EndpointForm({ apiEndpointDialog, childToParent }: any) {
+//! TTYPE
+export function EndpointForm({ apiEndpointDialog, childToParent, setSubmit}: any) {
   // console.log({childToParent})
   const [ isLoggedIn, setIsLoggedIn ] = useState(false);
   const { data: instance } = useSession();
   const image: any = instance?.user?.image;
 
   useEffect(() => {
-    // console.log('this is the instance, aka session object ---->', instance)
- 
     setIsLoggedIn(!!instance);
   }, [instance])
+
   //TODO: type
   const onSignIn = () => {
     signIn();
-    }
+  }
 
 const onSignOut = () => {
   signOut();
   setIsLoggedIn(false);
-  
 }
 
 
@@ -50,6 +49,7 @@ const onSignOut = () => {
     }
     // console.log("schema endpoint:", schemaAndEndpoint);
     childToParent(schemaAndEndpoint);
+    setSubmit(true)
   };
 
   const { data: session, status } = useSession();
@@ -60,7 +60,6 @@ const onSignOut = () => {
   
   return (
     <>
-      {/* <form action={handleSubmit} className="pt-5 pr-4 pl-4 flex items-center dark:bg-slate-800"> */}
       <form data-testid="endpoint-form" action={handleSubmit} className="pt-5 pr-4 pl-4 flex items-center dark:bg-slate-800">
         <div className="relative w-full">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -78,7 +77,7 @@ const onSignOut = () => {
               ></path>
             </svg>
           </div>
-{          apiEndpointDialog? <input
+          {apiEndpointDialog? <input
             type="text"
             name="endpoint-url"
             id="simple-search"

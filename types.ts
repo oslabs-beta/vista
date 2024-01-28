@@ -7,6 +7,8 @@ export type DisplaySchemaContainerProps = {
     setData: Dispatch<SetStateAction<Data>>,
     queryAsObj?: object,
     setQueryAsObj?: Dispatch<SetStateAction<object>>,
+    setSubmit: any,
+    submit: boolean
   }
 
 export type SchemaData = {
