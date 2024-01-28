@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import "tailwindcss/tailwind.css";
-import QueryGenerator from "./QueryGenerator";
-import QueryContainer from "./QueryContainer";
 import { GraphQLClient, gql } from "graphql-request";
 import { QueryResult } from "../../../types"
 
@@ -18,15 +16,9 @@ export default function QueryResult({ data, endpoint }: QueryResult) {
 
     // make the  query
     const queryResult = await graphQLClient.request(queryStringforData);
-
-    // document.getElementById("result").textContent = queryResult;
-
-    console.log("GraphQL queryResult in QueryResult.tsx", queryResult);
-    console.log("typeof queryResult", typeof queryResult);
     
     setResult(JSON.stringify(queryResult, null, 2));
 
-    // return queryResult;
   }
 
   return (

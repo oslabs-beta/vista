@@ -64,7 +64,7 @@ export default function App({ session, cookie }: any) {
       queryAsObjDeepCopy.query[argument.field]["__args"][argument.argument] = argument.value;
       setQueryAsObj(queryAsObjDeepCopy);
     }
-  },[argument, queryAsObj]);
+  },[argument]);
 
   useEffect(() => {
     setQueryAsString(jsonToGraphQLQuery(queryAsObj, { pretty: true }));
@@ -84,7 +84,8 @@ export default function App({ session, cookie }: any) {
         }
       }
     }
-  });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clickField]);
   
 
   return (
