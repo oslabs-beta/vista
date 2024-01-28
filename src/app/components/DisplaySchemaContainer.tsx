@@ -28,7 +28,7 @@ export function DisplaySchemaContainer(props: DisplaySchemaContainerProps) {
       <Suspense fallback={<CircularProgress />}>
         <ul>
           <div className="w-full h-[722px] border-2 border-blue-950 rounded-lg shadow p-2 mb-5 dark:border-white">
-            <SchemaDisplay setClickField={props.setClickField} queryAsObj={props.queryAsObj} data={props.data}/>
+            <SchemaDisplay setClickField={props.setClickField} setQueryAsObj={props.setQueryAsObj} queryAsObj={props.queryAsObj} data={props.data} setArgument={props.setArgument} />
           </div>
         </ul>
       </Suspense>
