@@ -1,6 +1,6 @@
 import { Node, Edge, MarkerType } from 'reactflow'
 
-export default function createNewNodesAndEdges(schema, argModifiedFunc, setArgumentFunc){
+export default function createNewNodesAndEdges(schema, setArgumentFunc){
     const newDataForFlow: {newNodes: Node[], newEdges: Edge[]} = {newNodes: [], newEdges: []}
     let xIndexForFields = 400;
     let yIndexForFields = 300;
@@ -100,7 +100,7 @@ export default function createNewNodesAndEdges(schema, argModifiedFunc, setArgum
             data: {
                 label: stringForLabel[j],
                 isArg: j === 0,
-                argModified: argModifiedFunc,
+                // argModified: argModifiedFunc,
                 field: field.name,
                 argument: field.reqArgs[i],
                 setArgument: setArgumentFunc

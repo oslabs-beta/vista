@@ -1,13 +1,16 @@
+import SchemaDisplay from "@/app/components/SchemaDisplay"
 import {Dispatch, SetStateAction} from "react"
 
-export type DisplaySchemaContainerProps = {
-    data: Data,
-    // setClickField: Dispatch<SetStateAction<{type: string, field: string}>>
-    setClickField: Dispatch<SetStateAction<{type: string, field: string, data: Data}>>,
+export interface SchemaDisplayProps {
+  data: Data,
+  setClickField: Dispatch<SetStateAction<{type: string, field: string, data: Data}>>,
+  queryAsObj: object,
+  setQueryAsObj: Dispatch<SetStateAction<object>>,
+  setArgument: Dispatch<SetStateAction<any>>
+}
+
+export interface DisplaySchemaContainerProps extends SchemaDisplayProps {
     setData: Dispatch<SetStateAction<Data>>,
-    queryAsObj?: object,
-    setQueryAsObj?: Dispatch<SetStateAction<object>>,
-    setArgument?: Dispatch<SetStateAction<any>>
   }
 
 export type SchemaData = {
@@ -152,5 +155,4 @@ export type BaseDialogProps = {
   title: string
   description: string
 }
-
 

@@ -15,6 +15,7 @@ import InputNode from './InputNode';
 import ObjectNode from './ObjectNode';
 import 'reactflow/dist/style.css';
 import createNewNodesAndEdges from "@/utils/createNewNodesAndEdges";
+import { SchemaDisplayProps } from "../../../types";
 
 const initialNodes: Node[] = [ 
     {
@@ -28,8 +29,6 @@ const initialNodes: Node[] = [
       data: { label: 'Fields'},
     },
   ];
-  
-
   
   const initialEdges: Edge[] = [
     {
@@ -61,7 +60,7 @@ const initialNodes: Node[] = [
     objectNode: ObjectNode,
   };
 
-export default function SchemaDisplay(props){
+export default function SchemaDisplay(props: SchemaDisplayProps){
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
     const schema = props.data.schema;
@@ -105,7 +104,7 @@ export default function SchemaDisplay(props){
     };
 
     if (nodes.length === 2){
-      newNodesAndEdges = createNewNodesAndEdges(schema, props.argModified, props.setArgument)
+      newNodesAndEdges = createNewNodesAndEdges(schema, props.setArgument)
       setNodes([...nodes, ...newNodesAndEdges.newNodes])
       setEdges([...edges, ...newNodesAndEdges.newEdges])
     }
