@@ -17,13 +17,13 @@
     "types": ["jest", "node"],
     "plugins": [
       {
-        "name": "next"
-      }
+        "name": "next",
+      },
     ],
     "paths": {
-      "@/*": ["./src/*"]
-    }
+      "@/*": ["./src/*"],
+    },
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"], // removed '"src/app/api/schema/routes.js"' 
-  "exclude": ["node_modules"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"], // removed '"src/app/api/schema/routes.js"'
+  "exclude": ["node_modules"],
 }

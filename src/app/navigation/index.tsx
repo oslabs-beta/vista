@@ -1,11 +1,7 @@
-"use client";
+'use client'
 
-import Navbar from './navbar';
+import Navbar from './navbar'
 
-const Navigation = () => {
-    return (
-        <Navbar />
-    )
-}
+const Navigation = () => <Navbar />
 
 export default Navigation

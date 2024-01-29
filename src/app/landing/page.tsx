@@ -1,18 +1,14 @@
-import React from 'react';
+import React from 'react'
 import Features from '../components/Features'
 import Hero from '../components/Hero'
 import Contributers from '../components/Contributers'
 
-const Landing = () => {
- return (
-    <>
+const Landing = () => (
+  <>
     <Hero />
     <Features />
-    <Contributers /> 
-    </>
-    
-    )
-}
-      
+    <Contributers />
+  </>
+)
 
 export default Landing

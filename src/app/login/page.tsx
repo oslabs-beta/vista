@@ -1,7 +1,7 @@
-"use client"
+'use client'
 
-import React, { useEffect } from "react";
-import { SessionProvider, useSession, signIn, signOut } from "next-auth/react";
+import React, { useEffect } from 'react'
+import { SessionProvider, useSession, signIn, signOut } from 'next-auth/react'
 
 // const Login = () => {
 //   const { data: session } = useSession();
@@ -28,21 +28,13 @@ import { SessionProvider, useSession, signIn, signOut } from "next-auth/react";
 
 // export default Login;
 
-const Login = () => { 
-  //const { data: session } = useSession();
+const Login = () => {
+  // const { data: session } = useSession();
   useEffect(() => {
-    signIn();
+    signIn()
   }, [])
 
-    return (
-        <div>
-          
-        </div>
-    )
-};
+  return <div></div>
+}
 
 export default Login
-
-
-
- 
