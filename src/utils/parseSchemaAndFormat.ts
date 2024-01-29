@@ -74,7 +74,8 @@ export async function parseSchemaAndFormat(apiEndpoint: string) {
               let name = field.name;
   
               // check if the field is of kind object meaning it adds a new level of nesting we currently don't support
-              let kindOfTypeOfField = field.type.kind;
+
+              // use of any here is to allow for flexibility when accessing 
               let ofType = field.type as any;
               let isObject = false;
 
