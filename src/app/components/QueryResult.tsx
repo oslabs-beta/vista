@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import "tailwindcss/tailwind.css";
-import QueryGenerator from "./QueryGenerator";
-import QueryContainer from "./QueryContainer";
 import { GraphQLClient, gql } from "graphql-request";
 import { QueryResult } from "../../../types"
 
