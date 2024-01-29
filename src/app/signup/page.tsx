@@ -2,7 +2,7 @@
 
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import SignupForm from '../components/SignupForm'
+import SignupForm from './SignupForm'
 
 export default function Signup() {
   const [username, setUsername] = useState('')

@@ -1,4 +1,4 @@
-import App from './components/App'
+import App from './App'
 import { checkForCookies } from '@/utils/checkForCookies'
 
 export default async function Home() {

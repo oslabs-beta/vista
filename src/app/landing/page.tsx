@@ -1,7 +1,7 @@
 import React from 'react'
-import Features from '../components/Features'
-import Hero from '../components/Hero'
-import Contributers from '../components/Contributers'
+import Features from './Features'
+import Hero from './Hero'
+import Contributers from './Contributers'
 
 const Landing = () => (
   <>
