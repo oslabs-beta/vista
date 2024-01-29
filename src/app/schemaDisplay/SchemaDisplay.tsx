@@ -92,7 +92,6 @@ export default function SchemaDisplay(props: SchemaDisplayProps) {
     } else if (node.data.isObject) {
       // TODO: make this non clickable and add a tootltip on hover
       // max depth level supported: 2
-      console.log('hello')
     }
     // case: is a queryable field --> update query generator
     else if (node.data.isObject === false || node.data.isArg === false) {
