@@ -26,17 +26,20 @@ export async function parseSchemaAndFormat(apiEndpoint: string) {
               type: "",
               reqArgs: [],
             };
-  
-            fieldObjectTemplate.name = field.name;
-            fieldObjectTemplate.type = field.type.name;
-  
+
             // accounting for type modifiers such as Lists and Non-Null types by traversing the type object until name is not null
             let currentOfType = field.type;
+            fieldObjectTemplate.name = field.name;
 
-            //! Review this part
-            while (!fieldObjectTemplate.type) {
-              fieldObjectTemplate.type = currentOfType.ofType.name;
-              currentOfType = currentOfType.ofType;
+            while (currentOfType) {
+              if (currentOfType.kind === 'OBJECT') {
+                fieldObjectTemplate.type = currentOfType.name;
+                break;
+              } else if (currentOfType.kind === 'LIST' || currentOfType.kind === 'NON_NULL') {
+                currentOfType = currentOfType.ofType as any; // Use 'as any' for flexibility
+              } else {
+                break;
+              }
             }
   
             if (field.args) {
@@ -72,16 +75,22 @@ export async function parseSchemaAndFormat(apiEndpoint: string) {
   
               // check if the field is of kind object meaning it adds a new level of nesting we currently don't support
               let kindOfTypeOfField = field.type.kind;
-              let ofType = field.type.ofType;
+              let ofType = field.type as any;
               let isObject = false;
-              while (ofType) {
-                kindOfTypeOfField = ofType.kind;
-                ofType = ofType.ofType;
-                if (kindOfTypeOfField === "OBJECT") {
-                  isObject = true;
+
+              while (ofType && ofType.kind !== 'OBJECT') {
+                if (ofType === 'LIST' || ofType === 'NON_NULL'){
+                  ofType = ofType.ofType
+                } else {
                   break;
                 }
               }
+
+                if (ofType && ofType.kind === 'OBJECT'){
+                  isObject = true;
+                }
+              
+
               fieldsOfTheType.push({
                 name,
                 isObject,
