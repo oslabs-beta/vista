@@ -66,8 +66,11 @@ export default function App({ session, cookie }: any) {
   useEffect(() => {
     if (Object.keys(argument).length > 0) {
       const queryAsObjDeepCopy = JSON.parse(JSON.stringify(queryAsObj))
-      // @ts-ignore
+      //@ts-ignore
+      if(argument.field)
+      //@ts-ignore
       queryAsObjDeepCopy.query[argument.field].__args[argument.argument] =
+      //@ts-ignore
         argument.value
       setQueryAsObj(queryAsObjDeepCopy)
     }
