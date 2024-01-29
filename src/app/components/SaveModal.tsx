@@ -2,6 +2,7 @@ import React, { ChangeEvent, MouseEvent, FormEvent, useState } from "react";
 import { useSession } from "next-auth/react";
 import { Dialog } from '@headlessui/react';
 import { SaveModalProps } from "../../../types";
+
 export default function SaveModal(props: SaveModalProps) {
     const { isSaveModalOpen,
             setIsSaveModalOpen,
@@ -10,6 +11,7 @@ export default function SaveModal(props: SaveModalProps) {
             query,
             endpoint,
         } = props;
+        
     const [queryName, setQueryName] = useState('');
     const { data: instance } = useSession();
     // console.log('this is the session from within the savemodal => ', instance);

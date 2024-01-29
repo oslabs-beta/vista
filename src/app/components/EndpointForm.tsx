@@ -1,30 +1,28 @@
 import { getSchema } from "@/utils/getSchema";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Menu, Transition } from '@headlessui/react';
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react"
 import { useRouter } from "next/navigation";
 
 export function EndpointForm({ apiEndpointDialog, childToParent }: any) {
-  // console.log({childToParent})
   const [ isLoggedIn, setIsLoggedIn ] = useState(false);
   const { data: instance } = useSession();
   const image: any = instance?.user?.image;
 
   useEffect(() => {
-    // console.log('this is the instance, aka session object ---->', instance)
- 
     setIsLoggedIn(!!instance);
   }, [instance])
-  //TODO: type
+
+
   const onSignIn = () => {
     signIn();
     }
 
-const onSignOut = () => {
-  signOut();
-  setIsLoggedIn(false);
-  
-}
+  const onSignOut = () => {
+    signOut();
+    setIsLoggedIn(false);
+    
+  }
 
 
   const router = useRouter();
@@ -48,7 +46,7 @@ const onSignOut = () => {
     if (typeof endpoint === "string") {
       schemaAndEndpoint.endpoint = endpoint!;
     }
-    // console.log("schema endpoint:", schemaAndEndpoint);
+    
     childToParent(schemaAndEndpoint);
   };
 
@@ -60,7 +58,6 @@ const onSignOut = () => {
   
   return (
     <>
-      {/* <form action={handleSubmit} className="pt-5 pr-4 pl-4 flex items-center dark:bg-slate-800"> */}
       <form data-testid="endpoint-form" action={handleSubmit} className="pt-5 pr-4 pl-4 flex items-center dark:bg-slate-800">
         <div className="relative w-full">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -123,9 +120,9 @@ const onSignOut = () => {
             <div>
               {/* Account Button */} 
 
-              {/* <Menu.Button className='inline-flex w-full justify-center gap-x-1.5 border border-blue-500 rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset hover:bg-gray-200 dark:bg-slate-500 dark:border-white dark:hover:bg-slate-300'></Menu.Button>      */}
               <Menu.Button data-testid="account-button" className='inline-flex w-full justify-center gap-x-1.5 border border-blue-500 rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset hover:bg-gray-200 dark:bg-slate-500 dark:border-white dark:hover:bg-slate-300'>
               {isLoggedIn ? (
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img src={image} alt="" className="inline-flex w-full justify-center gap-x-1.5 border-blue-500 rounded-sm w-6 h-6"
                     />
                   ) : (

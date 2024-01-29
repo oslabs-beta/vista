@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useEffect } from "react";
 import "tailwindcss/tailwind.css";
-import { jsonToGraphQLQuery } from "json-to-graphql-query";
 import { QueryGenerator } from "../../../types"
 
 export default function QueryGenerator(QueryGeneratorProps: QueryGenerator) {
@@ -25,7 +24,6 @@ export default function QueryGenerator(QueryGeneratorProps: QueryGenerator) {
             data-testid="query-generator"
             value={queryAsString}
             className="mt-1 ml-1 mb-1 resize-none hover:resize border border-gray-300 rounded px-2 py-1 w-96 h-60 break-normal dark:bg-slate-800 dark:text-white"
-            // className="resize-none hover:resize border border-gray-300 rounded px-2 py-1 w-96 h-60 break-normal bg-[url('https://graphql.org/img/logo-gray.svg')] bg-no-repeat bg-opacity-0"
             readOnly
           />
           <div>
@@ -56,7 +54,6 @@ export default function QueryGenerator(QueryGeneratorProps: QueryGenerator) {
               </svg>
             </button>
           </div>
-          {/* <p className="text-black">Result: {result}</p> */}
         </form>
       </div>
   );
