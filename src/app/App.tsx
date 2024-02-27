@@ -3,14 +3,15 @@
 import { useState, useEffect } from 'react'
 import { SessionProvider } from 'next-auth/react'
 import { jsonToGraphQLQuery } from 'json-to-graphql-query'
-import { EndpointForm } from '@/app/endpointForm/EndpointForm'
-import { DisplaySchemaContainer } from '@/app/schemaDisplay/SchemaDisplayContainer'
+import { EndpointForm } from '../app/endpointForm/EndpointForm'
+import { DisplaySchemaContainer } from '../app/schemaDisplay/SchemaDisplayContainer'
 import QueryContainer from './queryGeneratorAndResult/QueryGeneratorContainer'
 import { ChildData, ClickField, Data } from '../../types'
 import SaveModal from './SaveModal'
 import SaveResponseModal from './SaveResponseModal'
 import WelcomeDialog from './tutorialModals/WelcomeDialog'
 import BaseDialog from './tutorialModals/BaseDialog'
+import React from 'react'
 
 export default function App({ session, cookie }: any) {
   const [data, setData] = useState<Data>({
