@@ -1,6 +1,5 @@
-export async function GET(request:any) {
+export async function GET(request: any) {
+  console.log('inside api/schema GET route handler')
 
-    console.log('inside api/schema GET route handler')
-
-    return new Response('hello from /api/schem');
+  return new Response('hello from /api/schem')
 }

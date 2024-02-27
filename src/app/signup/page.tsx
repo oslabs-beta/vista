@@ -1,29 +1,29 @@
-"use client";
+'use client'
 
-import axios from "axios";
-import SignupForm from "../components/SignupForm";
-import { useEffect, useState } from "react";
+import axios from 'axios'
+import { useEffect, useState } from 'react'
+import SignupForm from './SignupForm'
 
 export default function Signup() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [rePassword, setRePassword] = useState("");
-  const [passMatch, setPassMatch] = useState(true);
-  const [usernameTaken, setUsernameTaken] = useState(false);
-  const [createdUsername, setCreatedUsername] = useState("");
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [rePassword, setRePassword] = useState('')
+  const [passMatch, setPassMatch] = useState(true)
+  const [usernameTaken, setUsernameTaken] = useState(false)
+  const [createdUsername, setCreatedUsername] = useState('')
 
   useEffect(() => {
-    setPassMatch(password === rePassword ? true : false);
-  }, [password, rePassword]);
+    setPassMatch(password === rePassword)
+  }, [password, rePassword])
 
   const postSignup = async () => {
-    const { data } = await axios.post("/api/signup", { username, password });
+    const { data } = await axios.post('/api/signup', { username, password })
     // console.log('this is data from signup/page.tsx', data)
     // console.log('username', data.username);
     // console.log('userTaken', data.userTaken);
-    data.userTaken && setUsernameTaken(true);
-    data.username && setCreatedUsername(data.username);
-  };
+    data.userTaken && setUsernameTaken(true)
+    data.username && setCreatedUsername(data.username)
+  }
 
   return (
     <>
@@ -69,5 +69,5 @@ export default function Signup() {
         </div>
       </div>
     </>
-  );
+  )
 }
